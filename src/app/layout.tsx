@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { ThemeInitScript } from "@/ds";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,6 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <ThemeInitScript />
+        <a className="ui-skip-link" href="#main">
+          Skip to content
+        </a>
         {children}
       </body>
     </html>
