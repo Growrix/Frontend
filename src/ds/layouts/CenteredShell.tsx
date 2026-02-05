@@ -14,7 +14,7 @@ export function CenteredShell({ title, children }: CenteredShellProps) {
       <main className="ui-page-main">
         <Section container="narrow">
           <Stack>
-            {title ? <h1 className="ui-h1">{title}</h1> : null}
+            {title ? <h1 className="text-heading-1">{title}</h1> : null}
             <div>{children}</div>
           </Stack>
         </Section>

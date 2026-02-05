@@ -1,54 +1,13 @@
 @layer ds.theme {
   :root {
-    color-scheme: light;
-  }
-
-  /* System theme: if not forced to light, follow OS dark mode. */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']):not([data-theme='dark']) {
-      color-scheme: dark;
-      --ds-color-bg: #000000;
-      --ds-color-surface: #1c1c1e;
-      --ds-color-surface-2: #2c2c2e;
-      --ds-color-text: #f5f5f7;
-      --ds-color-text-muted: rgba(245, 245, 247, 0.72);
-      --ds-color-border: rgba(245, 245, 247, 0.18);
-
-      --ds-color-primary: #0a84ff;
-      --ds-color-primary-hover: #409cff;
-      --ds-color-primary-active: #007aff;
-      --ds-color-on-primary: #000000;
-
-      --ds-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35);
-      --ds-shadow-2: 0 18px 50px rgba(0, 0, 0, 0.45);
-      --ds-shadow-3: 0 30px 80px rgba(0, 0, 0, 0.55);
-
-      --ds-color-focus-ring: rgba(10, 132, 255, 0.45);
-    }
-  }
-
-  :root[data-theme='dark'] {
     color-scheme: dark;
-    --ds-color-bg: #000000;
-    --ds-color-surface: #1c1c1e;
-    --ds-color-surface-2: #2c2c2e;
-    --ds-color-text: #f5f5f7;
-    --ds-color-text-muted: rgba(245, 245, 247, 0.72);
-    --ds-color-border: rgba(245, 245, 247, 0.18);
-
-    --ds-color-primary: #0a84ff;
-    --ds-color-primary-hover: #409cff;
-    --ds-color-primary-active: #007aff;
-    --ds-color-on-primary: #000000;
-
-    --ds-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35);
-    --ds-shadow-2: 0 18px 50px rgba(0, 0, 0, 0.45);
-    --ds-shadow-3: 0 30px 80px rgba(0, 0, 0, 0.55);
-
-    --ds-color-focus-ring: rgba(10, 132, 255, 0.45);
   }
 
-  :root[data-theme='light'] {
+  html.theme-dark {
+    color-scheme: dark;
+  }
+
+  html.theme-light {
     color-scheme: light;
   }
 }

@@ -17,7 +17,7 @@ exports[`DS layouts (snapshots) CenteredShell 1`] = `
           class="ui-stack"
         >
           <h1
-            class="ui-h1"
+            class="text-heading-1"
           >
             Sign in
           </h1>

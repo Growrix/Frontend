@@ -11,5 +11,5 @@ function cx(...classes: Array<string | false | undefined | null>) {
 }
 
 export function Text({ tone = "default", className, ...props }: TextProps) {
-  return <p className={cx(tone === "muted" && "ui-text-muted", className)} {...props} />;
+  return <p className={cx("text-body", tone === "muted" && "ui-text-muted", className)} {...props} />;
 }

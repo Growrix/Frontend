@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { Button } from "../primitives/Button";
-import { applyThemeMode, readStoredThemeMode, storeThemeMode, type ThemeMode } from "../themes/theme";
+import { applyTheme, readStoredTheme, storeTheme, type ThemeName } from "../themes/theme";
 
 export type ThemeSwitcherProps = {
   className?: string;
@@ -14,44 +14,31 @@ function cx(...classes: Array<string | false | undefined | null>) {
 }
 
 export function ThemeSwitcher({ className }: ThemeSwitcherProps) {
-  const [mode, setMode] = React.useState<ThemeMode>("system");
+  const [theme, setTheme] = React.useState<ThemeName>("dark");
 
   React.useEffect(() => {
-    const stored = readStoredThemeMode();
-    setMode(stored);
-    applyThemeMode(stored);
-
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      const current = readStoredThemeMode();
-      if (current === "system") applyThemeMode("system");
-    };
-
-    if (typeof media.addEventListener === "function") {
-      media.addEventListener("change", onChange);
-      return () => media.removeEventListener("change", onChange);
-    }
-
-    media.addListener(onChange);
-    return () => media.removeListener(onChange);
+    const stored = readStoredTheme();
+    const next = stored ?? "dark";
+    setTheme(next);
+    applyTheme(next);
   }, []);
 
-  const set = (next: ThemeMode) => {
-    setMode(next);
-    storeThemeMode(next);
-    applyThemeMode(next);
+  const set = (next: ThemeName) => {
+    setTheme(next);
+    storeTheme(next);
+    applyTheme(next);
   };
 
   return (
     <div className={cx("ui-row", className)} role="group" aria-label="Theme selector">
-      <Button size="sm" variant={mode === "system" ? "primary" : "secondary"} onClick={() => set("system")}>
-        System
+      <Button size="sm" variant={theme === "dark" ? "primary" : "secondary"} onClick={() => set("dark")}>
+        Dark
       </Button>
-      <Button size="sm" variant={mode === "light" ? "primary" : "secondary"} onClick={() => set("light")}>
+      <Button size="sm" variant={theme === "light" ? "primary" : "secondary"} disabled aria-disabled="true">
         Light
       </Button>
-      <Button size="sm" variant={mode === "dark" ? "primary" : "secondary"} onClick={() => set("dark")}>
-        Dark
+      <Button size="sm" variant={theme === "purple" ? "primary" : "secondary"} disabled aria-disabled="true">
+        Purple
       </Button>
     </div>
   );

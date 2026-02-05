@@ -1,31 +1,27 @@
-export type ThemeMode = "system" | "light" | "dark";
+export type ThemeName = "dark" | "light" | "purple";
 
-export const THEME_STORAGE_KEY = "ds.theme";
+export const THEME_STORAGE_KEY = "solarmatch-theme";
 
-export function resolveSystemTheme(): "light" | "dark" {
-  if (typeof window === "undefined") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
+const THEME_CLASS_PREFIX = "theme-";
 
-export function applyThemeMode(mode: ThemeMode) {
+export function applyTheme(theme: ThemeName) {
   if (typeof document === "undefined") return;
 
-  if (mode === "system") {
-    document.documentElement.removeAttribute("data-theme");
-    return;
+  const root = document.documentElement;
+  for (const cls of Array.from(root.classList)) {
+    if (cls.startsWith(THEME_CLASS_PREFIX)) root.classList.remove(cls);
   }
-
-  document.documentElement.setAttribute("data-theme", mode);
+  root.classList.add(`${THEME_CLASS_PREFIX}${theme}`);
 }
 
-export function readStoredThemeMode(): ThemeMode {
-  if (typeof window === "undefined") return "system";
+export function readStoredTheme(): ThemeName | null {
+  if (typeof window === "undefined") return null;
   const raw = window.localStorage.getItem(THEME_STORAGE_KEY);
-  if (raw === "light" || raw === "dark" || raw === "system") return raw;
-  return "system";
+  if (raw === "dark" || raw === "light" || raw === "purple") return raw;
+  return null;
 }
 
-export function storeThemeMode(mode: ThemeMode) {
+export function storeTheme(theme: ThemeName) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(THEME_STORAGE_KEY, mode);
+  window.localStorage.setItem(THEME_STORAGE_KEY, theme);
 }

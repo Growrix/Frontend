@@ -1,6 +1,68 @@
 import Link from "next/link";
 
-import { Card, Grid, PublicHeaderBar, PublicShell, Section, SectionHeader, SplitSection, Stack, Text, ThemeSwitcher } from "@/ds";
+import { CommonSetDemo } from "./_components/CommonSetDemo";
+
+import {
+  Alert,
+  Badge,
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  Field,
+  Grid,
+  Input,
+  PublicHeaderBar,
+  PublicShell,
+  Section,
+  SectionHeader,
+  Select,
+  Spacer,
+  Stack,
+  Switch,
+  Text,
+  Textarea,
+  ThemeSwitcher,
+} from "@/ds";
+
+const MOCK_FEATURES = [
+  {
+    title: "Token-first UI",
+    description: "Every component consumes semantic tokens—no random CSS values scattered in features.",
+    tone: "accent" as const,
+  },
+  {
+    title: "Mobile app feel",
+    description: "Touch targets, spacing, and bottom-sheet patterns are built-in for small screens.",
+    tone: "info" as const,
+  },
+  {
+    title: "Accessible by default",
+    description: "Focus rings, labels, and states are standard—not optional.",
+    tone: "success" as const,
+  },
+];
+
+const MOCK_STATS = [
+  { label: "Theme", value: "SolarConnect Dark" },
+  { label: "Tokens", value: "Semantic" },
+  { label: "Baseline", value: "Mobile-first" },
+];
+
+const MOCK_FAQ = [
+  {
+    q: "Can I add more themes later?",
+    a: "Yes—extend CSS variables per theme. Component code stays the same.",
+  },
+  {
+    q: "Do pages import UI directly?",
+    a: "No. Pages import from the single DS entry so the boundary stays clean.",
+  },
+  {
+    q: "Can I use Tailwind utilities?",
+    a: "This project is DS-class driven. Prefer DS primitives/components and semantic utilities.",
+  },
+];
 
 export default function Home() {
   return (
@@ -8,97 +70,246 @@ export default function Home() {
       header={
         <PublicHeaderBar>
           <div className="ui-row ui-row--between">
-            <strong>Blueprint DS</strong>
+            <div className="ui-row">
+              <strong className="text-label">SolarMatch</strong>
+              <Badge tone="accent">Design System</Badge>
+            </div>
             <div className="ui-row">
               <ThemeSwitcher />
-              <a className="ui-focus-ring" href="#features">
+              <a className="ui-navlink ui-focus-ring" href="#features">
                 Features
               </a>
-              <a className="ui-focus-ring" href="#shells">
-                Shells
+              <a className="ui-navlink ui-focus-ring" href="#build">
+                Build
               </a>
-              <Link className="ui-focus-ring" href="/">
-                Home
+              <a className="ui-navlink ui-focus-ring" href="#faq">
+                FAQ
+              </a>
+              <Link className="ui-navlink ui-focus-ring" href="/dashboard">
+                Dashboard
               </Link>
+              <Link className="ui-navlink ui-focus-ring" href="/component-library">
+                Component Library
+              </Link>
+              <Link className="ui-navlink ui-focus-ring" href="/docs">
+                Docs
+              </Link>
+              <Button size="sm" variant="primary">
+                Get Started
+              </Button>
             </div>
           </div>
         </PublicHeaderBar>
       }
       footer={
-        <div className="ui-container ui-section">
-          <Text tone="muted">Built with tokens → themes → primitives → components → layouts → pages.</Text>
+        <div className="ui-band ui-band--surface">
+          <div className="ui-container">
+            <div className="ui-footer-grid">
+              <div>
+                <Stack gap="compact">
+                  <div className="text-heading-4">SolarMatch</div>
+                  <Text tone="muted">
+                    DS-first UI foundation. Build fast, stay consistent, and ship a mobile-friendly experience.
+                  </Text>
+                </Stack>
+              </div>
+
+              <div>
+                <div className="text-label">Product</div>
+                <Spacer size={2} />
+                <ul className="ui-footer-links">
+                  <li>
+                    <a className="ui-navlink ui-focus-ring" href="#features">
+                      Features
+                    </a>
+                  </li>
+                  <li>
+                    <Link className="ui-navlink ui-focus-ring" href="/component-library">
+                      Component Library
+                    </Link>
+                  </li>
+                  <li>
+                    <a className="ui-navlink ui-focus-ring" href="#build">
+                      Component demo
+                    </a>
+                  </li>
+                  <li>
+                    <Link className="ui-navlink ui-focus-ring" href="/docs">
+                      Docs
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <div className="text-label">Resources</div>
+                <Spacer size={2} />
+                <ul className="ui-footer-links">
+                  <li>
+                    <a className="ui-navlink ui-focus-ring" href="#faq">
+                      FAQ
+                    </a>
+                  </li>
+                  <li>
+                    <a className="ui-navlink ui-focus-ring" href="#main">
+                      Back to top
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <Divider />
+            <Spacer size={4} />
+            <Text tone="muted">Built with tokens → themes → primitives → components → layouts → pages.</Text>
+            <Spacer size={4} />
+          </div>
         </div>
       }
     >
       <div id="main">
-        <Section container="wide">
-          <Stack>
-            <div className="ui-text-center">
-              <div className="ui-kicker">Design-System First</div>
-              <h1 className="ui-h1">Start clean. Stay consistent.</h1>
-              <div className="ui-lede ui-center">
-                This page uses only <code>@/ds</code> imports and DS-owned layout primitives.
+        <Section container="wide" size="lg">
+          <div className="ui-hero">
+            <Stack>
+              <div className="ui-text-center">
+                <div className="ui-kicker">SolarConnect Dark</div>
+                <h1 className="text-heading-1">A DS-first UI that feels like an app.</h1>
+                <div className="text-body-large ui-center">
+                  Build your components once, then compose pages without styling drift.
+                </div>
+
+                <Spacer size={4} />
+                <div className="ui-row ui-row--center">
+                  <a className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="#features">
+                    Explore the system
+                  </a>
+                  <a className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="#build">
+                    See components
+                  </a>
+                </div>
+
+                <Spacer size={4} />
+                <Grid cols={3}>
+                  {MOCK_STATS.map((s) => (
+                    <Card key={s.label}>
+                      <div className="text-label">{s.label}</div>
+                      <Spacer size={2} />
+                      <div className="text-heading-3">{s.value}</div>
+                    </Card>
+                  ))}
+                </Grid>
               </div>
-              <div className="ui-row ui-row--center">
-                <a className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="#features">
-                  Explore
-                </a>
-                <a className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="#shells">
-                  Shells
-                </a>
-              </div>
-            </div>
-          </Stack>
+            </Stack>
+          </div>
         </Section>
 
         <Section id="features" tone="surface" container="wide">
           <Stack>
             <SectionHeader
-              kicker="Blueprint"
-              title="DS boundary + single entry"
-              lede={
-                <>
-                  Pages consume UI from <code>@/ds</code> only. Tokens/themes live in one place.
-                </>
-              }
+              kicker="Why DS-first"
+              title="Consistency that scales"
+              lede="Tokens keep your UI coherent across desktop and mobile."
+              align="center"
             />
 
             <Grid cols={3}>
-              <Card>
-                <h3 className="ui-h2">Tokens</h3>
-                <Text tone="muted">All spacing, colors, radii, motion are CSS variables.</Text>
-              </Card>
-              <Card>
-                <h3 className="ui-h2">Utilities</h3>
-                <Text tone="muted">Layout is class-first: container / section / stack / grid.</Text>
-              </Card>
-              <Card>
-                <h3 className="ui-h2">Shells</h3>
-                <Text tone="muted">Pages don’t invent structure; shells own responsiveness.</Text>
-              </Card>
+              {MOCK_FEATURES.map((f) => (
+                <Card key={f.title}>
+                  <Stack gap="compact">
+                    <div className="ui-row">
+                      <Badge tone={f.tone}>{f.tone}</Badge>
+                      <span className="text-label">{f.title}</span>
+                    </div>
+                    <Text tone="muted">{f.description}</Text>
+                  </Stack>
+                </Card>
+              ))}
             </Grid>
           </Stack>
         </Section>
 
-        <Section id="shells" container="wide">
+        <Section id="build" container="wide">
           <Stack>
-            <SectionHeader kicker="Layouts" title="Split sections" lede="Reusable patterns built on primitives." />
-            <SplitSection
-              left={
-                <Stack>
-                  <h3 className="ui-h2">Left column</h3>
-                  <Text tone="muted">No page-level random spacing. This is DS-owned.</Text>
+            <SectionHeader kicker="Basics" title="Common components" lede="These are the building blocks used everywhere." />
+
+            <Grid cols={2}>
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Buttons</div>
+                  <div className="ui-row">
+                    <Button>Primary</Button>
+                    <Button variant="secondary">Secondary</Button>
+                    <Button variant="ghost">Ghost</Button>
+                    <Button variant="text">Text</Button>
+                  </div>
                 </Stack>
-              }
-              right={
-                <Card>
+              </Card>
+
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Alerts</div>
+                  <Alert tone="info" title="Mock notice">
+                    This is dummy content to show DS styling.
+                  </Alert>
+                </Stack>
+              </Card>
+            </Grid>
+
+            <Card>
+              <Stack>
+                <div className="text-heading-4">Form example</div>
+                <Text tone="muted">Everything uses DS controls and accessibility wiring.</Text>
+
+                <Grid cols={2}>
+                  <Field id="name" label="Full name" hint="Dummy hint text">
+                    <Input placeholder="Jane Doe" />
+                  </Field>
+
+                  <Field id="plan" label="Plan" hint="Mock options">
+                    <Select defaultValue="pro">
+                      <option value="starter">Starter</option>
+                      <option value="pro">Pro</option>
+                      <option value="enterprise">Enterprise</option>
+                    </Select>
+                  </Field>
+                </Grid>
+
+                <Field id="note" label="Notes" hint="Dummy multi-line input">
+                  <Textarea placeholder="Write a short note…" />
+                </Field>
+
+                <div className="ui-row ui-row--between">
+                  <Checkbox label="I agree to the dummy terms" />
+                  <Switch label="Enable mock setting" defaultChecked />
+                </div>
+
+                <div className="ui-row">
+                  <Button isLoading loadingText="Submitting…">
+                    Submit
+                  </Button>
+                  <Button variant="secondary">Cancel</Button>
+                </div>
+              </Stack>
+            </Card>
+
+            <CommonSetDemo />
+          </Stack>
+        </Section>
+
+        <Section id="faq" tone="surface" container="wide">
+          <Stack>
+            <SectionHeader kicker="FAQ" title="Common questions" lede="Quick answers for how this DS is intended to be used." />
+
+            <Grid cols={2}>
+              {MOCK_FAQ.map((item) => (
+                <Card key={item.q}>
                   <Stack gap="compact">
-                    <strong>Right card</strong>
-                    <Text tone="muted">Composed component using tokens + utilities.</Text>
+                    <div className="text-heading-4">{item.q}</div>
+                    <Text tone="muted">{item.a}</Text>
                   </Stack>
                 </Card>
-              }
-            />
+              ))}
+            </Grid>
           </Stack>
         </Section>
       </div>
