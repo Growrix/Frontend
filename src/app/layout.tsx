@@ -4,6 +4,8 @@ import { Fira_Code, Inter } from "next/font/google";
 import { ThemeInitScript } from "@/ds";
 import "./globals.css";
 
+import { PublicBottomNavGate } from "./_components/PublicBottomNavGate";
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -32,6 +34,7 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
+        <PublicBottomNavGate />
       </body>
     </html>
   );

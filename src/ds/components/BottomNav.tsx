@@ -21,13 +21,18 @@ export type BottomNavItemProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
   active?: boolean;
   icon?: React.ReactNode;
   label: string;
+  iconOnly?: boolean;
 };
 
-export function BottomNavItem({ active, icon, label, className, ...props }: BottomNavItemProps) {
+export function BottomNavItem({ active, icon, label, iconOnly, className, ...props }: BottomNavItemProps) {
   return (
-    <a className={cx("ui-bottom-nav__item ui-focus-ring", active && "ui-bottom-nav__item--active", className)} {...props}>
+    <a
+      className={cx("ui-bottom-nav__item ui-focus-ring", active && "ui-bottom-nav__item--active", className)}
+      aria-label={iconOnly ? label : props["aria-label"]}
+      {...props}
+    >
       {icon ? <span className="ui-bottom-nav__icon">{icon}</span> : null}
-      <span className="ui-bottom-nav__label text-micro">{label}</span>
+      {iconOnly ? <span className="ui-sr-only">{label}</span> : <span className="ui-bottom-nav__label text-micro">{label}</span>}
     </a>
   );
 }

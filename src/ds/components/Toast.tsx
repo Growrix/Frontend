@@ -58,7 +58,12 @@ export function useToast() {
 }
 
 export function ToastViewport({ items, onDismiss }: { items: ToastItem[]; onDismiss: (id: string) => void }) {
-  if (typeof document === "undefined") return null;
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return createPortal(
     <div className="ui-toast-region" aria-live="polite" aria-relevant="additions removals">

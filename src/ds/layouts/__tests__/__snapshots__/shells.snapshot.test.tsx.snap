@@ -35,7 +35,7 @@ exports[`DS layouts (snapshots) CenteredShell 1`] = `
 
 exports[`DS layouts (snapshots) DashboardShell (with sidebar) 1`] = `
 <div
-  class="ui-page"
+  class="ui-page ui-page--dashboard"
 >
   <div
     class="ui-band ui-band--surface ui-sticky-top"
@@ -46,19 +46,24 @@ exports[`DS layouts (snapshots) DashboardShell (with sidebar) 1`] = `
   </div>
   <main
     class="ui-page-main"
+    id="main"
   >
     <div
       class="ui-container ui-container--wide"
     >
       <div
-        class="ui-shell-grid ui-shell-grid--sidebar"
+        class="ui-shell-grid ui-shell-grid--left ui-shell-grid--sidebar"
       >
-        <aside>
+        <aside
+          class="ui-shell-aside ui-shell-aside--left"
+        >
           <nav>
             Nav
           </nav>
         </aside>
-        <div>
+        <div
+          class="ui-shell-content"
+        >
           <div>
             Content
           </div>
