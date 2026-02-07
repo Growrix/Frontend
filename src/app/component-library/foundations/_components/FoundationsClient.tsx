@@ -25,6 +25,44 @@ type ColorGroup = {
 
 const COLOR_GROUPS: ColorGroup[] = [
   {
+    id: "palette-neutral",
+    title: "Palette: Neutral scale",
+    description: "Base neutrals (0 → 950). Semantic surface/text tokens map to these by theme.",
+    tokens: [
+      { id: "neutral-0", label: "Neutral 0", cssVar: "--ds-palette-neutral-0" },
+      { id: "neutral-50", label: "Neutral 50", cssVar: "--ds-palette-neutral-50" },
+      { id: "neutral-100", label: "Neutral 100", cssVar: "--ds-palette-neutral-100" },
+      { id: "neutral-200", label: "Neutral 200", cssVar: "--ds-palette-neutral-200" },
+      { id: "neutral-300", label: "Neutral 300", cssVar: "--ds-palette-neutral-300" },
+      { id: "neutral-400", label: "Neutral 400", cssVar: "--ds-palette-neutral-400" },
+      { id: "neutral-500", label: "Neutral 500", cssVar: "--ds-palette-neutral-500" },
+      { id: "neutral-600", label: "Neutral 600", cssVar: "--ds-palette-neutral-600" },
+      { id: "neutral-700", label: "Neutral 700", cssVar: "--ds-palette-neutral-700" },
+      { id: "neutral-800", label: "Neutral 800", cssVar: "--ds-palette-neutral-800" },
+      { id: "neutral-850", label: "Neutral 850", cssVar: "--ds-palette-neutral-850" },
+      { id: "neutral-900", label: "Neutral 900", cssVar: "--ds-palette-neutral-900" },
+      { id: "neutral-950", label: "Neutral 950", cssVar: "--ds-palette-neutral-950" },
+    ],
+  },
+  {
+    id: "palette-brand",
+    title: "Palette: Brand scale",
+    description: "Brand steps (50 → 950). Set the brand scale per theme; semantic accent/primary map to it.",
+    tokens: [
+      { id: "brand-50", label: "Brand 50", cssVar: "--ds-palette-brand-50" },
+      { id: "brand-100", label: "Brand 100", cssVar: "--ds-palette-brand-100" },
+      { id: "brand-200", label: "Brand 200", cssVar: "--ds-palette-brand-200" },
+      { id: "brand-300", label: "Brand 300", cssVar: "--ds-palette-brand-300" },
+      { id: "brand-400", label: "Brand 400", cssVar: "--ds-palette-brand-400" },
+      { id: "brand-500", label: "Brand 500", cssVar: "--ds-palette-brand-500" },
+      { id: "brand-600", label: "Brand 600", cssVar: "--ds-palette-brand-600" },
+      { id: "brand-700", label: "Brand 700", cssVar: "--ds-palette-brand-700" },
+      { id: "brand-800", label: "Brand 800", cssVar: "--ds-palette-brand-800" },
+      { id: "brand-900", label: "Brand 900", cssVar: "--ds-palette-brand-900" },
+      { id: "brand-950", label: "Brand 950", cssVar: "--ds-palette-brand-950" },
+    ],
+  },
+  {
     id: "surfaces",
     title: "Surfaces",
     description: "Backgrounds, cards, panels, and structural borders.",
@@ -91,6 +129,18 @@ function normalizeColorString(value: string) {
   const v = value.trim();
   if (!v) return "";
   if (v.startsWith("#")) return v;
+
+  const rgbModern = v.match(/^rgb\((\d+)\s+(\d+)\s+(\d+)(?:\s*\/\s*([\d.]+))?\)$/i);
+  if (rgbModern) {
+    const r = Number.parseInt(rgbModern[1] ?? "", 10);
+    const g = Number.parseInt(rgbModern[2] ?? "", 10);
+    const b = Number.parseInt(rgbModern[3] ?? "", 10);
+    const a = rgbModern[4] != null ? Number.parseFloat(rgbModern[4]) : 1;
+    if ([r, g, b].some((n) => Number.isNaN(n))) return v;
+    if (!Number.isFinite(a) || a < 1) return v;
+    const toHex = (n: number) => n.toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
 
   const rgb = v.match(/^rgba?\(([^)]+)\)$/i);
   if (rgb) {
@@ -170,12 +220,12 @@ function ColorSwatchGrid() {
                     <div className="ui-swatch-chip" style={{ background: `var(${t.cssVar})` }} aria-label={`${t.label} swatch`} />
                     <div className="ui-swatch-meta">
                       <div className="text-body-small">{t.label}</div>
-                      <Text tone="muted">
+                      <div className="text-micro">
                         <code>{t.cssVar}</code>
-                      </Text>
-                      <Text tone="muted">
+                      </div>
+                      <div className="text-micro">
                         <code>{values[t.cssVar] || "—"}</code>
-                      </Text>
+                      </div>
                     </div>
                   </div>
                 ))}

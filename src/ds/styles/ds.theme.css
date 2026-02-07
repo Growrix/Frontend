@@ -10,4 +10,8 @@
   html.theme-light {
     color-scheme: light;
   }
+
+  html.theme-purple {
+    color-scheme: dark;
+  }
 }

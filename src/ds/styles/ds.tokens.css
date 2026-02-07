@@ -80,24 +80,74 @@
     --ds-z-sticky: 100;
 
     /* Semantic colors (SolarConnect Dark) */
-    --ds-color-background: #151419;
-    --ds-color-surface: #1b1b1e;
-    --ds-color-border: #262626;
-    --ds-color-foreground: #9ca3af;
-    --ds-color-foreground-secondary: #f3f4f6;
-    --ds-color-accent: #6d3be2;
-    --ds-color-accent-foreground: #230f4f;
+    /*
+      Pro-grade structure:
+      - Palette tokens: scale-able building blocks (neutral/brand/status)
+      - Semantic tokens: what components should consume
+      - Theme selectors (html.theme-*) override palette + semantic mapping
+    */
+
+    /* Palette: neutrals (default = dark theme baseline) */
+    --ds-palette-neutral-0: #ffffff;
+    --ds-palette-neutral-50: #f3f4f6;
+    --ds-palette-neutral-100: #e5e7eb;
+    --ds-palette-neutral-200: #d1d5db;
+    --ds-palette-neutral-300: #cbd5e1;
+    --ds-palette-neutral-400: #9ca3af;
+    --ds-palette-neutral-500: #6b7280;
+    --ds-palette-neutral-600: #4b5563;
+    --ds-palette-neutral-700: #374151;
+    --ds-palette-neutral-800: #262626;
+    --ds-palette-neutral-850: #1b1b1e;
+    --ds-palette-neutral-900: #151419;
+    --ds-palette-neutral-950: #0b0b0c;
+
+    /* Palette: brand (default accent) */
+    --ds-palette-brand-50: #f4f0ff;
+    --ds-palette-brand-100: #e7dcff;
+    --ds-palette-brand-200: #cebaff;
+    --ds-palette-brand-300: #b18cff;
+    --ds-palette-brand-400: #9156ff;
+    --ds-palette-brand-500: #7b42f2;
+    --ds-palette-brand-600: #6d3be2;
+    --ds-palette-brand-700: #5c2fc6;
+    --ds-palette-brand-800: #452291;
+    --ds-palette-brand-900: #2e1660;
+    --ds-palette-brand-950: #230f4f;
+
+    /* Palette: status base (kept minimal; scale can expand later) */
+    --ds-palette-success-600: #16a34a;
+    --ds-palette-warning-600: #f59e0b;
+    --ds-palette-danger-600: #dc2626;
+    --ds-palette-info-600: #2563eb;
+
+    /* Semantic colors (default = dark) */
+    --ds-color-background: var(--ds-palette-neutral-900);
+    --ds-color-surface: var(--ds-palette-neutral-850);
+    --ds-color-border: var(--ds-palette-neutral-800);
+    --ds-color-foreground: var(--ds-palette-neutral-400);
+    --ds-color-foreground-secondary: var(--ds-palette-neutral-50);
+    --ds-color-accent: var(--ds-palette-brand-600);
+    --ds-color-accent-foreground: var(--ds-palette-brand-950);
 
     --ds-color-primary: var(--ds-color-accent);
     --ds-color-on-primary: var(--ds-color-foreground-secondary);
 
-    --ds-color-success: #16a34a;
-    --ds-color-warning: #f59e0b;
-    --ds-color-danger: #dc2626;
-    --ds-color-info: #2563eb;
+    --ds-color-success: var(--ds-palette-success-600);
+    --ds-color-warning: var(--ds-palette-warning-600);
+    --ds-color-danger: var(--ds-palette-danger-600);
+    --ds-color-info: var(--ds-palette-info-600);
 
-    --ds-color-focus-ring: rgba(109, 59, 226, 0.45);
-    --ds-color-overlay: rgba(0, 0, 0, 0.55);
+    /* RGB helpers (space-separated, for use with rgb(var(--x) / a)) */
+    --ds-color-accent-rgb: 109 59 226;
+    --ds-color-success-rgb: 22 163 74;
+    --ds-color-warning-rgb: 245 158 11;
+    --ds-color-danger-rgb: 220 38 38;
+    --ds-color-info-rgb: 37 99 235;
+
+    /* Effects */
+    --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.45);
+    --ds-color-overlay: rgb(0 0 0 / 0.55);
 
     /* Interactive states */
     --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, white);
@@ -108,6 +158,10 @@
     --ds-color-text: var(--ds-color-foreground);
     --ds-color-text-muted: color-mix(in oklab, var(--ds-color-foreground) 78%, var(--ds-color-background));
     --ds-color-surface-2: color-mix(in oklab, var(--ds-color-surface) 70%, var(--ds-color-background));
+
+    /* Internal aliases used by some DS styles */
+    --ds-color-fg: var(--ds-color-foreground-secondary);
+    --ds-color-fg-muted: var(--ds-color-text-muted);
 
     /* Layout dimensions */
     --ds-container-max: 64rem;
@@ -135,5 +189,51 @@
     /* Popovers / tooltips */
     --ds-space-popover-pad: var(--ds-space-2);
     --ds-space-tooltip-gap: var(--ds-space-2);
+  }
+
+  /* Theme: light (semantic + palette overrides) */
+  html.theme-light {
+    --ds-palette-neutral-0: #ffffff;
+    --ds-palette-neutral-50: #f9fafb;
+    --ds-palette-neutral-100: #f3f4f6;
+    --ds-palette-neutral-200: #e5e7eb;
+    --ds-palette-neutral-300: #d1d5db;
+    --ds-palette-neutral-400: #9ca3af;
+    --ds-palette-neutral-500: #6b7280;
+    --ds-palette-neutral-600: #4b5563;
+    --ds-palette-neutral-700: #374151;
+    --ds-palette-neutral-800: #1f2937;
+    --ds-palette-neutral-850: #111827;
+    --ds-palette-neutral-900: #0f172a;
+    --ds-palette-neutral-950: #020617;
+
+    --ds-color-background: #ffffff;
+    --ds-color-surface: #ffffff;
+    --ds-color-border: #e5e7eb;
+    --ds-color-foreground: #374151;
+    --ds-color-foreground-secondary: #111827;
+
+    --ds-color-accent: var(--ds-palette-brand-600);
+    --ds-color-accent-foreground: #ffffff;
+    --ds-color-on-primary: #ffffff;
+
+    --ds-color-overlay: rgb(0 0 0 / 0.35);
+  }
+
+  /* Theme: purple (example variant; keeps dark surfaces, shifts brand scale) */
+  html.theme-purple {
+    --ds-palette-brand-50: #faf5ff;
+    --ds-palette-brand-100: #f3e8ff;
+    --ds-palette-brand-200: #e9d5ff;
+    --ds-palette-brand-300: #d8b4fe;
+    --ds-palette-brand-400: #c084fc;
+    --ds-palette-brand-500: #a855f7;
+    --ds-palette-brand-600: #9333ea;
+    --ds-palette-brand-700: #7e22ce;
+    --ds-palette-brand-800: #6b21a8;
+    --ds-palette-brand-900: #581c87;
+    --ds-palette-brand-950: #3b0764;
+
+    --ds-color-accent-rgb: 147 51 234;
   }
 }

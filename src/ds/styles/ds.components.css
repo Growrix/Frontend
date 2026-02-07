@@ -763,18 +763,24 @@
 
   .ui-swatch-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-    gap: var(--ds-space-3);
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: var(--ds-space-4);
   }
 
   .ui-swatch-tile {
     display: grid;
-    gap: var(--ds-space-2);
-    align-content: start;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--ds-space-3);
+    align-items: center;
+    padding: var(--ds-space-3);
+    border: 1px solid var(--ds-color-border);
+    border-radius: var(--ds-radius-default);
+    background: var(--ds-color-surface);
+    overflow: hidden;
   }
 
   .ui-swatch-chip {
-    width: calc(var(--ds-size-touch-target) * 1.65);
+    width: calc(var(--ds-size-touch-target) * 1.1);
     aspect-ratio: 1 / 1;
     border-radius: var(--ds-radius-default);
     border: 1px solid var(--ds-color-border);
@@ -783,8 +789,35 @@
 
   .ui-swatch-meta {
     display: grid;
-    gap: var(--ds-space-1);
+    gap: 0.125rem;
     min-width: 0;
+  }
+
+  .ui-swatch-meta > * {
+    min-width: 0;
+  }
+
+  .ui-swatch-meta .text-body-small {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ui-swatch-meta code {
+    display: block;
+    font-family: var(--ds-font-mono);
+    font-size: var(--ds-font-size-1);
+    line-height: var(--ds-line-height-meta);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ds-color-text-muted);
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .ui-divider {
