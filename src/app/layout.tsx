@@ -32,9 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`theme-dark ${inter.variable} ${display.variable} ${firaCode.variable}`}>
-      <body>
+    <html lang="en" className={`${inter.variable} ${display.variable} ${firaCode.variable}`} suppressHydrationWarning>
+      <head>
         <ThemeInitScript />
+      </head>
+      <body>
         <a className="ui-skip-link" href="#main">
           Skip to content
         </a>

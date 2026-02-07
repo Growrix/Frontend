@@ -7,7 +7,186 @@ import { Badge, Card, Divider, Grid, Spacer, Stack, Tabs, TabsList, TabsPanel, T
 const TABS = [
   { value: "typography", label: "Typography" },
   { value: "tokens", label: "Tokens" },
+  { value: "colors", label: "Colors" },
 ];
+
+type ColorToken = {
+  id: string;
+  label: string;
+  cssVar: `--${string}`;
+};
+
+type ColorGroup = {
+  id: string;
+  title: string;
+  description: string;
+  tokens: ColorToken[];
+};
+
+const COLOR_GROUPS: ColorGroup[] = [
+  {
+    id: "surfaces",
+    title: "Surfaces",
+    description: "Backgrounds, cards, panels, and structural borders.",
+    tokens: [
+      { id: "background", label: "Background", cssVar: "--ds-color-background" },
+      { id: "surface", label: "Surface", cssVar: "--ds-color-surface" },
+      { id: "surface-2-alias", label: "Surface 2", cssVar: "--ds-color-surface-2" },
+      { id: "border", label: "Border", cssVar: "--ds-color-border" },
+      { id: "overlay", label: "Overlay", cssVar: "--ds-color-overlay" },
+    ],
+  },
+  {
+    id: "text",
+    title: "Text",
+    description: "Default and emphasized foregrounds for readable UI.",
+    tokens: [
+      { id: "foreground", label: "Foreground", cssVar: "--ds-color-foreground" },
+      { id: "foreground-secondary", label: "Foreground secondary", cssVar: "--ds-color-foreground-secondary" },
+      { id: "text", label: "Text (legacy alias)", cssVar: "--ds-color-text" },
+      { id: "text-muted", label: "Text muted (legacy alias)", cssVar: "--ds-color-text-muted" },
+    ],
+  },
+  {
+    id: "brand",
+    title: "Brand",
+    description: "Primary brand/action colors and their on-color pairings.",
+    tokens: [
+      { id: "accent", label: "Accent", cssVar: "--ds-color-accent" },
+      { id: "accent-foreground", label: "Accent foreground", cssVar: "--ds-color-accent-foreground" },
+      { id: "primary", label: "Primary", cssVar: "--ds-color-primary" },
+      { id: "on-primary", label: "On primary", cssVar: "--ds-color-on-primary" },
+    ],
+  },
+  {
+    id: "status",
+    title: "Status",
+    description: "System feedback colors (success, warning, danger, info).",
+    tokens: [
+      { id: "success", label: "Success", cssVar: "--ds-color-success" },
+      { id: "warning", label: "Warning", cssVar: "--ds-color-warning" },
+      { id: "danger", label: "Danger", cssVar: "--ds-color-danger" },
+      { id: "info", label: "Info", cssVar: "--ds-color-info" },
+    ],
+  },
+  {
+    id: "interactive",
+    title: "Interactive",
+    description: "Hover/active/focus colors used by interactive components.",
+    tokens: [
+      { id: "accent-hover", label: "Accent hover", cssVar: "--ds-color-accent-hover" },
+      { id: "accent-active", label: "Accent active", cssVar: "--ds-color-accent-active" },
+      { id: "focus-ring", label: "Focus ring", cssVar: "--ds-color-focus-ring" },
+    ],
+  },
+  {
+    id: "aliases",
+    title: "Aliases (legacy)",
+    description: "Compat vars kept for older classnames; prefer the semantic tokens above.",
+    tokens: [{ id: "bg", label: "BG", cssVar: "--ds-color-bg" }],
+  },
+];
+
+function normalizeColorString(value: string) {
+  const v = value.trim();
+  if (!v) return "";
+  if (v.startsWith("#")) return v;
+
+  const rgb = v.match(/^rgba?\(([^)]+)\)$/i);
+  if (rgb) {
+    const parts = rgb[1]
+      .split(",")
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    const r = Number.parseInt(parts[0] ?? "", 10);
+    const g = Number.parseInt(parts[1] ?? "", 10);
+    const b = Number.parseInt(parts[2] ?? "", 10);
+    const a = parts[3] != null ? Number.parseFloat(parts[3]) : 1;
+
+    if ([r, g, b].some((n) => Number.isNaN(n))) return v;
+    if (!Number.isFinite(a) || a < 1) return v;
+
+    const toHex = (n: number) => n.toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+
+  return v;
+}
+
+function useCssVarValues(cssVars: Array<ColorToken["cssVar"]>) {
+  const [values, setValues] = React.useState<Record<string, string>>({});
+
+  const key = React.useMemo(() => cssVars.join("|"), [cssVars]);
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+
+    const compute = () => {
+      const styles = getComputedStyle(root);
+      const next: Record<string, string> = {};
+      for (const cssVar of cssVars) {
+        const raw = styles.getPropertyValue(cssVar).trim();
+        next[cssVar] = normalizeColorString(raw);
+      }
+      setValues(next);
+    };
+
+    compute();
+
+    const obs = new MutationObserver(() => compute());
+    obs.observe(root, { attributes: true, attributeFilter: ["class", "data-theme"] });
+    return () => obs.disconnect();
+  }, [cssVars, key]);
+
+  return values;
+}
+
+function ColorSwatchGrid() {
+  const cssVars = React.useMemo(() => COLOR_GROUPS.flatMap((g) => g.tokens.map((t) => t.cssVar)), []);
+  const values = useCssVarValues(cssVars);
+
+  return (
+    <Stack gap="compact">
+      <Card className="ui-card--compact">
+        <Stack gap="compact">
+          <div className="text-heading-4">Color palette</div>
+          <Text tone="muted">Organized by usage. Values are computed from CSS variables (updates when theme changes).</Text>
+        </Stack>
+      </Card>
+
+      <Stack gap="compact">
+        {COLOR_GROUPS.map((group) => (
+          <Card key={group.id} className="ui-card--compact">
+            <Stack gap="compact">
+              <div>
+                <div className="text-heading-4">{group.title}</div>
+                <Text tone="muted">{group.description}</Text>
+              </div>
+
+              <div className="ui-swatch-grid">
+                {group.tokens.map((t) => (
+                  <div key={t.id} className="ui-swatch-tile">
+                    <div className="ui-swatch-chip" style={{ background: `var(${t.cssVar})` }} aria-label={`${t.label} swatch`} />
+                    <div className="ui-swatch-meta">
+                      <div className="text-body-small">{t.label}</div>
+                      <Text tone="muted">
+                        <code>{t.cssVar}</code>
+                      </Text>
+                      <Text tone="muted">
+                        <code>{values[t.cssVar] || "—"}</code>
+                      </Text>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Stack>
+          </Card>
+        ))}
+      </Stack>
+    </Stack>
+  );
+}
 
 export function FoundationsClient() {
   const [tab, setTab] = React.useState<string>(TABS[0]?.value ?? "typography");
@@ -83,6 +262,10 @@ export function FoundationsClient() {
             </Stack>
           </Card>
         </Grid>
+      </TabsPanel>
+
+      <TabsPanel value="colors">
+        <ColorSwatchGrid />
       </TabsPanel>
     </Tabs>
   );

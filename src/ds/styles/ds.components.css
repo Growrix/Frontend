@@ -747,10 +747,44 @@
     padding: var(--ds-space-card-padding);
   }
 
+  .ui-card--compact {
+    padding: var(--ds-space-4);
+  }
+
   @media (max-width: 48rem) {
     .ui-card {
       padding: var(--ds-space-4);
     }
+
+    .ui-card--compact {
+      padding: var(--ds-space-3);
+    }
+  }
+
+  .ui-swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: var(--ds-space-3);
+  }
+
+  .ui-swatch-tile {
+    display: grid;
+    gap: var(--ds-space-2);
+    align-content: start;
+  }
+
+  .ui-swatch-chip {
+    width: calc(var(--ds-size-touch-target) * 1.65);
+    aspect-ratio: 1 / 1;
+    border-radius: var(--ds-radius-default);
+    border: 1px solid var(--ds-color-border);
+    background: var(--ds-color-surface-2);
+  }
+
+  .ui-swatch-meta {
+    display: grid;
+    gap: var(--ds-space-1);
+    min-width: 0;
   }
 
   .ui-divider {

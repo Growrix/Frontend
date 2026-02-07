@@ -184,6 +184,9 @@
     position: sticky;
     top: var(--ds-size-header-h);
     height: var(--ds-size-viewport-minus-header);
+    align-self: start;
+    overflow: auto;
+    z-index: var(--ds-z-sticky);
   }
 
   .ui-page--dashboard .ui-sidebar,
