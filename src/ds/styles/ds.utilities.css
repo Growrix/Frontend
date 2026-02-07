@@ -334,32 +334,38 @@
   }
 
   .text-heading-1 {
-    font-size: clamp(2rem, 2.2vw + 1rem, 2.5rem);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-font-size-7);
     font-weight: var(--ds-font-weight-bold);
     line-height: var(--ds-line-height-tight);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--ds-letter-spacing-tight);
     color: var(--ds-color-foreground-secondary);
   }
 
   .text-heading-2 {
-    font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
-    font-weight: var(--ds-font-weight-bold);
+    font-family: var(--ds-font-sans);
+    font-size: var(--ds-font-size-6);
+    font-weight: var(--ds-font-weight-demibold);
     line-height: var(--ds-line-height-tight);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--ds-letter-spacing-tight);
     color: var(--ds-color-foreground-secondary);
   }
 
   .text-heading-3 {
-    font-size: var(--ds-font-size-5);
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-font-size-4);
     font-weight: var(--ds-font-weight-bold);
-    line-height: var(--ds-line-height-tight);
+    line-height: var(--ds-line-height-section);
+    letter-spacing: normal;
     color: var(--ds-color-foreground-secondary);
   }
 
   .text-heading-4 {
-    font-size: var(--ds-font-size-4);
-    font-weight: var(--ds-font-weight-medium);
+    font-family: var(--ds-font-display);
+    font-size: var(--ds-font-size-3);
+    font-weight: var(--ds-font-weight-semibold);
     line-height: var(--ds-line-height-tight);
+    letter-spacing: normal;
     color: var(--ds-color-foreground-secondary);
   }
 
@@ -370,7 +376,7 @@
   }
 
   .text-body-large {
-    font-size: var(--ds-font-size-4);
+    font-size: var(--ds-font-size-5);
     line-height: var(--ds-line-height-relaxed);
     color: var(--ds-color-foreground);
   }
@@ -383,21 +389,25 @@
 
   .text-caption {
     font-size: var(--ds-font-size-1);
-    line-height: var(--ds-line-height-normal);
+    font-weight: var(--ds-font-weight-book);
+    line-height: var(--ds-line-height-meta);
+    letter-spacing: var(--ds-letter-spacing-loose);
     color: var(--ds-color-text-muted);
   }
 
   .text-micro {
     font-size: var(--ds-font-size-1);
-    line-height: var(--ds-line-height-tight);
-    letter-spacing: 0.04em;
+    font-weight: var(--ds-font-weight-book);
+    line-height: var(--ds-line-height-meta);
+    letter-spacing: var(--ds-letter-spacing-loose);
     color: var(--ds-color-text-muted);
   }
 
   .text-label {
     font-size: var(--ds-font-size-2);
-    font-weight: var(--ds-font-weight-medium);
+    font-weight: var(--ds-font-weight-bold);
     line-height: var(--ds-line-height-tight);
+    letter-spacing: var(--ds-letter-spacing-loose);
     color: var(--ds-color-foreground-secondary);
   }
 

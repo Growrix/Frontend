@@ -22,6 +22,8 @@ export type ResourceTableProps = {
 };
 
 export function ResourceTable({ title = "Resources", rows, onCreate, onEdit, onDelete }: ResourceTableProps) {
+  const hasActions = Boolean(onEdit || onDelete);
+
   const cols: Array<DataTableColumn<ResourceRow>> = [
     { id: "name", header: "Name", sortable: true, sortValue: (r) => r.name, cell: (r) => <span className="text-body-small">{r.name}</span> },
     {
@@ -32,26 +34,33 @@ export function ResourceTable({ title = "Resources", rows, onCreate, onEdit, onD
       cell: (r) => <span className="text-body-small ui-text-muted">{r.updatedAt ?? "—"}</span>,
       width: "shrink",
     },
-    {
+  ];
+
+  if (hasActions) {
+    cols.push({
       id: "actions",
-      header: "",
+      header: <span className="ui-sr-only">Actions</span>,
       cell: (r) => (
         <div className="ui-row">
-          <Button size="sm" variant="secondary" onClick={() => onEdit?.(r.id)}>
-            Edit
-          </Button>
-          <Button size="sm" variant="secondary" onClick={() => onDelete?.(r.id)}>
-            Delete
-          </Button>
+          {onEdit ? (
+            <Button size="sm" variant="secondary" onClick={() => onEdit(r.id)}>
+              Edit
+            </Button>
+          ) : null}
+          {onDelete ? (
+            <Button size="sm" variant="secondary" onClick={() => onDelete(r.id)}>
+              Delete
+            </Button>
+          ) : null}
         </div>
       ),
       width: "shrink",
       align: "end",
-    },
-  ];
+    });
+  }
 
   return (
-    <div className="ui-stack">
+    <div className="ui-stack ui-stack--compact">
       <div className="ui-row ui-row--between">
         <div className="text-heading-4">{title}</div>
         {onCreate ? (

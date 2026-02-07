@@ -15,7 +15,7 @@ export function SectionHeader({ kicker, title, lede, align = "left" }: SectionHe
       <Stack gap="tight">
         {kicker ? <div className="ui-kicker">{kicker}</div> : null}
         <h2 className="text-heading-2">{title}</h2>
-        {lede ? <div className="text-body-large ui-center">{lede}</div> : null}
+        {lede ? <div className={align === "center" ? "text-body-large ui-center" : "text-body-large"}>{lede}</div> : null}
       </Stack>
     </header>
   );

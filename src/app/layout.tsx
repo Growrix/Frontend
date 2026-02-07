@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fira_Code, Inter } from "next/font/google";
+import { Fira_Code, Inter, Montserrat } from "next/font/google";
 
 import { ThemeInitScript } from "@/ds";
 import "./globals.css";
@@ -8,6 +8,11 @@ import { PublicBottomNavGate } from "./_components/PublicBottomNavGate";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const display = Montserrat({
+  variable: "--font-display",
   subsets: ["latin"],
 });
 
@@ -27,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="theme-dark">
-      <body className={`${inter.variable} ${firaCode.variable}`}>
+    <html lang="en" className={`theme-dark ${inter.variable} ${display.variable} ${firaCode.variable}`}>
+      <body>
         <ThemeInitScript />
         <a className="ui-skip-link" href="#main">
           Skip to content
