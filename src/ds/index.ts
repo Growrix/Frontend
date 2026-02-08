@@ -83,4 +83,6 @@ export * from "./layouts/DocsShell";
 
 export * from "./themes/ThemeInitScript";
 
+export * from "./preview/PreviewPlatform";
+
 export * from "./icons";

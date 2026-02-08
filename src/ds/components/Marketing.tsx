@@ -21,7 +21,7 @@ export function HeroSection({ kicker, title, lede, primaryAction, secondaryActio
         {kicker ? <div className="ui-kicker">{kicker}</div> : null}
         <h1 className="text-heading-1">{title}</h1>
         {lede ? <div className="text-body-large ui-center">{lede}</div> : null}
-        <div className="ui-row ui-row--center">
+        <div className="ui-hero__actions ui-row ui-row--center">
           {primaryAction ? (
             primaryAction.href ? (
               <a className="ui-button ui-button--md ui-button--primary ui-focus-ring" href={primaryAction.href}>

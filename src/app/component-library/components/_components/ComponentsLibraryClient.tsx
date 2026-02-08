@@ -40,6 +40,7 @@ import {
   FileDropzone,
   FormErrorSummary,
   Grid,
+  HeroSection,
   Icon,
   Input,
   LineChart,
@@ -82,6 +83,7 @@ import {
   Tooltip,
   useToast,
   VideoPlayer,
+  usePreviewPlatform,
 } from "@/ds";
 
 import { Bell, Home, Layers, Menu, Settings, Sun } from "@/ds";
@@ -89,6 +91,7 @@ import { Bell, Home, Layers, Menu, Settings, Sun } from "@/ds";
 const TABS = [
   { value: "layout", label: "Layout" },
   { value: "nav", label: "Navigation" },
+  { value: "platform", label: "Platform" },
   { value: "data", label: "Data" },
   { value: "feedback", label: "Feedback" },
   { value: "forms", label: "Forms" },
@@ -142,6 +145,11 @@ function ToastDemoButtons() {
 }
 
 export function ComponentsLibraryClient() {
+  const { platform } = usePreviewPlatform();
+  const isMobilePlatform = platform === "mobile";
+  const colsPrimary = isMobilePlatform ? 1 : 2;
+  const colsTight = isMobilePlatform ? 1 : 3;
+
   const [tab, setTab] = React.useState<string>(TABS[0]?.value ?? "layout");
 
   const [demoTab, setDemoTab] = React.useState(MOCK_TABS[0]?.value ?? "first");
@@ -181,11 +189,11 @@ export function ComponentsLibraryClient() {
           </TabsList>
 
           <TabsPanel value="layout">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Grid / Card / Stack</div>
-                  <Grid cols={3}>
+                  <Grid cols={colsTight}>
                     <Card>
                       <Text tone="muted">Card</Text>
                     </Card>
@@ -231,7 +239,7 @@ export function ComponentsLibraryClient() {
               </Card>
             </Grid>
 
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Progress / Stepper / Pagination</div>
@@ -255,36 +263,89 @@ export function ComponentsLibraryClient() {
           </TabsPanel>
 
           <TabsPanel value="nav">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
-                  <div className="text-heading-4">AppBar / menus</div>
-                  <AppBar leading={<Button size="sm" variant="secondary">Menu</Button>} title={<span>Blueprint</span>} actions={<Button size="sm">Action</Button>} />
-                  <Divider />
-                  <div className="ui-row">
-                    <DropdownMenu
-                      trigger={
-                        <Button size="sm" variant="secondary">
+                  <div className="text-heading-4">App bar / drawer / menus</div>
+
+                  <div style={{ maxWidth: "28rem" }}>
+                    <AppBar
+                      leading={
+                        <Button size="sm" variant="secondary" onClick={() => setDrawerOpen(true)} aria-label="Open menu">
                           <Icon icon={Menu} aria-hidden />
-                          Dropdown
                         </Button>
                       }
-                    >
-                      {MOCK_MENU_ITEMS.map((item) => (
-                        <DropdownMenuButton key={item.id} onClick={() => {}}>
-                          {item.label}
-                        </DropdownMenuButton>
-                      ))}
-                    </DropdownMenu>
-                    <ContextMenu
-                      items={[
-                        { id: "open", label: "Open", onSelect: () => {} },
-                        { id: "rename", label: "Rename", onSelect: () => {} },
-                        { id: "delete", label: "Delete", onSelect: () => {} },
-                      ]}
-                    >
-                      <div className="ui-drop">Right-click</div>
-                    </ContextMenu>
+                      title={<Text>Library</Text>}
+                      actions={
+                        <DropdownMenu
+                          trigger={
+                            <Button size="sm" variant="secondary" aria-label="Open actions">
+                              <Icon icon={Bell} aria-hidden />
+                            </Button>
+                          }
+                        >
+                          <Stack gap="compact">
+                            {MOCK_MENU_ITEMS.map((item) => (
+                              <DropdownMenuButton key={item.id} onClick={() => {}}>
+                                {item.label}
+                              </DropdownMenuButton>
+                            ))}
+                          </Stack>
+                        </DropdownMenu>
+                      }
+                    />
+                  </div>
+
+                  <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} side="left" title="Menu" description="Navigation">
+                    <Stack gap="compact">
+                      <a className="ui-navlink ui-focus-ring" href="#">
+                        Home
+                      </a>
+                      <a className="ui-navlink ui-focus-ring" href="#">
+                        Settings
+                      </a>
+                    </Stack>
+                  </Drawer>
+
+                  <Divider />
+
+                  <ContextMenu
+                    items={MOCK_MENU_ITEMS.map((i) => ({
+                      id: i.id,
+                      label: i.label,
+                      onSelect: () => {},
+                    }))}
+                  >
+                    <div className="ui-drop">Right-click</div>
+                  </ContextMenu>
+                </Stack>
+              </Card>
+
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Bottom navigation</div>
+                  <div style={{ maxWidth: "28rem" }}>
+                    {isMobilePlatform ? (
+                      <BottomNav>
+                        <BottomNavItem href="#" label="Home" active icon={<Icon icon={Home} aria-hidden />} iconOnly />
+                        <BottomNavItem href="#" label="Components" icon={<Icon icon={Layers} aria-hidden />} iconOnly />
+                        <BottomNavItem href="#" label="Settings" icon={<Icon icon={Settings} aria-hidden />} iconOnly />
+                      </BottomNav>
+                    ) : (
+                      <>
+                        <Button size="sm" variant="secondary" onClick={() => setBottomNavVisible((v) => !v)}>
+                          {bottomNavVisible ? "Hide" : "Show"}
+                        </Button>
+                        <Spacer size={2} />
+                        {bottomNavVisible ? (
+                          <BottomNav>
+                            <BottomNavItem href="#" label="Home" active icon={<Icon icon={Home} aria-hidden />} iconOnly />
+                            <BottomNavItem href="#" label="Components" icon={<Icon icon={Layers} aria-hidden />} iconOnly />
+                            <BottomNavItem href="#" label="Settings" icon={<Icon icon={Settings} aria-hidden />} iconOnly />
+                          </BottomNav>
+                        ) : null}
+                      </>
+                    )}
                   </div>
                 </Stack>
               </Card>
@@ -307,37 +368,57 @@ export function ComponentsLibraryClient() {
                 </Stack>
               </Card>
             </Grid>
+          </TabsPanel>
 
-            <Card>
-              <Stack gap="compact">
-                <div className="text-heading-4">Bottom navigation (mobile)</div>
-                <Text tone="muted">This component is fixed-position. Toggle it on/off for preview.</Text>
-                <div className="ui-row">
-                  <Button size="sm" variant={bottomNavVisible ? "secondary" : "primary"} onClick={() => setBottomNavVisible((v) => !v)}>
-                    {bottomNavVisible ? "Hide" : "Show"} bottom nav
-                  </Button>
-                </div>
-                {bottomNavVisible ? (
-                  <>
-                    <Spacer size={6} />
-                    <BottomNav>
-                      <BottomNavItem href="#" active icon={<Icon icon={Home} aria-hidden />} label="Home" />
-                      <BottomNavItem href="#" icon={<Icon icon={Layers} aria-hidden />} label="Library" />
-                      <BottomNavItem href="#" icon={<Icon icon={Bell} aria-hidden />} label="Alerts" />
-                      <BottomNavItem href="#" icon={<Icon icon={Settings} aria-hidden />} label="Settings" />
-                    </BottomNav>
-                  </>
-                ) : null}
-              </Stack>
-            </Card>
+          <TabsPanel value="platform">
+            <Grid cols={colsPrimary}>
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Hero section (Web vs Mobile)</div>
+                  <Text tone="muted">
+                    Same component. Mobile variant is driven by the data-platform token presets (not just responsive shrink).
+                  </Text>
+
+                  <Grid cols={isMobilePlatform ? 1 : 2}>
+                    <Card>
+                      <Stack gap="compact">
+                        <div className="text-label">Web</div>
+                        <HeroSection
+                          kicker="Web"
+                          title="Build fast. Stay consistent."
+                          lede="This is the default web hero (centered, wider)."
+                          primaryAction={{ label: "Get started", href: "#" }}
+                          secondaryAction={{ label: "Learn more", href: "#" }}
+                        />
+                      </Stack>
+                    </Card>
+
+                    <Card>
+                      <Stack gap="compact">
+                        <div className="text-label">Mobile</div>
+                        <div data-platform="mobile" data-density="compact">
+                          <HeroSection
+                            kicker="Mobile"
+                            title="App-like mobile UI"
+                            lede="Same DS component, but tuned for a mobile platform feel."
+                            primaryAction={{ label: "Continue", href: "#" }}
+                            secondaryAction={{ label: "Details", href: "#" }}
+                          />
+                        </div>
+                      </Stack>
+                    </Card>
+                  </Grid>
+                </Stack>
+              </Card>
+            </Grid>
           </TabsPanel>
 
           <TabsPanel value="data">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Metric cards</div>
-                  <Grid cols={3}>
+                  <Grid cols={colsTight}>
                     <MetricCard label="Revenue" value="$42k" delta="+8%" hint="vs last week" />
                     <MetricCard label="Leads" value="128" delta="+12" hint="this week" />
                     <MetricCard label="Conversion" value="6.4%" delta="-0.3" hint="7d" />
@@ -364,7 +445,7 @@ export function ComponentsLibraryClient() {
               </Card>
             </Grid>
 
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Table</div>
@@ -425,7 +506,7 @@ export function ComponentsLibraryClient() {
               </Card>
             </Grid>
 
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">List</div>
@@ -465,7 +546,7 @@ export function ComponentsLibraryClient() {
           </TabsPanel>
 
           <TabsPanel value="feedback">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Alerts + toasts</div>
@@ -504,7 +585,7 @@ export function ComponentsLibraryClient() {
               </Card>
             </Grid>
 
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Badges / tooltip</div>
@@ -540,7 +621,7 @@ export function ComponentsLibraryClient() {
               <Stack>
                 <div className="text-heading-4">Form controls</div>
                 <FormErrorSummaryDemo />
-                <Grid cols={2}>
+                <Grid cols={colsPrimary}>
                   <Field id="cl-name" label="Name" hint="Mock hint">
                     <Input placeholder="Jane Doe" />
                   </Field>
@@ -570,7 +651,7 @@ export function ComponentsLibraryClient() {
               </Stack>
             </Card>
 
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Uploads / tags / multi-select</div>
@@ -595,7 +676,7 @@ export function ComponentsLibraryClient() {
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Date & time</div>
-                  <Grid cols={2}>
+                  <Grid cols={colsPrimary}>
                     <Field id="cl-date" label="Date">
                       <DatePicker />
                     </Field>
@@ -612,7 +693,7 @@ export function ComponentsLibraryClient() {
           </TabsPanel>
 
           <TabsPanel value="media">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Images + Carousel</div>
@@ -664,7 +745,7 @@ export function ComponentsLibraryClient() {
           </TabsPanel>
 
           <TabsPanel value="utility">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Theme switcher</div>
@@ -683,7 +764,7 @@ export function ComponentsLibraryClient() {
               </Card>
             </Grid>
 
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Scroll to top</div>
@@ -725,7 +806,7 @@ export function ComponentsLibraryClient() {
           </TabsPanel>
 
           <TabsPanel value="overlays">
-            <Grid cols={2}>
+            <Grid cols={colsPrimary}>
               <Card>
                 <Stack gap="compact">
                   <div className="text-heading-4">Modal / Drawer</div>

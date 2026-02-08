@@ -907,4 +907,49 @@ description: "Task list for BLOG pixel-perfect prototype migration"
 
 - [x] DSH120 Run gates: `npm run verify`
 
+---
+
+## Phase 13: Platform-Variant Components (Web vs Mobile) + Variant Preview
+
+**Purpose**: Move beyond “responsive shrink” by supporting **platform-aware visuals** (web vs app-like mobile) while keeping **shared data + logic**.
+
+**Definition**:
+- **Responsive**: same UI structure, CSS adapts.
+- **Platform-variant**: UI structure and/or interaction patterns can differ for mobile vs desktop, while keeping the same business logic and data.
+
+**Rules**:
+- Keep the existing responsive system intact (no breaking changes).
+- Prefer **token + CSS scope** (`data-platform`, `data-density`) when possible.
+- Use React branching only when a component truly needs different structure.
+- Component library must be able to preview **both** variants.
+
+### Phase 13.A: Audit (Classify Components)
+
+- [ ] DSH130 Audit DS components and classify: token-only vs CSS-scope vs structural-branching
+        - Targets (initial): `src/ds/components/Marketing.tsx`, `src/ds/components/AppBar.tsx`, `src/ds/components/BottomNav.tsx`, `src/ds/components/Tabs.tsx`, `src/ds/components/Breadcrumbs.tsx`
+        - Output: short table in this phase (component → approach → notes)
+
+| Component | Variant need? | Approach | Notes |
+| --- | --- | --- | --- |
+| `HeroSection` (Marketing) | Yes (app-like mobile vs web) | CSS-scope via `data-platform` | Keep API stable; avoid hooks/client conversion |
+| `AppBar` | Maybe | Token-only + small CSS-scope | Already sticky; mobile may need different padding/actions patterns |
+| `BottomNav` | Yes (mobile primary nav pattern) | Use as-is (structural component already exists) | Ensure pages account for fixed nav height |
+| `Tabs` | Maybe | CSS-scope first | Consider horizontal scroll / compact hit targets on mobile |
+| `Breadcrumbs` | Maybe | Structural-branching if needed | Mobile often collapses to “Back + current” |
+
+### Phase 13.B: Initial Implementation (Pilot Variants)
+
+- [x] DSH131 Add platform-scoped hero variant styling (web vs mobile) without changing component API
+        - Files: `src/ds/components/Marketing.tsx`, `src/ds/styles/ds.components.css`
+
+### Phase 13.C: Component Library Re-org (Preview Variants)
+
+- [x] DSH132 Add a `Platform` section in the Components library to preview web vs mobile variants side-by-side
+        - File: `src/app/component-library/components/_components/ComponentsLibraryClient.tsx`
+
+### Phase 13.D: Next Candidates (Keep Minimal, Add As Needed)
+
+- [ ] DSH133 Add platform-variant previews for additional components once they have real mobile UI differences
+        - Candidate previews: navigation patterns, tabs-as-segmented-control, breadcrumbs collapsing, compact filter bars
+
 

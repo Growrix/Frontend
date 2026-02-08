@@ -354,6 +354,32 @@
     padding: var(--ds-space-8) 0;
     text-align: center;
   }
+
+  .ui-hero__actions {
+    justify-content: center;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-hero {
+    padding: var(--ds-space-6) 0;
+    text-align: left;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-hero .ui-center {
+    margin-inline: 0;
+    max-width: 52ch;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-hero__actions {
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-hero__actions > * {
+    width: 100%;
+    justify-content: center;
+  }
   .ui-kicker {
     display: inline-flex;
     align-items: center;

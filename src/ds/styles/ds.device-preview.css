@@ -41,8 +41,7 @@
     overflow: auto;
     overscroll-behavior: contain;
     background: var(--ds-color-background);
-    padding: var(--ds-space-6);
-    box-sizing: border-box;
+    padding: 0;
   }
 
   .ui-device-preview__current {
