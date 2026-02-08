@@ -170,7 +170,10 @@
 
     /* Sizing */
     --ds-size-hero-min-h: 28rem;
-    --ds-size-header-h: 3.5rem;
+     /* Header band height (used for sticky offsets + viewport calculations).
+       Matches shells that use .ui-header-pad (padding-block: --ds-space-4)
+       around a row of controls that are at least --ds-size-touch-target tall. */
+     --ds-size-header-h: calc(var(--ds-size-touch-target) + var(--ds-space-4) + var(--ds-space-4));
     --ds-size-viewport-minus-header: calc(100dvh - var(--ds-size-header-h));
 
     --ds-size-touch-target: 2.75rem;
@@ -250,5 +253,24 @@
   :where(html[data-visual="glass"], [data-visual="glass"]) {
     --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
     --ds-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  :where(html[data-visual="neumorph"], [data-visual="neumorph"]) {
+    --ds-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
+    --ds-shadow-md: 0 14px 38px rgba(0, 0, 0, 0.28);
+  }
+
+  :where(html[data-visual="sleek"], [data-visual="sleek"]) {
+    --ds-shadow-sm: none;
+    --ds-shadow-md: none;
+    --ds-radius-default: 0.375rem;
+    --ds-radius-card: 0.5rem;
+  }
+
+  /* Platform presets (scopable per page via a wrapper) */
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) {
+    --ds-size-touch-target: 3rem;
+    --ds-size-bottom-nav-h: 4.25rem;
+    --ds-size-tabs-h: var(--ds-size-touch-target);
   }
 }

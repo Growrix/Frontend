@@ -181,20 +181,19 @@
   }
 
   .ui-page--dashboard .ui-shell-aside {
+    position: sticky;
+    top: var(--ds-size-header-h);
+    height: var(--ds-size-viewport-minus-header);
     align-self: start;
     z-index: var(--ds-z-sticky);
   }
 
   .ui-page--dashboard .ui-sidebar,
   .ui-page--dashboard .ui-rightbar {
-    position: sticky;
-    top: var(--ds-size-header-h);
-    height: var(--ds-size-viewport-minus-header);
-    align-self: start;
+    height: 100%;
   }
 
-  .ui-page--dashboard .ui-sidebar .ui-card,
-  .ui-page--dashboard .ui-rightbar .ui-card {
+  .ui-page--dashboard .ui-shell-aside .ui-card {
     height: 100%;
     border-radius: 0;
     box-shadow: none;
