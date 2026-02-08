@@ -828,3 +828,53 @@ description: "Task list for BLOG pixel-perfect prototype migration"
 - [ ] TB063 Clean config and references after deletion
 - [ ] TB064 Run gates (Typecheck + Build)
 
+---
+
+## Phase 11: Frontend Hub — Design System Scalability (Next-level Plan)
+
+**Purpose**: Keep all options open so the DS can scale to:
+- Minimal schemes (2–3 colors)
+- Rich palettes (many scales)
+- Multiple themes
+- Visual variants (glass / neumorphic / sleek / basic)
+- Mobile-app-like platform mode + dedicated component library surface
+
+**Rules (do not overcomplicate)**:
+- Components consume **semantic** tokens (not palette) unless explicitly a palette viewer.
+- Theme, visual variant, and density/platform are **separate knobs**.
+- Keep the token API stable; implementation can be minimal or derived.
+
+### Phase 11.A: Token Contract (Palette → Semantic → Component)
+
+- [ ] DSH001 Define token taxonomy + conventions (Palette / Semantic / Component / Effects) in docs (no code yet)
+- [ ] DSH002 Identify legacy aliases to keep vs gradually retire (list only; no breaking changes)
+- [ ] DSH003 Add a lightweight conformance checklist for new components (semantic-only, variant-safe, density-safe)
+
+### Phase 11.B: Theme Registry (Data-driven themes)
+
+- [x] DSH010 Create a theme registry (single source of truth) for allowed themes + labels
+- [x] DSH011 Update theme init + theme switcher to read from the registry (no hardcoded theme list)
+- [x] DSH012 Ensure `ThemeInitScript` validates theme names via registry and falls back to default
+
+### Phase 11.C: Visual Variants (Glass / Neumorph / Sleek)
+
+- [ ] DSH020 Introduce a `data-visual` contract (e.g. `basic`, `glass`, `neumorph`, `sleek`) with token overrides only
+- [ ] DSH021 Start with `basic` (default) + `glass` (minimal override) without changing component APIs
+
+### Phase 11.D: Density + Platform Mode (Web vs Mobile feel)
+
+- [ ] DSH030 Introduce `data-density` contract (`comfortable` default, `compact`)
+- [ ] DSH031 Add minimal token overrides for `compact` (touch targets, card padding, gaps) without layout breakage
+
+### Phase 11.E: Mobile Component Library Page
+
+- [x] DSH040 Add route: `src/app/component-library/mobile/page.tsx`
+- [x] DSH041 Add sidebar nav item for Mobile library (DS boundary icon)
+- [x] DSH042 Render mobile-focused component demos (AppBar, BottomNav, list rows, forms) in a narrow container
+
+### Phase 11.F: Gates + Ongoing Governance
+
+- [x] DSH050 Run gates: `npm run lint`, `npm test`, `npm run build`
+- [ ] DSH051 Add a recurring audit task: spot-check components for hardcoded colors/shadows that block variants
+
+

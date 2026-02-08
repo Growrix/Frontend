@@ -11,6 +11,7 @@ export {
   PanelRightClose,
   PanelRightOpen,
   SlidersHorizontal,
+  Smartphone,
   Settings,
   Sun,
   X,

@@ -3,7 +3,8 @@
 import * as React from "react";
 
 import { Button } from "../primitives/Button";
-import { applyTheme, readStoredTheme, storeTheme, type ThemeName } from "../themes/theme";
+import { THEMES, type ThemeName } from "../themes/registry";
+import { applyTheme, readStoredTheme, storeTheme } from "../themes/theme";
 
 export type ThemeSwitcherProps = {
   className?: string;
@@ -31,15 +32,11 @@ export function ThemeSwitcher({ className }: ThemeSwitcherProps) {
 
   return (
     <div className={cx("ui-row", className)} role="group" aria-label="Theme selector">
-      <Button size="sm" variant={theme === "dark" ? "primary" : "secondary"} onClick={() => set("dark")}>
-        Dark
-      </Button>
-      <Button size="sm" variant={theme === "light" ? "primary" : "secondary"} disabled aria-disabled="true">
-        Light
-      </Button>
-      <Button size="sm" variant={theme === "purple" ? "primary" : "secondary"} disabled aria-disabled="true">
-        Purple
-      </Button>
+      {THEMES.map((t) => (
+        <Button key={t.name} size="sm" variant={theme === t.name ? "primary" : "secondary"} onClick={() => set(t.name)}>
+          {t.label}
+        </Button>
+      ))}
     </div>
   );
 }

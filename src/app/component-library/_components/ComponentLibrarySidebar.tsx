@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Icon, Stack } from "@/ds";
-import { BookOpen, Layers, SlidersHorizontal, Zap } from "@/ds";
+import { BookOpen, Layers, SlidersHorizontal, Smartphone, Zap } from "@/ds";
 
 type NavItem = {
   id: string;
@@ -20,6 +20,7 @@ const NAV: NavItem[] = [
   { id: "primitives", label: "Primitives", href: "/component-library/primitives", icon: SlidersHorizontal },
   { id: "components", label: "Components", href: "/component-library/components", icon: Layers },
   { id: "patterns", label: "Patterns", href: "/component-library/patterns", icon: Zap },
+  { id: "mobile", label: "Mobile", href: "/component-library/mobile", icon: Smartphone },
 ];
 
 export type ComponentLibrarySidebarProps = {

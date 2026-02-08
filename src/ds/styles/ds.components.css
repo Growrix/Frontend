@@ -747,6 +747,12 @@
     padding: var(--ds-space-card-padding);
   }
 
+  :where(html[data-visual="glass"], [data-visual="glass"]) .ui-card {
+    background: color-mix(in oklab, var(--ds-color-surface) 78%, transparent);
+    border-color: color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
   .ui-card--compact {
     padding: var(--ds-space-4);
   }
