@@ -846,9 +846,9 @@ description: "Task list for BLOG pixel-perfect prototype migration"
 
 ### Phase 11.A: Token Contract (Palette → Semantic → Component)
 
-- [ ] DSH001 Define token taxonomy + conventions (Palette / Semantic / Component / Effects) in docs (no code yet)
-- [ ] DSH002 Identify legacy aliases to keep vs gradually retire (list only; no breaking changes)
-- [ ] DSH003 Add a lightweight conformance checklist for new components (semantic-only, variant-safe, density-safe)
+- [x] DSH001 Define token taxonomy + conventions (Palette / Semantic / Component / Effects) in docs (no code yet)
+- [x] DSH002 Identify legacy aliases to keep vs gradually retire (list only; no breaking changes)
+- [x] DSH003 Add a lightweight conformance checklist for new components (semantic-only, variant-safe, density-safe)
 
 ### Phase 11.B: Theme Registry (Data-driven themes)
 
@@ -858,13 +858,15 @@ description: "Task list for BLOG pixel-perfect prototype migration"
 
 ### Phase 11.C: Visual Variants (Glass / Neumorph / Sleek)
 
-- [ ] DSH020 Introduce a `data-visual` contract (e.g. `basic`, `glass`, `neumorph`, `sleek`) with token overrides only
-- [ ] DSH021 Start with `basic` (default) + `glass` (minimal override) without changing component APIs
+- [x] DSH020 Introduce a `data-visual` contract (e.g. `basic`, `glass`, `neumorph`, `sleek`) with token overrides only
+- [x] DSH021 Start with `basic` (default) + `glass` (minimal override) without changing component APIs
+- [x] DSH022 Add minimal `neumorph` + `sleek` variants (token-first; keep component APIs unchanged)
 
 ### Phase 11.D: Density + Platform Mode (Web vs Mobile feel)
 
-- [ ] DSH030 Introduce `data-density` contract (`comfortable` default, `compact`)
-- [ ] DSH031 Add minimal token overrides for `compact` (touch targets, card padding, gaps) without layout breakage
+- [x] DSH030 Introduce `data-density` contract (`comfortable` default, `compact`)
+- [x] DSH031 Add minimal token overrides for `compact` (touch targets, card padding, gaps) without layout breakage
+- [x] DSH032 Introduce `data-platform` contract (`web` default, `mobile`) with minimal sizing overrides
 
 ### Phase 11.E: Mobile Component Library Page
 
@@ -875,6 +877,34 @@ description: "Task list for BLOG pixel-perfect prototype migration"
 ### Phase 11.F: Gates + Ongoing Governance
 
 - [x] DSH050 Run gates: `npm run lint`, `npm test`, `npm run build`
-- [ ] DSH051 Add a recurring audit task: spot-check components for hardcoded colors/shadows that block variants
+- [x] DSH051 Add a recurring audit task: spot-check components for hardcoded colors/shadows that block variants
+- [x] DSH052 Add `npm run ds:audit` to detect hardcoded colors in DS styles (tooling only)
+
+---
+
+## Phase 12: Mobile Device Preview + Live Responsive Preview
+
+**Purpose**: Provide two dev-time preview surfaces:
+- **Component Library preview**: build and tune mobile components inside a device-like frame (Mobile/Tablet/Current).
+- **Live site preview**: view the real app routes inside a Mobile/Tablet/Current-size preview (AI Studio-style selector).
+
+**Rules**:
+- Use existing DS components (`DropdownMenu`, `Button`, `Card`, `Stack`, etc.).
+- No hardcoded colors/shadows; preview chrome must be token-driven.
+- Keep UX minimal: a single device selector (Current / Mobile / Tablet) like the reference.
+
+### Phase 12.A: Component Library Device Preview
+
+- [x] DSH100 Create a reusable DS `DevicePreview` component (frame + internal scroll + device selector)
+- [x] DSH101 Integrate `DevicePreview` into `/component-library/mobile` so mobile components can be tuned in-frame
+
+### Phase 12.B: Live Responsive Site Preview
+
+- [x] DSH110 Add a `/preview` route that renders the app inside a resizable device frame via iframe
+- [x] DSH111 Support `?path=/some/route` query param for previewing specific pages (default `/`)
+
+### Phase 12.C: Governance
+
+- [x] DSH120 Run gates: `npm run verify`
 
 

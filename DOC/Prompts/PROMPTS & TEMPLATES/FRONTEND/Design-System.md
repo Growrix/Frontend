@@ -12,42 +12,69 @@ It defines the tokens, rules, and component standards that the codebase will be 
 
 ---
 
+## Source of Truth (Implementation References)
+
+These files define the *actual* system behavior. If this doc conflicts with code, **update this doc**.
+
+- Token + theme layers
+  - `src/ds/styles/ds.tokens.css` (palette + semantic + knob overrides)
+  - `src/ds/styles/ds.theme.css` (color-scheme)
+  - `src/ds/styles/ds.base.css` (base element styles)
+  - `src/ds/styles/ds.utilities.css` (layout + typography utilities)
+  - `src/ds/styles/ds.components.css` (DS component styles)
+  - `src/ds/styles/index.css` (imports + layer order)
+- Theme runtime
+  - `src/ds/themes/registry.ts` (allowed themes + default)
+  - `src/ds/themes/theme.ts` (apply/read/store/resolve)
+  - `src/ds/themes/ThemeInitScript.tsx` (early theme class init in `<head>`)
+- App integration
+  - `src/app/layout.tsx` (fonts + theme init wiring)
+  - `src/app/globals.css` (global imports)
+
 
 ## Design Tokens & Rules
 
 ### Colors
 
-Token naming convention:
-- `primary` = brand primary (links, highlights)
-- `secondary` = brand secondary (secondary emphasis)
-- `accent` = primary call-to-action emphasis (buttons, focus)
-- `background`/`surface` = base layers
-- `foreground-*` = text hierarchy
+**Token taxonomy (Palette → Semantic → Effects)**
 
-Current target (ONE THEME NOW): **SolarConnect Dark**
+1) **Palette tokens** (raw building blocks; may use hex)
+- Examples: `--ds-palette-neutral-50`, `--ds-palette-brand-600`, `--ds-palette-success-600`
+- Live in: `src/ds/styles/ds.tokens.css`
+- Overridden by theme selectors: `html.theme-dark|light|purple`
 
-This repo is currently focused on shipping **one theme** that matches the Google AI Studio SolarConnect design. Additional themes can be added later without changing component code by extending CSS variables.
+2) **Semantic tokens** (what components should consume)
+- Examples: `--ds-color-background`, `--ds-color-surface`, `--ds-color-border`, `--ds-color-foreground`, `--ds-color-accent`
+- Defined as mappings to palette tokens (or direct theme overrides where needed)
 
-**Semantic tokens (used across the app)**
-- `background`: `#151419`
-- `surface` / elevated: `#1B1B1E`
-- `border`: `#262626`
-- `foreground` (body): `#9CA3AF`
-- `foreground-secondary` (high emphasis): `#F3F4F6`
-- `accent` (CTA + focus): `#6D3BE2`
-- `accent-foreground`: `#230F4F`
+3) **Effects / state tokens** (derived, variant-friendly)
+- Examples: `--ds-color-focus-ring`, `--ds-color-overlay`, `--ds-color-accent-hover`, `--ds-color-accent-active`
 
-**Optional scales (SolarConnect compatibility)**
-To support SolarConnect-style utilities like `bg-brand-500/20` or `text-neutral-300` without hardcoding values, the system provides optional centralized scales:
-- `brand-50..950` (purple scale)
-- `neutral-50..950` (SolarConnect slate override)
+**Supported themes (separate knob)**
+- Theme names are registry-driven: `dark`, `light`, `purple`
+- Theme is applied as a single class on `<html>`: `theme-*`
+- Theme defaults to `dark` and is stored in localStorage key `solarmatch-theme`
 
-These scales must be mapped to CSS variables (theme-driven) and are optional; most of the app should continue using semantic keys (`background`, `surface`, `accent`, etc.).
+**Optional scales (compatibility + future expansion)**
+- Neutral scale: `neutral-0..950`
+- Brand scale: `brand-50..950`
+- Status bases: `success|warning|danger|info-600` (scales can expand later)
 
-Rules:
-- No hardcoded hex/rgb/rgba values in components.
-- No `text-gray-*`, `bg-slate-*`, or `dark:` classes.
-- Colors must be expressed via semantic Tailwind keys that map to CSS variables.
+**Rules (non-negotiable)**
+- Outside of `src/ds/styles/ds.tokens.css`: **no hardcoded hex / rgb(a)()**. Use `var(--ds-*)`, `color-mix()`, or token-derived values.
+- Components consume **semantic** tokens (not palette) unless the component is explicitly a palette viewer.
+- Use `npm run ds:audit` to prevent regressions in DS style layers.
+
+**Legacy aliases (keep vs retire — list only, no breaking changes)**
+
+Keep for compatibility (existing DS classes/styles may rely on these):
+- Keep: `--ds-color-bg`, `--ds-color-text`, `--ds-color-text-muted`, `--ds-color-surface-2`
+- Keep: `--ds-color-fg`, `--ds-color-fg-muted`
+
+Prefer going forward (canonical names):
+- Prefer: `--ds-color-background`, `--ds-color-surface`, `--ds-color-border`
+- Prefer: `--ds-color-foreground`, `--ds-color-foreground-secondary`
+- Prefer: `--ds-color-accent`, `--ds-color-accent-foreground`
 
 ---
 
@@ -94,11 +121,11 @@ Rules:
 ### Icons
 
 Default icon system (UI):
-- Use `lucide-react` for all general-purpose UI icons.
-- Do not introduce new `@heroicons/react` imports.
+- Use `lucide-react` **via the DS boundary**: `src/ds/icons.ts`.
+- Do not import `lucide-react` directly in feature code.
 
 Allowed exceptions:
-- Brand/auth icons (e.g., Google/Apple) remain as custom SVG components under `src/components/icons/**`.
+- Brand/auth icons may remain as custom SVG components under the app boundary.
 
 Size scale:
 - `xs` = 14px
@@ -108,11 +135,10 @@ Size scale:
 - `xl` = 32px
 
 Implementation standard:
-- Prefer the canonical wrapper `src/components/ui/icon.tsx` to enforce consistent sizing/props.
-- Icons should inherit current text color (`className="text-current"` when needed) and rely on theme tokens for color.
+- Icons should inherit current text color (default behavior); rely on semantic tokens for color.
 
 Rules:
-- Avoid inline SVGs in feature/pages. Use Lucide via `Icon`, or (for brand/auth only) custom SVG components under `src/components/icons/**`.
+- Avoid inline SVGs in feature/pages. Use DS icons via `src/ds/icons.ts`.
 - Icon-only buttons must have an `aria-label`.
 
 ### Spacing
@@ -204,29 +230,52 @@ Rules:
 ### Theme
 
 Supported themes:
-- Current shipping focus: `dark` only (SolarConnect Dark).
-- `light` / additional themes may be added later via CSS variable overrides.
+- `dark`, `light`, `purple` (registry-driven)
 
 How theme switching works:
-- The `ThemeProvider` applies one of `theme-dark`, `theme-light`, `theme-purple` to `<html>`.
+- `ThemeInitScript` runs in `<head>` to apply exactly one `theme-*` class before paint.
 - Theme preference is stored in localStorage key `solarmatch-theme`.
-- Tailwind dark variant uses `.theme-dark` selector (see `tailwind.config.js`).
+- `applyTheme()` removes any existing `theme-*` class and adds the new one.
+
+Separate knobs (do not conflate):
+- **Theme**: `<html class="theme-dark|theme-light|theme-purple">` (brand + semantic color mapping)
+- **Visual variant**: `data-visual="basic|glass|neumorph|sleek"` (mostly effects: shadows/radii)
+- **Density**: `data-density="comfortable|compact"` (spacing/padding)
+- **Platform**: `data-platform="web|mobile"` (touch target sizing)
+
+Notes:
+- Knobs can be applied to `<html>` for global mode or to a wrapper element to scope a single surface.
+- Implementation is token-first: knobs override CSS variables; components should not branch logic on knob values.
 
 Rules:
-- Do not toggle Tailwind’s `dark` class directly.
-- Theme-aware colors must come from CSS variables.
+- Theme-aware visuals must come from CSS variables.
 
 ---
 
-## Tailwind & Utility Mapping
+## CSS Utilities & Token Mapping
 
-- Semantic color keys in Tailwind (`primary`, `secondary`, `accent`, `background`, `surface`, `border`, `foreground-*`) map to CSS variables (RGB triples).
-- Typography utilities map to `src/design-tokens/semantic/typography.ts`.
-- Spacing utilities include semantic responsive tokens generated via a Tailwind plugin (see `tailwind.config.js`).
+- Use DS CSS layers + classes, not Tailwind.
+- Typography utilities (e.g. `text-heading-*`, `text-body-*`) live in `src/ds/styles/ds.utilities.css`.
+- Layout utilities (shell/grid/sticky) live in `src/ds/styles/ds.utilities.css`.
+- Component base styles live in `src/ds/styles/ds.components.css`.
 
-Dark mode:
-- `darkMode: ['class', '.theme-dark']`
-- Use `theme-*` classes on `<html>`; avoid `dark:` usage.
+Mapping rules:
+- Feature UI should consume DS utilities/components instead of reinventing tokens.
+- Any new repeated pattern should become a DS utility/class before proliferating in feature code.
+
+---
+
+## Component Conformance Checklist (Lightweight)
+
+For any new DS component or DS style block:
+
+- No hardcoded color values (hex/rgb/rgba) outside `ds.tokens.css`.
+- Uses **semantic** tokens (`--ds-color-*`, `--ds-space-*`, `--ds-size-*`, `--ds-shadow-*`, `--ds-radius-*`).
+- Variant-safe: looks acceptable under `data-visual=basic|glass|neumorph|sleek` without changing APIs.
+- Density-safe: padding/gaps respond to `data-density=compact` via variables (no fixed pixel paddings).
+- Platform-safe: touch targets respect `--ds-size-touch-target` (and thus `data-platform=mobile`).
+- Theme-safe: readable under `theme-dark|light|purple` (contrast sanity check).
+- Passes governance: `npm run ds:audit` and `npm run verify`.
 
 ---
 
@@ -336,9 +385,9 @@ Mobile app-like rules:
 ## Usage Guidelines
 
 - Always use semantic tokens for colors/typography/spacing; never hardcode values.
-- Prefer `src/components/ui/**` for design-system components.
+- Prefer `src/ds/components/**` and `src/ds/styles/**` for design-system components and styling.
 - Enforce with scripts:
-  - `npm run ds:verify`
+  - `npm run verify`
   - `npm run ds:audit`
 
 ---

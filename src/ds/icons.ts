@@ -3,9 +3,12 @@
 export {
   BookOpen,
   Bell,
+  Check,
+  ChevronDown,
   Home,
   Layers,
   Menu,
+  Monitor,
   PanelLeftClose,
   PanelLeftOpen,
   PanelRightClose,
@@ -14,6 +17,7 @@ export {
   Smartphone,
   Settings,
   Sun,
+  Tablet,
   X,
   Zap,
 } from "lucide-react";
