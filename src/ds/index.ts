@@ -27,7 +27,6 @@ export * from "./components/Modal";
 export * from "./components/Drawer";
 export * from "./components/Tabs";
 export * from "./components/DropdownMenu";
-export * from "./components/DevicePreview";
 export * from "./components/Tooltip";
 export * from "./components/Toast";
 export * from "./components/BottomNav";

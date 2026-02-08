@@ -3,6 +3,9 @@
 import * as React from "react";
 
 import { Button } from "../primitives/Button";
+import { DropdownMenu, DropdownMenuButton } from "./DropdownMenu";
+import { Icon } from "./Icon";
+import { Check, Sun, Zap } from "../icons";
 import { THEMES, type ThemeName } from "../themes/registry";
 import { applyTheme, readStoredTheme, storeTheme } from "../themes/theme";
 
@@ -30,13 +33,55 @@ export function ThemeSwitcher({ className }: ThemeSwitcherProps) {
     applyTheme(next);
   };
 
+  const themeCount = THEMES.length;
+  const canToggle = themeCount === 2;
+  const canChoose = themeCount > 2;
+
+  const nextToggleTheme = React.useMemo<ThemeName | null>(() => {
+    if (!canToggle) return null;
+    const other = THEMES.find((t) => t.name !== theme);
+    return (other?.name ?? null) as ThemeName | null;
+  }, [canToggle, theme]);
+
+  const triggerIcon = theme === "purple" ? Zap : Sun;
+  const ariaLabel = canToggle
+    ? `Toggle theme${nextToggleTheme ? ` (switch to ${nextToggleTheme})` : ""}`
+    : "Change theme";
+
+  const trigger = (
+    <Button
+      size="sm"
+      variant="secondary"
+      className={className}
+      aria-label={ariaLabel}
+      onClick={
+        canToggle
+          ? () => {
+              if (nextToggleTheme) set(nextToggleTheme);
+            }
+          : undefined
+      }
+      disabled={themeCount <= 1}
+    >
+      <Icon icon={triggerIcon} size="sm" aria-hidden />
+    </Button>
+  );
+
+  if (!canChoose) return trigger;
+
   return (
-    <div className={cx("ui-row", className)} role="group" aria-label="Theme selector">
-      {THEMES.map((t) => (
-        <Button key={t.name} size="sm" variant={theme === t.name ? "primary" : "secondary"} onClick={() => set(t.name)}>
-          {t.label}
-        </Button>
-      ))}
+    <div className={cx("ui-row", className)}>
+      <DropdownMenu trigger={trigger}>
+        {THEMES.map((t) => {
+          const active = t.name === theme;
+          return (
+            <DropdownMenuButton key={t.name} onClick={() => set(t.name)} aria-current={active ? "true" : undefined}>
+              <span style={{ flex: 1, minWidth: 0 }}>{t.label}</span>
+              {active ? <Icon icon={Check} size="sm" aria-hidden /> : null}
+            </DropdownMenuButton>
+          );
+        })}
+      </DropdownMenu>
     </div>
   );
 }
