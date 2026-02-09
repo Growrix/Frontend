@@ -19,6 +19,8 @@ export * from "./primitives/Text";
 
 export * from "./components/Section";
 export * from "./components/Card";
+export * from "./components/ImageCard";
+export * from "./components/IconCard";
 export * from "./components/Field";
 export * from "./components/Badge";
 export * from "./components/Alert";
@@ -81,6 +83,17 @@ export * from "./layouts/DashboardShell";
 export * from "./layouts/DocsShell";
 
 export * from "./themes/ThemeInitScript";
+
+// Updated blueprint layers (scaffolded, non-breaking)
+export * from "./foundation";
+export * from "./runtime";
+
+export * from "./structures";
+export * from "./interactions";
+export * from "./patterns";
+export * from "./visuals";
+export * from "./widgets";
+export * from "./composition";
 
 export * from "./preview/PreviewPlatform";
 

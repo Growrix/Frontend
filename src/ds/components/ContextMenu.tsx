@@ -22,6 +22,7 @@ export type ContextMenuProps = {
 export function ContextMenu({ items, children, className }: ContextMenuProps) {
   const [open, setOpen] = React.useState(false);
   const [pos, setPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const menuRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (!open) return;
@@ -37,6 +38,14 @@ export function ContextMenu({ items, children, className }: ContextMenuProps) {
     };
   }, [open]);
 
+  React.useEffect(() => {
+    if (!open) return;
+    const el = menuRef.current;
+    if (!el) return;
+    el.style.setProperty("--ui-cm-left", `${pos.x}px`);
+    el.style.setProperty("--ui-cm-top", `${pos.y}px`);
+  }, [open, pos]);
+
   return (
     <div
       className={cx("ui-cmhost", className)}
@@ -49,7 +58,7 @@ export function ContextMenu({ items, children, className }: ContextMenuProps) {
       {children}
       {open
         ? createPortal(
-            <div className="ui-cm" style={{ left: pos.x, top: pos.y }} role="menu" aria-label="Context menu">
+            <div ref={menuRef} className="ui-cm" role="menu" aria-label="Context menu">
               {items.map((it) => (
                 <button
                   key={it.id}

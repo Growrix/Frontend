@@ -76,7 +76,7 @@ export function ThemeSwitcher({ className }: ThemeSwitcherProps) {
           const active = t.name === theme;
           return (
             <DropdownMenuButton key={t.name} onClick={() => set(t.name)} aria-current={active ? "true" : undefined}>
-              <span style={{ flex: 1, minWidth: 0 }}>{t.label}</span>
+              <span className="ui-flex-1 ui-min-w-0">{t.label}</span>
               {active ? <Icon icon={Check} size="sm" aria-hidden /> : null}
             </DropdownMenuButton>
           );

@@ -16,7 +16,8 @@ const eslintConfig = defineConfig([
   ]),
 
   {
-    files: ["src/app/**/*.{ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/ds/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -27,6 +28,19 @@ const eslintConfig = defineConfig([
               message: "Import UI only from '@/ds' (single public entry).",
             },
           ],
+        },
+      ],
+    },
+  },
+
+  {
+    files: ["src/ds/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "JSXAttribute[name.name='style']",
+          message: "Do not use inline styles in DS. Use CSS classes + CSS variables set via refs if needed.",
         },
       ],
     },

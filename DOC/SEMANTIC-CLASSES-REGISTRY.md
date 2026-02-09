@@ -1,100 +1,58 @@
-# SolarMatch Semantic Classes Registry
+# Blueprint DS Semantic Classes Registry
 
-This file is the quick reference for the semantic classes and token-driven utilities used across the app.
+Quick reference for the **token-driven** `ui-*` classes used across the app.
 
-**Goal**: make it easy to migrate UI without guessing, and prevent hardcoded colors/typography/arbitrary values.
+**Goal**: predictable UI, no hardcoded values, and pages acting as consumers.
 
 ## Sources of truth
 
-- Token definitions + theme variables: `src/app/globals.css`
-- Tailwind token wiring: `tailwind.config.js`
-- Working examples: `src/app/component-library/page.tsx`
-- Target v3 SOT: `DOC/Prompts/PROMPTS & TEMPLATES/FRONTEND/Design-System.md`
+- DS CSS layers (the real SOT):
+	- `src/ds/styles/ds.tokens.css` (tokens + theme overrides)
+	- `src/ds/styles/ds.utilities.css` (layout/util utilities)
+	- `src/ds/styles/ds.components.css` (component classes)
+- Entry wiring:
+	- `src/app/globals.css` imports `src/ds/styles/index.css`
+- Working examples:
+	- `src/app/component-library/*`
 
 ## Rules
 
-- Use semantic tokens/utilities (e.g. `bg-background`, `text-foreground`, `border-border`).
-- Prefer semantic component classes for complex patterns (cards, forms, tables).
-- Do not use hardcoded colors (`#...`, `rgb(...)`, `rgba(...)`) in components.
-- Do not use `dark:` classes; theme is controlled by `ThemeProvider` (`theme-*` on `<html>`).
+- Prefer DS components via `@/ds` over raw class composition.
+- Avoid hardcoded values in app code (`#...`, `rgb(...)`, `px`, etc.).
+- Theme is controlled by `theme-*` class on `<html>` via `ThemeInitScript`.
+- Use `data-platform`, `data-density`, `data-visual` knobs on wrappers when needed.
 
 ---
 
-## Token-Driven Utility Classes (Tailwind)
+## Core layout / utilities (ds.utilities.css)
 
-### Backgrounds / Surfaces
-
-- `bg-background`
-- `bg-background-alt`
-- `bg-surface`
-- `bg-surface-hover`
-- `bg-muted` / `bg-muted/…` (if present in the Tailwind mapping)
-
-### Text
-
-- `text-foreground`
-- `text-foreground-secondary`
-- `text-muted-foreground`
-- `text-subtle`
-
-### Borders
-
-- `border-border`
-
-### Brand / Status
-
-(Exact availability depends on Tailwind mapping; prefer these semantic keys when present)
-
-- `bg-primary`, `text-primary`, `border-primary`
-- `bg-secondary`, `text-secondary`, `border-secondary`
-- `bg-accent`, `bg-accent-hover`, `text-accent`
-- `text-destructive`
+- `.ui-page`, `.ui-page-main`
+- `.ui-container` (+ modifiers `--narrow|--wide|--full`)
+- `.ui-section` (+ `--sm|--lg`)
+- `.ui-stack` (+ `--tight|--compact`)
+- `.ui-row` (+ `--between|--center`)
+- `.ui-sticky-top`
+- `.ui-focus-ring` (focus-visible ring)
 
 ---
 
-## Typography Utilities (Semantic)
+## Common component classes (ds.components.css)
 
-Use the semantic typography utilities wired in Tailwind (avoid `text-sm`, `text-lg`, `font-bold`, etc.):
-
-- `text-heading-1`
-- `text-heading-2`
-- `text-heading-3`
-- `text-heading-4`
-- `text-body`
-- `text-body-small`
-- `text-caption`
-- `text-label`
-
----
-
-## Semantic Component Classes (globals.css)
-
-These are referenced and demonstrated in the Component Library page.
-
-### Containers
-
-- `.theme-card` — modal/dialog container (strong elevation)
-- `.detail-card` — content/info card
-- `.neu-card` — neumorphic card variant
-- `.info-section` — section wrapper
-
-### Form elements
-
-- `.form-input` — text inputs
-- `.form-select` — select dropdowns (only where a caret is correct)
-- `.toggle-switch` — toggle buttons
-- `.slider-track` — range slider track
-
-### Data display
-
-- `.cost-item` — key/value row for financial data
-- `.metric-card` — KPI metric tiles
-- `.spec-card` — specification cards
-- `.rebate-item` — rebate rows
+- Surfaces:
+	- `.ui-card` (+ `.ui-card--compact`)
+	- Runtime surfaces: `.ui-screen`, `.ui-sheet`, `.ui-overlay`, `.ui-fab`, `.ui-siderail`
+- Inputs:
+	- `.ui-input`, `.ui-textarea`, `.ui-select__control`
+- Feedback:
+	- `.ui-alert`, `.ui-banner`, `.ui-toast*`, `.ui-skeleton`, `.ui-empty*`
+- Navigation:
+	- `.ui-bottom-nav*`, `.ui-breadcrumbs*`, `.ui-tabs*`
+- Overlays:
+	- `.ui-popover__panel`, `.ui-tooltip*`, `.ui-cm*`
 
 ---
 
 ## Notes
 
-- If you add/rename a semantic class in `src/app/globals.css`, update this registry and the `Component Library` page.
-- If you’re unsure which class to use, start from `src/app/component-library/page.tsx` and the target SOT.
+- If you add or rename any `ui-*` class in DS CSS, update this file.
+- Prefer **intent components** over “desktop/mobile component forks”; platform differences should be driven by runtime or scoped knobs.

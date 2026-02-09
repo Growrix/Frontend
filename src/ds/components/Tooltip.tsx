@@ -24,6 +24,7 @@ export function Tooltip({ content, children, className }: TooltipProps) {
   const [pos, setPos] = React.useState<{ top: number; left: number } | null>(null);
   const id = React.useId();
   const [anchor, setAnchor] = React.useState<HTMLSpanElement | null>(null);
+  const tooltipRef = React.useRef<HTMLDivElement | null>(null);
 
   const onAnchorRef = React.useCallback((node: HTMLSpanElement | null) => {
     setAnchor(node);
@@ -48,6 +49,15 @@ export function Tooltip({ content, children, className }: TooltipProps) {
       window.removeEventListener("resize", onResize);
     };
   }, [open, compute]);
+
+  React.useEffect(() => {
+    if (!open) return;
+    if (!pos) return;
+    const el = tooltipRef.current;
+    if (!el) return;
+    el.style.setProperty("--ui-tooltip-top", `${pos.top}px`);
+    el.style.setProperty("--ui-tooltip-left", `${pos.left}px`);
+  }, [open, pos]);
 
   const child = React.cloneElement(children, {
     onFocus: (e: React.FocusEvent) => {
@@ -76,7 +86,7 @@ export function Tooltip({ content, children, className }: TooltipProps) {
       </span>
       {open && pos
         ? createPortal(
-            <div id={id} role="tooltip" className={cx("ui-tooltip", className)} style={{ top: pos.top, left: pos.left }}>
+            <div id={id} ref={tooltipRef} role="tooltip" className={cx("ui-tooltip", className)}>
               <div className="ui-tooltip__bubble text-body-small">{content}</div>
             </div>,
             document.body

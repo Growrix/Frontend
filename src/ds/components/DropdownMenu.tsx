@@ -31,6 +31,7 @@ export function DropdownMenu({ trigger, children, className }: DropdownMenuProps
   const [open, setOpen] = React.useState(false);
   const [pos, setPos] = React.useState<{ top: number; left: number; width: number } | null>(null);
   const [anchor, setAnchor] = React.useState<HTMLSpanElement | null>(null);
+  const panelRef = React.useRef<HTMLDivElement | null>(null);
   const menuId = React.useId();
 
   const onTriggerRef = React.useCallback((node: HTMLSpanElement | null) => {
@@ -77,6 +78,16 @@ export function DropdownMenu({ trigger, children, className }: DropdownMenuProps
     };
   }, [open, menuId, anchor]);
 
+  React.useEffect(() => {
+    if (!open) return;
+    if (!pos) return;
+    const el = panelRef.current;
+    if (!el) return;
+    el.style.setProperty("--ui-menu-top", `${pos.top}px`);
+    el.style.setProperty("--ui-menu-left", `${pos.left}px`);
+    el.style.setProperty("--ui-menu-min-w", `${pos.width}px`);
+  }, [open, pos]);
+
   return (
     <div className={cx("ui-menu", className)}>
       <span className="ui-menu__anchor" ref={onTriggerRef}>
@@ -95,9 +106,9 @@ export function DropdownMenu({ trigger, children, className }: DropdownMenuProps
             <MenuContext.Provider value={{ close: () => setOpen(false) }}>
               <div
                 id={menuId}
+                ref={panelRef}
                 className="ui-menu__panel"
                 role="menu"
-                style={{ top: pos.top, left: pos.left, minWidth: pos.width }}
               >
                 {children}
               </div>

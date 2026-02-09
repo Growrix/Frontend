@@ -37,7 +37,7 @@
     font-family: var(--ds-font-mono);
     font-size: 0.95em;
     padding: 0.1em 0.35em;
-    border-radius: var(--ds-radius-sm);
+    border-radius: var(--ds-radius-default);
     border: 1px solid var(--ds-color-border);
     background: color-mix(in oklab, var(--ds-color-surface) 88%, var(--ds-color-primary) 12%);
   }

@@ -18,6 +18,7 @@ export function Popover({ trigger, children, className, align = "start" }: Popov
   const [open, setOpen] = React.useState(false);
   const [pos, setPos] = React.useState<{ top: number; left: number } | null>(null);
   const [anchor, setAnchor] = React.useState<HTMLSpanElement | null>(null);
+  const panelRef = React.useRef<HTMLDivElement | null>(null);
   const id = React.useId();
 
   const compute = React.useCallback(() => {
@@ -40,6 +41,15 @@ export function Popover({ trigger, children, className, align = "start" }: Popov
       window.removeEventListener("resize", onResize);
     };
   }, [open, compute]);
+
+  React.useEffect(() => {
+    if (!open) return;
+    if (!pos) return;
+    const el = panelRef.current;
+    if (!el) return;
+    el.style.setProperty("--ui-popover-top", `${pos.top}px`);
+    el.style.setProperty("--ui-popover-left", `${pos.left}px`);
+  }, [open, pos]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -76,7 +86,13 @@ export function Popover({ trigger, children, className, align = "start" }: Popov
 
       {open && pos
         ? createPortal(
-            <div id={id} className={cx("ui-popover__panel", align === "end" && "ui-popover__panel--end")} role="dialog" aria-modal="false" style={{ top: pos.top, left: pos.left }}>
+            <div
+              id={id}
+              ref={panelRef}
+              className={cx("ui-popover__panel", align === "end" && "ui-popover__panel--end")}
+              role="dialog"
+              aria-modal="false"
+            >
               {children}
             </div>,
             document.body

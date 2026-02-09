@@ -61,6 +61,12 @@
     --ds-radius-modal: 0.5rem;
     --ds-radius-full: 9999px;
 
+    /* Radius scale aliases (used by existing component CSS) */
+    --ds-radius-sm: var(--ds-radius-default);
+    --ds-radius-1: var(--ds-radius-default);
+    --ds-radius-2: var(--ds-radius-default);
+    --ds-radius-3: var(--ds-radius-card);
+
     /* Motion */
     --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
     --ds-duration-fast: 120ms;

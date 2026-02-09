@@ -13,6 +13,7 @@ import {
   Badge,
   Banner,
   BarChart,
+  BlogCard,
   BottomNav,
   BottomNavItem,
   Breadcrumbs,
@@ -41,6 +42,8 @@ import {
   FormErrorSummary,
   Grid,
   HeroSection,
+  IconCard,
+  ImageCard,
   Icon,
   Input,
   LineChart,
@@ -86,7 +89,7 @@ import {
   usePreviewPlatform,
 } from "@/ds";
 
-import { Bell, Home, Layers, Menu, Settings, Sun } from "@/ds";
+import { Bell, BookOpen, Home, Layers, Menu, Settings, Sun } from "@/ds";
 
 const TABS = [
   { value: "layout", label: "Layout" },
@@ -205,6 +208,35 @@ export function ComponentsLibraryClient() {
                     </Card>
                   </Grid>
                   <Text tone="muted">This demonstrates responsive layout primitives.</Text>
+                </Stack>
+              </Card>
+
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Cards (Blog / Image / Icon)</div>
+                  <Grid cols={isMobilePlatform ? 1 : 3}>
+                    <BlogCard
+                      title="How to design a platform-variant DS"
+                      excerpt="One component can look app-like on mobile and web-like on desktop—without duplicating logic."
+                      href="#"
+                    />
+
+                    <ImageCard
+                      imageSrc="/window.svg"
+                      imageAlt="Preview"
+                      title="Image card"
+                      description="Token-driven media card using the global DS image primitive."
+                      href="#"
+                      aspect="video"
+                    />
+
+                    <IconCard
+                      icon={BookOpen}
+                      title="Icon card"
+                      description="Reusable card with an icon slot and consistent spacing."
+                      href="#"
+                    />
+                  </Grid>
                 </Stack>
               </Card>
 

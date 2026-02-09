@@ -14,15 +14,24 @@ export type ProgressBarProps = {
 export function ProgressBar({ value, max = 100, label = "Progress", className }: ProgressBarProps) {
   const safeMax = Math.max(1, max);
   const pct = Math.max(0, Math.min(100, (value / safeMax) * 100));
+
+  const rootRef = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    el.style.setProperty("--ui-progress", `${pct}%`);
+  }, [pct]);
+
   return (
     <div
       className={cx("ui-progress", className)}
+      ref={rootRef}
       role="progressbar"
       aria-label={label}
       aria-valuemin={0}
       aria-valuemax={safeMax}
       aria-valuenow={value}
-      style={{ ["--ui-progress" as never]: `${pct}%` } as React.CSSProperties}
     >
       <div className="ui-progress__bar" />
     </div>
