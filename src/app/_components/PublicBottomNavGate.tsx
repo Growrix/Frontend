@@ -8,8 +8,9 @@ import { PublicBottomNav } from "./PublicBottomNav";
 export function PublicBottomNavGate() {
   const pathname = usePathname() ?? "/";
   const isDashboard = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+  const isAppHome = pathname === "/app-home" || pathname.startsWith("/app-home/");
 
-  if (isDashboard) return null;
+  if (isDashboard || isAppHome) return null;
 
   return (
     <div className="ui-only-mobile">

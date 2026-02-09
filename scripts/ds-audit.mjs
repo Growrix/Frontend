@@ -22,6 +22,13 @@ const rules = [
   },
 ];
 
+function isTokenDrivenRgbCall(text, index) {
+  // Allow token-driven patterns like: rgb(var(--ds-color-accent-rgb) / 0.16)
+  // and also tolerate optional whitespace.
+  const window = text.slice(index, index + 40);
+  return /^rgba?\(\s*var\(--/i.test(window);
+}
+
 function getLineNumber(text, index) {
   let line = 1;
   for (let i = 0; i < index; i++) {
@@ -38,8 +45,13 @@ for (const filePath of targets) {
 
   for (const rule of rules) {
     for (const match of text.matchAll(rule.pattern)) {
-      hasFindings = true;
       const idx = match.index ?? 0;
+
+      if (rule.id === "hardcoded-rgb" && isTokenDrivenRgbCall(text, idx)) {
+        continue;
+      }
+
+      hasFindings = true;
       const line = getLineNumber(text, idx);
       const snippet = (match[0] ?? "").slice(0, 80);
       // Keep output simple/greppable.

@@ -88,6 +88,9 @@ export default function Home() {
               <Link className="ui-navlink ui-focus-ring" href="/dashboard">
                 Dashboard
               </Link>
+              <Link className="ui-navlink ui-focus-ring" href="/app-home">
+                App Home
+              </Link>
               <Link className="ui-navlink ui-focus-ring" href="/component-library">
                 Component Library
               </Link>

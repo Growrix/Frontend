@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Design System Platform (DS)
 
-## Getting Started
+This repo is a **Design System Platform** for building web apps (including app-like web) with a strict, centralized design architecture.
 
-First, run the development server:
+## Core rules (non-negotiable)
+- **Design is centralized** in DS tokens/themes/styles.
+- **Pages are consumers**, not decision makers.
+- **No hardcoded values** for colors/spacing/typography in pages/features.
+- **Layout belongs to DS shells** (`PublicShell`, `DashboardShell`, etc.).
+- **Single DS import entry:** app code must import UI only from `@/ds`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Project structure (relevant)
+- `src/ds/` — the Design System Platform
+	- `foundation/` — tokens/themes/semantics/motion/a11y surfaces
+	- `primitives/` — Button/Text/Input/Stack/Grid/etc
+	- `components/` — Card/Modal/Tabs/etc
+	- `layouts/` — shells (layout ownership)
+	- `runtime/` — platform-aware surfaces (web + app-like + tablet presets)
+	- `styles/` — layered CSS (tokens/theme/base/utilities/components)
+- `src/app/` — Next.js routes only (compose DS; don’t invent design)
+
+## How to use DS in pages
+Always import from the single DS entry:
+
+```ts
+import { Button, Stack, DashboardShell, AppBar, ThemeSwitcher } from "@/ds";
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Example: app-like page composition
+```tsx
+import { DashboardShell, AppBar, Section, Stack, Card, Button } from "@/ds";
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+export default function Example() {
+	return (
+		<DashboardShell
+			topbar={<AppBar title={<strong>Example</strong>} />}
+		>
+			<Section container="wide" size="lg">
+				<Stack>
+					<Card>
+						<Button variant="primary">Action</Button>
+					</Card>
+				</Stack>
+			</Section>
+		</DashboardShell>
+	);
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tokens & themes
+- Token values are defined as **CSS variables** in `src/ds/styles/ds.tokens.css`.
+- Theme selection is CSS-variable based (no per-component light/dark branching).
+- Theme bootstrap runs via `ThemeInitScript` (already wired in `src/app/layout.tsx`).
 
-## Learn More
+## Adding a DS component (safe workflow)
+1) Pick the correct layer:
+	 - `primitives/` for “UI alphabet”
+	 - `components/` for reusable composed blocks
+2) Add class-based styles under `src/ds/styles/` (no inline styles in DS).
+3) Export via `src/ds/index.ts`.
+4) Verify:
+	 - `npm run verify`
+	 - `npm run ds:audit`
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
+- `npm run dev` — run locally
+- `npm run verify` — lint + tests + production build
+- `npm run ds:audit` — detects hardcoded color usage patterns in DS CSS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+See `CONTRIBUTING.md` for DS rules and the checklist.
