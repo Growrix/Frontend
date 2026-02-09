@@ -117,9 +117,9 @@ export default function Home() {
 
                 <Card>
                   <Stack gap="compact">
-                    <div className="text-label">Docs</div>
-                    <Text tone="muted">How to build systematically with the DS.</Text>
-                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/docs">
+                    <div className="text-label">Dashboard</div>
+                    <Text tone="muted">See the app-like dashboard shell and patterns.</Text>
+                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/dashboard">
                       Open
                     </Link>
                   </Stack>
@@ -133,8 +133,8 @@ export default function Home() {
                     <Link className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="/dashboard">
                       Go to dashboard
                     </Link>
-                    <Link className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="/app-home">
-                      App home demo
+                    <Link className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="/component-library">
+                      Open component library
                     </Link>
                   </div>
                 </Stack>
@@ -155,30 +155,12 @@ export default function Home() {
                 </div>
                 <div className="ui-row">
                   <ThemeSwitcher />
-                  <a className="ui-navlink ui-focus-ring" href="#features">
-                    Features
-                  </a>
-                  <a className="ui-navlink ui-focus-ring" href="#build">
-                    Build
-                  </a>
-                  <a className="ui-navlink ui-focus-ring" href="#faq">
-                    FAQ
-                  </a>
                   <Link className="ui-navlink ui-focus-ring" href="/dashboard">
                     Dashboard
-                  </Link>
-                  <Link className="ui-navlink ui-focus-ring" href="/app-home">
-                    App Home
                   </Link>
                   <Link className="ui-navlink ui-focus-ring" href="/component-library">
                     Component Library
                   </Link>
-                  <Link className="ui-navlink ui-focus-ring" href="/docs">
-                    Docs
-                  </Link>
-                  <Button size="sm" variant="primary">
-                    Get Started
-                  </Button>
                 </div>
               </div>
             </PublicHeaderBar>
@@ -214,11 +196,6 @@ export default function Home() {
                         <a className="ui-navlink ui-focus-ring" href="#build">
                           Component demo
                         </a>
-                      </li>
-                      <li>
-                        <Link className="ui-navlink ui-focus-ring" href="/docs">
-                          Docs
-                        </Link>
                       </li>
                     </ul>
                   </div>

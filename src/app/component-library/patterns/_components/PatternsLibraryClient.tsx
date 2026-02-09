@@ -199,9 +199,6 @@ export function PatternsLibraryClient() {
                 <Link className="ui-navlink ui-focus-ring" href="/dashboard">
                   Open dashboard demo
                 </Link>
-                <Link className="ui-navlink ui-focus-ring" href="/docs">
-                  Open docs shell
-                </Link>
               </div>
             </Stack>
           </Card>

@@ -23,7 +23,7 @@ import {
   useToast,
 } from "@/ds";
 
-import { Bell, BookOpen, Layers, Settings, Zap } from "@/ds";
+import { Bell, Layers, Settings, Zap } from "@/ds";
 
 type Kpi = {
   id: string;
@@ -71,9 +71,9 @@ const MOCK_ACTIONS = [
   },
   {
     id: "action-3",
-    title: "Docs",
-    description: "Jump to documentation patterns and guidelines.",
-    icon: BookOpen,
+    title: "Component Library",
+    description: "Browse DS primitives, components, and patterns.",
+    icon: Layers,
     tone: "success" as const,
   },
   {

@@ -3,13 +3,12 @@
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BottomNav, BottomNavItem, Icon } from "@/ds";
-import { Home, Layers, BookOpen, Monitor } from "@/ds";
+import { Home, Layers, Monitor } from "@/ds";
 
 const NAV = [
   { id: "pub-1", href: "/", label: "Home", icon: Home },
-  { id: "pub-4", href: "/app-home", label: "App", icon: Monitor },
   { id: "pub-2", href: "/component-library", label: "Components", icon: Layers },
-  { id: "pub-3", href: "/docs", label: "Docs", icon: BookOpen },
+  { id: "pub-3", href: "/dashboard", label: "Dashboard", icon: Monitor },
 ];
 
 export function PublicBottomNav() {
