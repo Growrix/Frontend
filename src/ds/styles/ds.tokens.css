@@ -190,6 +190,10 @@
     --ds-size-tabs-h: var(--ds-size-touch-target);
     --ds-size-bottom-nav-h: 4rem;
 
+    /* Device preview sizing (used by component-library previews) */
+    --ds-size-device-phone-w: 24.375rem; /* 390px */
+    --ds-size-device-phone-h: 52.75rem; /* 844px */
+
     /* Dashboard shell sizing */
     --ds-size-shell-left: 13rem;
     --ds-size-shell-right: 16rem;

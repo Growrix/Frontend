@@ -9,8 +9,9 @@ export function PublicBottomNavGate() {
   const pathname = usePathname() ?? "/";
   const isDashboard = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
   const isAppHome = pathname === "/app-home" || pathname.startsWith("/app-home/");
+  const isHome = pathname === "/";
 
-  if (isDashboard || isAppHome) return null;
+  if (isDashboard || isAppHome || isHome) return null;
 
   return (
     <div className="ui-only-mobile">

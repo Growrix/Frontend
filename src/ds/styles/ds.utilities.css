@@ -577,4 +577,47 @@
   .ui-skip-link:focus {
     transform: translateY(0);
   }
+
+  /* Device preview frame
+     Token-driven wrapper for embedded previews (e.g. component-library mobile preview).
+     Avoid inline styles so the "device" look stays inside the DS. */
+  .ui-device-frame {
+    width: min(100%, var(--ds-size-device-phone-w));
+    height: var(--ds-size-device-phone-h);
+    border-radius: var(--ds-radius-3);
+    border: 1px solid var(--ds-color-border);
+    background: var(--ds-color-surface);
+    box-shadow: var(--ds-shadow-md);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .ui-device-frame__viewport {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: transparent;
+  }
+
+  /* Responsive visibility helpers (block-level)
+     Use these when you need to swap entire page sections/layouts.
+     (The existing ui-only-mobile/ui-only-desktop utilities are inline-flex oriented.) */
+  .ui-only-mobile-block {
+    display: none;
+  }
+
+  .ui-only-desktop-block {
+    display: block;
+  }
+
+  @media (max-width: 48rem) {
+    .ui-only-mobile-block {
+      display: block;
+    }
+
+    .ui-only-desktop-block {
+      display: none;
+    }
+  }
 }
