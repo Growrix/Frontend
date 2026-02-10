@@ -84,7 +84,7 @@ export default function Home() {
               actions={
                 <div className="ui-row">
                   <ThemeSwitcher />
-                  <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/dashboard">
+                  <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/admin/dashboard">
                     Dashboard
                   </Link>
                 </div>
@@ -109,7 +109,7 @@ export default function Home() {
                   <Stack gap="compact">
                     <div className="text-label">Component Library</div>
                     <Text tone="muted">Preview primitives/components in a controlled shell.</Text>
-                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/component-library">
+                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/admin/component-library">
                       Open
                     </Link>
                   </Stack>
@@ -119,7 +119,7 @@ export default function Home() {
                   <Stack gap="compact">
                     <div className="text-label">Dashboard</div>
                     <Text tone="muted">See the app-like dashboard shell and patterns.</Text>
-                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/dashboard">
+                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/admin/dashboard">
                       Open
                     </Link>
                   </Stack>
@@ -130,10 +130,10 @@ export default function Home() {
                 <Stack gap="compact">
                   <div className="text-label">Quick actions</div>
                   <div className="ui-row ui-row--wrap">
-                    <Link className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="/dashboard">
+                    <Link className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="/admin/dashboard">
                       Go to dashboard
                     </Link>
-                    <Link className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="/component-library">
+                    <Link className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="/admin/component-library">
                       Open component library
                     </Link>
                   </div>
@@ -155,10 +155,10 @@ export default function Home() {
                 </div>
                 <div className="ui-row">
                   <ThemeSwitcher />
-                  <Link className="ui-navlink ui-focus-ring" href="/dashboard">
+                  <Link className="ui-navlink ui-focus-ring" href="/admin/dashboard">
                     Dashboard
                   </Link>
-                  <Link className="ui-navlink ui-focus-ring" href="/component-library">
+                  <Link className="ui-navlink ui-focus-ring" href="/admin/component-library">
                     Component Library
                   </Link>
                 </div>
@@ -188,7 +188,7 @@ export default function Home() {
                         </a>
                       </li>
                       <li>
-                        <Link className="ui-navlink ui-focus-ring" href="/component-library">
+                        <Link className="ui-navlink ui-focus-ring" href="/admin/component-library">
                           Component Library
                         </Link>
                       </li>
