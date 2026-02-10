@@ -1,5 +1,7 @@
 # Blueprint Design System (DS) — Anatomy, Rules, and Operating Guide
 
+> **For strict responsive-site build rules, see: [Ds_instruction.md](./Ds_instruction.md)**
+
 **Location:** `src/ds/`
 
 This document explains how the Design System (DS) in this repo is structured, how it works at runtime, and the strict rules for using/extending it while building frontend.
