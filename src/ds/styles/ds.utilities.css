@@ -28,8 +28,22 @@
     z-index: var(--ds-z-sticky);
   }
 
+  .ui-sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--ds-z-sticky);
+  }
+
   :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-sticky-top {
     padding-top: env(safe-area-inset-top);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-sticky-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .ui-kb-avoid {
+    padding-bottom: var(--ui-keyboard-inset, 0px);
   }
 
   /* Mobile safe-area helper (runtime) */

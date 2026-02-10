@@ -190,6 +190,20 @@
     --ds-size-tabs-h: var(--ds-size-touch-target);
     --ds-size-bottom-nav-h: 4rem;
 
+    /* Media / masonry layout sizing */
+    --ds-size-media-cell-sm: 6.5rem;
+    --ds-size-media-cell-md: 8rem;
+    --ds-size-media-cell-lg: 10rem;
+
+    --ds-size-masonry-col-sm: 14rem;
+    --ds-size-masonry-col-md: 18rem;
+    --ds-size-masonry-col-lg: 22rem;
+
+    /* Parallax strength (multiplied by a unitless progress value) */
+    --ds-size-parallax-strength-sm: 0.75rem;
+    --ds-size-parallax-strength-md: 1.25rem;
+    --ds-size-parallax-strength-lg: 1.75rem;
+
     /* Device preview sizing (used by component-library previews) */
     --ds-size-device-phone-w: 24.375rem; /* 390px */
     --ds-size-device-phone-h: 52.75rem; /* 844px */
