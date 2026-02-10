@@ -2,10 +2,10 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
-import { Checkbox } from "../primitives/Checkbox";
-import { Stack } from "../primitives/Stack";
-import { Text } from "../primitives/Text";
+import { Button } from "../../primitives/Button";
+import { Checkbox } from "../../primitives/Checkbox";
+import { Stack } from "../../primitives/Stack";
+import { Text } from "../../primitives/Text";
 import { Popover } from "./Popover";
 
 export type MultiSelectOption = {
@@ -46,3 +46,4 @@ export function MultiSelect({ label, options, values, onValuesChange }: MultiSel
     </Popover>
   );
 }
+

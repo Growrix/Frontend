@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Badge, Card, Divider, Grid, Spacer, Stack, Tabs, TabsList, TabsPanel, TabsTrigger, Text } from "@/ds";
+import { Badge, Card, Divider, Grid, Heading, Label, LinkText, Spacer, Stack, Tabs, TabsList, TabsPanel, TabsTrigger, Text, TruncatedText, Caption } from "@/ds";
 
 const TABS = [
   { value: "typography", label: "Typography" },
@@ -277,6 +277,24 @@ export function FoundationsClient() {
               </Text>
               <Spacer size={2} />
               <Text tone="muted">Fonts are configured globally via Next/font and consumed through DS tokens.</Text>
+
+              <Divider />
+
+              <div className="text-heading-4">Typography components</div>
+              <Text tone="muted">Thin wrappers over the same token-driven classes for consistent usage in React.</Text>
+              <Stack gap="compact">
+                <Heading variant={4}>Heading (variant 4)</Heading>
+                <Label>Label text</Label>
+                <Caption>Caption text</Caption>
+                <Text>
+                  Inline link: <LinkText href="#">Learn more</LinkText>
+                </Text>
+                <Text tone="muted">
+                  <TruncatedText title="This is a very long line that will truncate inside its container.">
+                    This is a very long line that will truncate inside its container.
+                  </TruncatedText>
+                </Text>
+              </Stack>
             </Stack>
           </Card>
         </Grid>

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { MetricCard, type MetricCardProps } from "../components/MetricCard";
+import { MetricCard, type MetricCardProps } from "../components/shared/MetricCard";
 import { WidgetShell, type WidgetShellProps } from "./WidgetShell";
 
 export type MetricWidgetProps = {

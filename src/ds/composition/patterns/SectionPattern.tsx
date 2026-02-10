@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { Section, type SectionProps } from "../../components/Section";
-import { SectionHeader, type SectionHeaderProps } from "../../components/SectionHeader";
+import { Section, type SectionProps } from "../../components/shared/Section";
+import { SectionHeader, type SectionHeaderProps } from "../../components/shared/SectionHeader";
 import { Stack } from "../../primitives/Stack";
 
 function cx(...classes: Array<string | false | undefined | null>) {

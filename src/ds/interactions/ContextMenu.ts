@@ -1,1 +1,1 @@
-export { ContextMenu, type ContextMenuItem, type ContextMenuProps } from "../components/ContextMenu";
+export { ContextMenu, type ContextMenuItem, type ContextMenuProps } from "../components/shared/ContextMenu";

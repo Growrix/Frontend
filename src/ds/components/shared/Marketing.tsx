@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
+import { Button } from "../../primitives/Button";
 import { Card } from "./Card";
-import { Grid } from "../primitives/Grid";
-import { Stack } from "../primitives/Stack";
-import { Text } from "../primitives/Text";
+import { Grid } from "../../primitives/Grid";
+import { Stack } from "../../primitives/Stack";
+import { Text } from "../../primitives/Text";
 
 export type HeroSectionProps = {
   kicker?: React.ReactNode;
@@ -131,3 +131,4 @@ export function NewsletterSignup({ title = "Newsletter" }: { title?: React.React
     </Card>
   );
 }
+

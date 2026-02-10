@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Card } from "./Card";
-import { Text } from "../primitives/Text";
+import { Text } from "../../primitives/Text";
 
 export type MetricCardProps = {
   label: React.ReactNode;
@@ -24,3 +24,4 @@ export function MetricCard({ label, value, hint, delta }: MetricCardProps) {
     </Card>
   );
 }
+

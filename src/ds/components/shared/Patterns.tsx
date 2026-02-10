@@ -2,14 +2,14 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
+import { Button } from "../../primitives/Button";
 import { Card } from "./Card";
 import { Field } from "./Field";
-import { Input } from "../primitives/Input";
-import { Select } from "../primitives/Select";
-import { Stack } from "../primitives/Stack";
-import { Switch } from "../primitives/Switch";
-import { Text } from "../primitives/Text";
+import { Input } from "../../primitives/Input";
+import { Select } from "../../primitives/Select";
+import { Stack } from "../../primitives/Stack";
+import { Switch } from "../../primitives/Switch";
+import { Text } from "../../primitives/Text";
 import { DataGrid } from "./DataGrid";
 import { Timeline } from "./Timeline";
 import { StatusIndicator, StatusButton } from "./Status";
@@ -144,3 +144,4 @@ export function SettingsPanel() {
     </Card>
   );
 }
+

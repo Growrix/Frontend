@@ -5,4 +5,4 @@ export {
   type DropdownMenuProps,
   type DropdownMenuButtonProps,
   type DropdownMenuLinkProps,
-} from "../components/DropdownMenu";
+} from "../components/shared/DropdownMenu";

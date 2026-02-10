@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Alert } from "../components/Alert";
+import { Alert } from "../components/shared/Alert";
 import { Stack } from "../primitives/Stack";
 import { Text } from "../primitives/Text";
 

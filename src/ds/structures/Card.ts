@@ -1,1 +1,1 @@
-export { Card, type CardProps } from "../components/Card";
+export { Card, type CardProps } from "../components/shared/Card";

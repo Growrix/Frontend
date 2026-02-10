@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { CommonSetDemo } from "./_components/CommonSetDemo";
 import { PublicBottomNav } from "./_components/PublicBottomNav";
+import { LeadGenHomeClient, LeadGenHomeMobileClient } from "./_components/LeadGenHomeClient";
 
 import {
   Alert,
@@ -14,7 +14,6 @@ import {
   Field,
   Input,
   AppBar,
-  DashboardShell,
   PublicHeaderBar,
   PublicShell,
   Section,
@@ -26,6 +25,7 @@ import {
   Switch,
   Textarea,
   ThemeSwitcher,
+  app,
 } from "@/ds";
 
 const MOCK_FEATURES = [
@@ -71,77 +71,26 @@ export default function Home() {
   return (
     <>
       <div className="ui-only-mobile-block">
-        <DashboardShell
-          containerWidth="wide"
+        <app.mobile.MobileAppShell
           topbar={
             <AppBar
               title={
                 <div className="ui-row">
                   <strong className="text-label">SolarMatch</strong>
-                  <Badge tone="accent">Home</Badge>
+                  <Badge tone="accent">Quote</Badge>
                 </div>
               }
               actions={
                 <div className="ui-row">
                   <ThemeSwitcher />
-                  <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/dashboard">
-                    Dashboard
-                  </Link>
                 </div>
               }
             />
           }
           bottomNav={<PublicBottomNav />}
         >
-          <Section container="wide" size="lg">
-            <Stack>
-              <div>
-                <div className="ui-kicker">App-like</div>
-                <h1 className="text-heading-2">Homepage</h1>
-                <Spacer size={2} />
-                <Text tone="muted">Mobile uses DS app-like presets; desktop keeps the classic site layout.</Text>
-              </div>
-
-              <Divider />
-
-              <Grid cols={2}>
-                <Card>
-                  <Stack gap="compact">
-                    <div className="text-label">Component Library</div>
-                    <Text tone="muted">Preview primitives/components in a controlled shell.</Text>
-                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/component-library">
-                      Open
-                    </Link>
-                  </Stack>
-                </Card>
-
-                <Card>
-                  <Stack gap="compact">
-                    <div className="text-label">Dashboard</div>
-                    <Text tone="muted">See the app-like dashboard shell and patterns.</Text>
-                    <Link className="ui-button ui-button--sm ui-button--secondary ui-focus-ring" href="/dashboard">
-                      Open
-                    </Link>
-                  </Stack>
-                </Card>
-              </Grid>
-
-              <Card>
-                <Stack gap="compact">
-                  <div className="text-label">Quick actions</div>
-                  <div className="ui-row ui-row--wrap">
-                    <Link className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="/dashboard">
-                      Go to dashboard
-                    </Link>
-                    <Link className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="/component-library">
-                      Open component library
-                    </Link>
-                  </div>
-                </Stack>
-              </Card>
-            </Stack>
-          </Section>
-        </DashboardShell>
+          <LeadGenHomeMobileClient />
+        </app.mobile.MobileAppShell>
       </div>
 
       <div className="ui-only-desktop-block">
@@ -151,16 +100,22 @@ export default function Home() {
               <div className="ui-row ui-row--between">
                 <div className="ui-row">
                   <strong className="text-label">SolarMatch</strong>
-                  <Badge tone="accent">Design System</Badge>
+                  <Badge tone="accent">Solar Leads</Badge>
                 </div>
                 <div className="ui-row">
                   <ThemeSwitcher />
-                  <Link className="ui-navlink ui-focus-ring" href="/dashboard">
-                    Dashboard
-                  </Link>
-                  <Link className="ui-navlink ui-focus-ring" href="/component-library">
-                    Component Library
-                  </Link>
+                  <a className="ui-navlink ui-focus-ring" href="#quote">
+                    Instant quote
+                  </a>
+                  <a className="ui-navlink ui-focus-ring" href="#rebates">
+                    Rebates
+                  </a>
+                  <a className="ui-navlink ui-focus-ring" href="#blog">
+                    Blog
+                  </a>
+                  <a className="ui-navlink ui-focus-ring" href="#newsletter">
+                    Newsletter
+                  </a>
                 </div>
               </div>
             </PublicHeaderBar>
@@ -172,7 +127,7 @@ export default function Home() {
                   <div>
                     <Stack gap="compact">
                       <div className="text-heading-4">SolarMatch</div>
-                      <Text tone="muted">DS-first UI foundation. Build fast, stay consistent, and ship a responsive web experience.</Text>
+                      <Text tone="muted">Lead-gen homepage built with DS primitives + components.</Text>
                     </Stack>
                   </div>
 
@@ -181,19 +136,13 @@ export default function Home() {
                     <Spacer size={2} />
                     <ul className="ui-footer-links">
                       <li>
-                        <a className="ui-navlink ui-focus-ring" href="#features">
-                          Features
-                        </a>
+                        <a className="ui-navlink ui-focus-ring" href="#quote">Instant quote</a>
                       </li>
                       <li>
-                        <Link className="ui-navlink ui-focus-ring" href="/component-library">
-                          Component Library
-                        </Link>
+                        <a className="ui-navlink ui-focus-ring" href="#rebates">Rebates</a>
                       </li>
                       <li>
-                        <a className="ui-navlink ui-focus-ring" href="#build">
-                          Component demo
-                        </a>
+                        <a className="ui-navlink ui-focus-ring" href="#blog">Blog</a>
                       </li>
                     </ul>
                   </div>
@@ -203,9 +152,7 @@ export default function Home() {
                     <Spacer size={2} />
                     <ul className="ui-footer-links">
                       <li>
-                        <a className="ui-navlink ui-focus-ring" href="#faq">
-                          FAQ
-                        </a>
+                        <a className="ui-navlink ui-focus-ring" href="#newsletter">Newsletter</a>
                       </li>
                       <li>
                         <a className="ui-navlink ui-focus-ring" href="#main">
@@ -225,141 +172,7 @@ export default function Home() {
           }
         >
           <div id="main">
-            <Section container="wide" size="lg">
-              <div className="ui-hero">
-                <Stack>
-                  <div className="ui-text-center">
-                    <div className="ui-kicker">SolarConnect Dark</div>
-                    <h1 className="text-heading-1">A DS-first UI for responsive web.</h1>
-                    <div className="text-body-large ui-center">Build your components once, then compose pages without styling drift.</div>
-
-                    <Spacer size={4} />
-                    <div className="ui-row ui-row--center">
-                      <a className="ui-button ui-button--md ui-button--primary ui-focus-ring" href="#features">
-                        Explore the system
-                      </a>
-                      <a className="ui-button ui-button--md ui-button--secondary ui-focus-ring" href="#build">
-                        See components
-                      </a>
-                    </div>
-
-                    <Spacer size={4} />
-                    <Grid cols={3}>
-                      {MOCK_STATS.map((s) => (
-                        <Card key={s.label}>
-                          <div className="text-label">{s.label}</div>
-                          <Spacer size={2} />
-                          <div className="text-heading-3">{s.value}</div>
-                        </Card>
-                      ))}
-                    </Grid>
-                  </div>
-                </Stack>
-              </div>
-            </Section>
-
-            <Section id="features" tone="surface" container="wide">
-              <Stack>
-                <SectionHeader kicker="Why DS-first" title="Consistency that scales" lede="Tokens keep your UI coherent across breakpoints." align="center" />
-
-                <Grid cols={3}>
-                  {MOCK_FEATURES.map((f) => (
-                    <Card key={f.title}>
-                      <Stack gap="compact">
-                        <div className="ui-row">
-                          <Badge tone={f.tone}>{f.tone}</Badge>
-                          <span className="text-label">{f.title}</span>
-                        </div>
-                        <Text tone="muted">{f.description}</Text>
-                      </Stack>
-                    </Card>
-                  ))}
-                </Grid>
-              </Stack>
-            </Section>
-
-            <Section id="build" container="wide">
-              <Stack>
-                <SectionHeader kicker="Basics" title="Common components" lede="These are the building blocks used everywhere." />
-
-                <Grid cols={2}>
-                  <Card>
-                    <Stack gap="compact">
-                      <div className="text-heading-4">Buttons</div>
-                      <div className="ui-row">
-                        <Button>Primary</Button>
-                        <Button variant="secondary">Secondary</Button>
-                        <Button variant="ghost">Ghost</Button>
-                        <Button variant="text">Text</Button>
-                      </div>
-                    </Stack>
-                  </Card>
-
-                  <Card>
-                    <Stack gap="compact">
-                      <div className="text-heading-4">Alerts</div>
-                      <Alert tone="info" title="Mock notice">
-                        This is dummy content to show DS styling.
-                      </Alert>
-                    </Stack>
-                  </Card>
-                </Grid>
-
-                <Card>
-                  <Stack>
-                    <div className="text-heading-4">Form example</div>
-                    <Text tone="muted">Everything uses DS controls and accessibility wiring.</Text>
-
-                    <Grid cols={2}>
-                      <Field id="name" label="Full name" hint="Dummy hint text">
-                        <Input placeholder="Jane Doe" />
-                      </Field>
-
-                      <Field id="plan" label="Plan" hint="Mock options">
-                        <Select defaultValue="pro">
-                          <option value="starter">Starter</option>
-                          <option value="pro">Pro</option>
-                          <option value="enterprise">Enterprise</option>
-                        </Select>
-                      </Field>
-                    </Grid>
-
-                    <Field id="note" label="Notes" hint="Dummy multi-line input">
-                      <Textarea placeholder="Write a short note…" />
-                    </Field>
-
-                    <div className="ui-row ui-row--between">
-                      <Checkbox label="I agree to the dummy terms" />
-                      <Switch label="Enable mock setting" defaultChecked />
-                    </div>
-
-                    <div className="ui-row">
-                      <Button isLoading loadingText="Submitting…">Submit</Button>
-                      <Button variant="secondary">Cancel</Button>
-                    </div>
-                  </Stack>
-                </Card>
-
-                <CommonSetDemo />
-              </Stack>
-            </Section>
-
-            <Section id="faq" tone="surface" container="wide">
-              <Stack>
-                <SectionHeader kicker="FAQ" title="Common questions" lede="Quick answers for how this DS is intended to be used." />
-
-                <Grid cols={2}>
-                  {MOCK_FAQ.map((item) => (
-                    <Card key={item.q}>
-                      <Stack gap="compact">
-                        <div className="text-heading-4">{item.q}</div>
-                        <Text tone="muted">{item.a}</Text>
-                      </Stack>
-                    </Card>
-                  ))}
-                </Grid>
-              </Stack>
-            </Section>
+            <LeadGenHomeClient />
           </div>
         </PublicShell>
       </div>

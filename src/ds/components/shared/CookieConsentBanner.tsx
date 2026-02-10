@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
-import { Text } from "../primitives/Text";
+import { Button } from "../../primitives/Button";
+import { Text } from "../../primitives/Text";
 
 export type CookieConsentBannerProps = {
   storageKey?: string;
@@ -50,3 +50,4 @@ export function CookieConsentBanner({ storageKey = "ds-cookie-consent", title = 
     </div>
   );
 }
+

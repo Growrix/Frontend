@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Stack } from "../primitives/Stack";
+import { Stack } from "../../primitives/Stack";
 
 export type SectionHeaderProps = {
   kicker?: string;
@@ -20,3 +20,4 @@ export function SectionHeader({ kicker, title, lede, align = "left" }: SectionHe
     </header>
   );
 }
+

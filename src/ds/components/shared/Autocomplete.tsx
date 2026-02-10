@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Input } from "../primitives/Input";
+import { Input } from "../../primitives/Input";
 
 function cx(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
@@ -108,3 +108,4 @@ export function Autocomplete({ value, onValueChange, options, placeholder, label
     </div>
   );
 }
+

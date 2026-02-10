@@ -4,8 +4,8 @@ import type { LucideIcon } from "lucide-react";
 
 import { Card } from "./Card";
 import { Icon } from "./Icon";
-import { Stack } from "../primitives/Stack";
-import { Text } from "../primitives/Text";
+import { Stack } from "../../primitives/Stack";
+import { Text } from "../../primitives/Text";
 
 function cx(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
@@ -46,3 +46,4 @@ export function IconCard({ icon, title, description, href, className }: IconCard
     </Card>
   );
 }
+

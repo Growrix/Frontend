@@ -1,1 +1,1 @@
-export { Drawer, type DrawerProps } from "../components/Drawer";
+export { Drawer, type DrawerProps } from "../components/shared/Drawer";

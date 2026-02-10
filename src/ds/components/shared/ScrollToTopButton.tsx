@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
+import { Button } from "../../primitives/Button";
 
 export type ScrollToTopButtonProps = {
   label?: string;
@@ -36,3 +36,4 @@ export function ScrollToTopButton({ label = "Scroll to top" }: ScrollToTopButton
     </div>
   );
 }
+

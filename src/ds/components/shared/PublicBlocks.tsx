@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { Stack } from "../primitives/Stack";
-import { Grid } from "../primitives/Grid";
-import { Text } from "../primitives/Text";
+import { Stack } from "../../primitives/Stack";
+import { Grid } from "../../primitives/Grid";
+import { Text } from "../../primitives/Text";
 import { Accordion, AccordionItem } from "./Accordion";
 import { BlogCard } from "./Marketing";
 
@@ -58,3 +58,4 @@ export function SiteFooter({
     </footer>
   );
 }
+

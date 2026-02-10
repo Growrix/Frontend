@@ -2,12 +2,12 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
+import { Button } from "../../primitives/Button";
 import { DropdownMenu, DropdownMenuButton } from "./DropdownMenu";
 import { Icon } from "./Icon";
-import { Check, Sun, Zap } from "../icons";
-import { THEMES, type ThemeName } from "../themes/registry";
-import { applyTheme, readStoredTheme, storeTheme } from "../themes/theme";
+import { Check, Sun, Zap } from "../../icons";
+import { THEMES, type ThemeName } from "../../themes/registry";
+import { applyTheme, readStoredTheme, storeTheme } from "../../themes/theme";
 
 export type ThemeSwitcherProps = {
   className?: string;
@@ -85,3 +85,4 @@ export function ThemeSwitcher({ className }: ThemeSwitcherProps) {
     </div>
   );
 }
+

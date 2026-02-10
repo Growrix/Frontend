@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "text" | "icon" | "fab";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "text" | "icon" | "fab" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -42,6 +42,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         size === "md" && "ui-button--md",
         size === "lg" && "ui-button--lg",
         variant === "primary" && "ui-button--primary",
+        variant === "danger" && "ui-button--danger",
         variant === "secondary" && "ui-button--secondary",
         variant === "ghost" && "ui-button--ghost",
         variant === "text" && "ui-button--text",

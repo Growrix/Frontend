@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { BottomNav, type BottomNavProps } from "../../../components/BottomNav";
+import { BottomNav, type BottomNavProps } from "../../../components/shared/BottomNav";
 
 /**
  * Mobile runtime preset: uses the shared DS BottomNav with a stable platform hint.

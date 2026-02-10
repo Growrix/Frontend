@@ -1,1 +1,1 @@
-export * from "../../components/Marketing";
+export * from "../../components/shared/Marketing";

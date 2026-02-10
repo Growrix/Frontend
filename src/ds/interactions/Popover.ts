@@ -1,1 +1,1 @@
-export { Popover, type PopoverProps } from "../components/Popover";
+export { Popover, type PopoverProps } from "../components/shared/Popover";

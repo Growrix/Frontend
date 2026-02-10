@@ -28,6 +28,35 @@
     z-index: var(--ds-z-sticky);
   }
 
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-sticky-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Mobile safe-area helper (runtime) */
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-safe-area[data-safe-top] {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-safe-area[data-safe-bottom] {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-safe-area[data-safe-left] {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-safe-area[data-safe-right] {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Mobile scroll surface (runtime) */
+  .ui-mobile-scroll {
+    flex: 1;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .ui-container {
     width: 100%;
     max-width: var(--ds-container-max);
@@ -104,6 +133,28 @@
 
   .ui-row--center {
     justify-content: center;
+  }
+
+  .ui-link {
+    color: var(--ds-color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-color: color-mix(in oklab, var(--ds-color-accent), transparent 45%);
+  }
+
+  .ui-link:hover {
+    color: var(--ds-color-accent-hover);
+    text-decoration-color: color-mix(in oklab, var(--ds-color-accent-hover), transparent 35%);
+  }
+
+  .ui-truncate {
+    display: inline-block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
   }
 
   .ui-flex-1 {

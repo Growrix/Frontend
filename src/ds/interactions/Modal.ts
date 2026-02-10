@@ -1,1 +1,1 @@
-export { Modal, type ModalProps } from "../components/Modal";
+export { Modal, type ModalProps } from "../components/shared/Modal";

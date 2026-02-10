@@ -12,6 +12,7 @@ import {
   AvatarGroup,
   Badge,
   Banner,
+  BackButton,
   BarChart,
   BlogCard,
   BottomNav,
@@ -19,9 +20,14 @@ import {
   Breadcrumbs,
   Button,
   Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
   Carousel,
   CarouselItem,
   Checkbox,
+  CloseButton,
+  CollapsibleSection,
   ConfirmDialog,
   ContextMenu,
   DataGrid,
@@ -46,6 +52,7 @@ import {
   ImageCard,
   Icon,
   Input,
+  Inline,
   LineChart,
   List,
   ListItem,
@@ -87,6 +94,16 @@ import {
   useToast,
   VideoPlayer,
   usePreviewPlatform,
+  SearchInput,
+  OtpInput,
+  ToggleButton,
+  SectionedList,
+  ExpandableListItem,
+  SwipeableListItem,
+  SwipeActionButton,
+  InfiniteList,
+  VirtualizedList,
+  ReorderableList,
 } from "@/ds";
 
 import { Bell, BookOpen, Home, Layers, Menu, Settings, Sun } from "@/ds";
@@ -162,6 +179,15 @@ export function ComponentsLibraryClient() {
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [page, setPage] = React.useState(2);
   const [acValue, setAcValue] = React.useState("");
+  const [otp, setOtp] = React.useState("");
+  const [togglePressed, setTogglePressed] = React.useState(false);
+  const [infiniteCount, setInfiniteCount] = React.useState(8);
+  const [infiniteLoading, setInfiniteLoading] = React.useState(false);
+  const [reorderItems, setReorderItems] = React.useState(() => [
+    { id: "r-1", title: "First" },
+    { id: "r-2", title: "Second" },
+    { id: "r-3", title: "Third" },
+  ]);
   const [multiValues, setMultiValues] = React.useState<string[]>(["solar"]);
   const [tags, setTags] = React.useState<string[]>(["nextjs", "ds-first"]);
   const [range, setRange] = React.useState(35);
@@ -208,6 +234,44 @@ export function ComponentsLibraryClient() {
                     </Card>
                   </Grid>
                   <Text tone="muted">This demonstrates responsive layout primitives.</Text>
+                </Stack>
+              </Card>
+
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Inline / Card sections / Collapsible</div>
+
+                  <Inline>
+                    <Button size="sm" variant="secondary">
+                      Left
+                    </Button>
+                    <Button size="sm" variant="secondary">
+                      Middle
+                    </Button>
+                    <Button size="sm" variant="secondary">
+                      Right
+                    </Button>
+                  </Inline>
+
+                  <Card>
+                    <CardHeader>
+                      <div className="text-heading-4">Card header</div>
+                      <Text tone="muted">Header uses DS tokens + borders.</Text>
+                    </CardHeader>
+                    <CardContent>
+                      <Text tone="muted">Content section keeps spacing consistent.</Text>
+                    </CardContent>
+                    <CardFooter>
+                      <Button size="sm" variant="secondary">
+                        Cancel
+                      </Button>
+                      <Button size="sm">Save</Button>
+                    </CardFooter>
+                  </Card>
+
+                  <CollapsibleSection id="cs-one" title="Collapsible section" defaultOpen>
+                    <Text tone="muted">This is a single-item accordion wrapper.</Text>
+                  </CollapsibleSection>
                 </Stack>
               </Card>
 
@@ -269,6 +333,35 @@ export function ComponentsLibraryClient() {
                   </Accordion>
                 </Stack>
               </Card>
+
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Buttons & actions</div>
+                  <div className="ui-row">
+                    <Button size="sm">Primary</Button>
+                    <Button size="sm" variant="secondary">
+                      Secondary
+                    </Button>
+                    <Button size="sm" variant="ghost">
+                      Ghost
+                    </Button>
+                    <Button size="sm" variant="text">
+                      Text
+                    </Button>
+                  </div>
+                  <div className="ui-row">
+                    <Button size="sm" variant="danger">
+                      Destructive
+                    </Button>
+                    <Button size="sm" isLoading loadingText="Loading…">
+                      Loading
+                    </Button>
+                    <ToggleButton size="sm" pressed={togglePressed} onPressedChange={setTogglePressed}>
+                      Toggle
+                    </ToggleButton>
+                  </div>
+                </Stack>
+              </Card>
             </Grid>
 
             <Grid cols={colsPrimary}>
@@ -303,9 +396,7 @@ export function ComponentsLibraryClient() {
                   <div style={{ maxWidth: "28rem" }}>
                     <AppBar
                       leading={
-                        <Button size="sm" variant="secondary" onClick={() => setDrawerOpen(true)} aria-label="Open menu">
-                          <Icon icon={Menu} aria-hidden />
-                        </Button>
+                        <BackButton onClick={() => setDrawerOpen(true)} aria-label="Open menu" />
                       }
                       title={<Text>Library</Text>}
                       actions={
@@ -326,6 +417,11 @@ export function ComponentsLibraryClient() {
                         </DropdownMenu>
                       }
                     />
+                  </div>
+
+                  <div className="ui-row">
+                    <Text tone="muted">Header actions:</Text>
+                    <CloseButton onClick={() => setDrawerOpen(false)} />
                   </div>
 
                   <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} side="left" title="Menu" description="Navigation">
@@ -575,6 +671,110 @@ export function ComponentsLibraryClient() {
                 </Stack>
               </Card>
             </Grid>
+
+            <Grid cols={colsPrimary}>
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Expandable / Sectioned / Swipe</div>
+                  <SectionedList
+                    ariaLabel="Sectioned list"
+                    sections={[
+                      { id: "today", title: "Today", items: [{ id: "s1", name: "Jane" }, { id: "s2", name: "Sam" }] },
+                      { id: "yesterday", title: "Yesterday", items: [{ id: "s3", name: "Alex" }] },
+                    ]}
+                    renderItem={(item) => (
+                      <SwipeableListItem
+                        key={item.id}
+                        leading={<Avatar name={item.name} size="sm" />}
+                        actions={
+                          <>
+                            <SwipeActionButton variant="secondary">More</SwipeActionButton>
+                            <SwipeActionButton variant="danger">Delete</SwipeActionButton>
+                          </>
+                        }
+                      >
+                        <div className="text-body-small">{item.name}</div>
+                        <Text tone="muted">Swipe for actions</Text>
+                      </SwipeableListItem>
+                    )}
+                  />
+
+                  <Divider />
+
+                  <List ariaLabel="Expandable list">
+                    <ExpandableListItem leading={<Avatar name="Taylor" size="sm" />} title="Expandable item" description="Tap to show details" defaultOpen>
+                      <Text tone="muted">This is expandable content inside the list item.</Text>
+                    </ExpandableListItem>
+                  </List>
+                </Stack>
+              </Card>
+
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Reorderable</div>
+                  <ReorderableList
+                    ariaLabel="Reorderable list"
+                    items={reorderItems}
+                    getItemId={(i) => i.id}
+                    onReorder={setReorderItems}
+                    renderItem={(item, { dragHandleProps }) => (
+                      <ListItem
+                        leading={
+                          <Button size="sm" variant="icon" aria-label="Drag" {...dragHandleProps}>
+                            <Icon icon={Layers} aria-hidden />
+                          </Button>
+                        }
+                      >
+                        <div className="text-body-small">{item.title}</div>
+                        <Text tone="muted">Drag to reorder (or use arrow keys)</Text>
+                      </ListItem>
+                    )}
+                  />
+                </Stack>
+              </Card>
+            </Grid>
+
+            <Grid cols={colsPrimary}>
+              <Card>
+                <Stack gap="compact">
+                  <div className="text-heading-4">Virtualized / Infinite</div>
+                  <VirtualizedList
+                    ariaLabel="Virtualized list"
+                    items={Array.from({ length: 150 }, (_, i) => ({ id: `v-${i + 1}`, label: `Row ${i + 1}` }))}
+                    getItemKey={(i) => i.id}
+                    renderItem={(item) => (
+                      <>
+                        <div className="text-body-small">{item.label}</div>
+                        <Text tone="muted">Windowed rendering</Text>
+                      </>
+                    )}
+                  />
+
+                  <Divider />
+
+                  <InfiniteList
+                    hasMore={infiniteCount < 20}
+                    isLoading={infiniteLoading}
+                    onLoadMore={() => {
+                      setInfiniteLoading(true);
+                      setTimeout(() => {
+                        setInfiniteCount((c) => Math.min(20, c + 4));
+                        setInfiniteLoading(false);
+                      }, 250);
+                    }}
+                  >
+                    <List ariaLabel="Infinite list">
+                      {Array.from({ length: infiniteCount }, (_, i) => (
+                        <ListItem key={i} leading={<Avatar name={`Item ${i + 1}`} size="sm" />}>
+                          <div className="text-body-small">Item {i + 1}</div>
+                          <Text tone="muted">Auto-loads near the bottom</Text>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </InfiniteList>
+                </Stack>
+              </Card>
+            </Grid>
           </TabsPanel>
 
           <TabsPanel value="feedback">
@@ -659,6 +859,24 @@ export function ComponentsLibraryClient() {
                   </Field>
                   <Field id="cl-email" label="Email" error="Mock error state">
                     <Input placeholder="jane@example.com" />
+                  </Field>
+                </Grid>
+
+                <Grid cols={colsPrimary}>
+                  <Field id="cl-search" label="Search" hint="DS SearchInput pattern">
+                    <SearchInput
+                      placeholder="Search…"
+                      value={acValue}
+                      onChange={(e) => setAcValue(e.target.value)}
+                      onClear={() => setAcValue("")}
+                    />
+                  </Field>
+
+                  <Field id="cl-otp" label="OTP / Pin" hint="DS OtpInput pattern">
+                    <Stack gap="compact">
+                      <OtpInput length={6} value={otp} onValueChange={setOtp} />
+                      <Text tone="muted">Value: {otp || "—"}</Text>
+                    </Stack>
                   </Field>
                 </Grid>
                 <Field id="cl-plan" label="Plan" hint="Dummy options">

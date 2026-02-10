@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import { Card } from "./Card";
-import { Divider } from "../primitives/Divider";
-import { Stack } from "../primitives/Stack";
+import { Divider } from "../../primitives/Divider";
+import { Stack } from "../../primitives/Stack";
 
 export type FilterPanelProps = {
   title?: React.ReactNode;
@@ -25,3 +25,4 @@ export function FilterPanel({ title = "Filters", actions, children, className }:
     </Card>
   );
 }
+

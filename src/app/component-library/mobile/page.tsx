@@ -25,7 +25,7 @@ export default function MobileComponentLibraryPage() {
           <Card className="ui-card--compact">
             <Stack gap="compact">
               <div className="text-heading-4">App bar</div>
-              <div style={{ maxWidth: "28rem" }}>
+              <div className="ui-center">
                 <AppBar title="Library" />
               </div>
             </Stack>
@@ -34,7 +34,7 @@ export default function MobileComponentLibraryPage() {
           <Card className="ui-card--compact">
             <Stack gap="compact">
               <div className="text-heading-4">Form controls</div>
-              <div style={{ maxWidth: "28rem" }}>
+              <div className="ui-center">
                 <Stack gap="compact">
                   <Field label="Search">
                     <Input placeholder="Search…" />

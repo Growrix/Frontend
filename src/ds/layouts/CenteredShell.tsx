@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Stack } from "../primitives/Stack";
-import { Section } from "../components/Section";
+import { Section } from "../components/shared/Section";
 
 export type CenteredShellProps = {
   title?: React.ReactNode;

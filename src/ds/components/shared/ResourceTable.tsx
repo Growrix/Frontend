@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
+import { Button } from "../../primitives/Button";
 import { DataGrid } from "./DataGrid";
 import { type DataTableColumn } from "./DataTable";
 
@@ -73,3 +73,4 @@ export function ResourceTable({ title = "Resources", rows, onCreate, onEdit, onD
     </div>
   );
 }
+

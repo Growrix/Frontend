@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
-import { Textarea } from "../primitives/Textarea";
+import { Button } from "../../primitives/Button";
+import { Textarea } from "../../primitives/Textarea";
 
 function escapeHtml(s: string) {
   return s
@@ -55,3 +55,4 @@ export function MarkdownEditor({ value, onValueChange, className }: MarkdownEdit
     </div>
   );
 }
+

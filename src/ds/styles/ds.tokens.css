@@ -194,6 +194,9 @@
     --ds-size-device-phone-w: 24.375rem; /* 390px */
     --ds-size-device-phone-h: 52.75rem; /* 844px */
 
+    /* Virtualized list sizing */
+    --ds-size-virtual-list-h: 22rem;
+
     /* Dashboard shell sizing */
     --ds-size-shell-left: 13rem;
     --ds-size-shell-right: 16rem;
@@ -279,6 +282,26 @@
 
   /* Platform presets (scopable per page via a wrapper) */
   :where(html[data-platform="mobile"], [data-platform="mobile"]) {
+    /* App-like mobile typography: smaller headings, clearer body text.
+       Scoped to data-platform so desktop remains classic. */
+    --ds-font-size-1: 0.75rem; /* 12px */
+    --ds-font-size-2: 0.875rem; /* 14px */
+    --ds-font-size-3: 1rem; /* 16px */
+    --ds-font-size-4: 1.125rem; /* 18px */
+    --ds-font-size-5: 1.125rem; /* 18px */
+    --ds-font-size-6: 1.375rem; /* 22px */
+    --ds-font-size-7: 1.75rem; /* 28px */
+
+    /* App-like spacing + shape */
+    --ds-space-card-padding: var(--ds-space-4);
+    --ds-space-modal-padding: var(--ds-space-4);
+    --ds-space-form-gap: var(--ds-space-3);
+    --ds-space-nav-padding: var(--ds-space-3);
+
+    --ds-radius-default: 0.5rem;
+    --ds-radius-card: 0.75rem;
+    --ds-radius-modal: 0.75rem;
+
     --ds-size-touch-target: 3rem;
     --ds-size-bottom-nav-h: 4.25rem;
     --ds-size-tabs-h: var(--ds-size-touch-target);

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Input } from "../primitives/Input";
+import { Input } from "../../primitives/Input";
 
 export type DatePickerProps = Omit<React.ComponentProps<typeof Input>, "type">;
 export function DatePicker(props: DatePickerProps) {
@@ -26,3 +26,4 @@ export function DateRangePicker({ startProps, endProps, className }: DateRangePi
     </div>
   );
 }
+

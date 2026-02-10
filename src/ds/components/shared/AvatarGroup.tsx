@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Avatar, type AvatarProps } from "../primitives/Avatar";
+import { Avatar, type AvatarProps } from "../../primitives/Avatar";
 
 function cx(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
@@ -31,3 +31,4 @@ export function AvatarGroup({ people, size = "sm", max = 5, className }: AvatarG
     </div>
   );
 }
+

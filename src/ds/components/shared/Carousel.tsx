@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
+import { Button } from "../../primitives/Button";
 
 function cx(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
@@ -45,3 +45,4 @@ export type CarouselItemProps = {
 export function CarouselItem({ children, className }: CarouselItemProps) {
   return <div className={cx("ui-carousel__item", className)}>{children}</div>;
 }
+

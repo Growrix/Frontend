@@ -1,1 +1,1 @@
-export * from "../../components/PublicBlocks";
+export * from "../../components/shared/PublicBlocks";

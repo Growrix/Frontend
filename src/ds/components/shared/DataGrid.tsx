@@ -5,8 +5,8 @@ import * as React from "react";
 import { Pagination } from "./Pagination";
 import { BulkActionsToolbar, type BulkAction } from "./BulkActionsToolbar";
 import { DataTable, type DataTableColumn, type DataTableSort } from "./DataTable";
-import { Input } from "../primitives/Input";
-import { Stack } from "../primitives/Stack";
+import { Input } from "../../primitives/Input";
+import { Stack } from "../../primitives/Stack";
 
 export type DataGridProps<T> = {
   rows: T[];
@@ -94,3 +94,4 @@ export function DataGrid<T>({
     </div>
   );
 }
+

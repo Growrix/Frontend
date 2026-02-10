@@ -2,9 +2,9 @@
 
 import * as React from "react";
 
-import { Button } from "../primitives/Button";
-import { Stack } from "../primitives/Stack";
-import { Text } from "../primitives/Text";
+import { Button } from "../../primitives/Button";
+import { Stack } from "../../primitives/Stack";
+import { Text } from "../../primitives/Text";
 import { Modal } from "./Modal";
 
 export type ConfirmDialogProps = {
@@ -35,3 +35,4 @@ export function ConfirmDialog({ open, onClose, title, description, confirmLabel 
     </Modal>
   );
 }
+
