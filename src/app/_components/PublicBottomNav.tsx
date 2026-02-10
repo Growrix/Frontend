@@ -11,6 +11,11 @@ const NAV = [
   { id: "pub-3", href: "/dashboard", label: "Dashboard", icon: Monitor },
 ];
 
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
 export function PublicBottomNav() {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
@@ -21,7 +26,7 @@ export function PublicBottomNav() {
         <BottomNavItem
           key={item.id}
           href={item.href}
-          active={pathname === item.href}
+          active={isActive(pathname, item.href)}
           label={item.label}
           iconOnly
           icon={<Icon icon={item.icon} aria-hidden />}

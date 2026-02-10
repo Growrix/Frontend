@@ -4,8 +4,6 @@ import { Fira_Code, Inter, Montserrat } from "next/font/google";
 import { ThemeInitScript } from "@/ds";
 import "./globals.css";
 
-import { PublicBottomNavGate } from "./_components/PublicBottomNavGate";
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -32,7 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${display.variable} ${firaCode.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      data-platform="mobile"
+      data-density="compact"
+      className={`${inter.variable} ${display.variable} ${firaCode.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <ThemeInitScript />
       </head>
@@ -41,7 +45,6 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
-        <PublicBottomNavGate />
       </body>
     </html>
   );
