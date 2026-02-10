@@ -29,16 +29,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const mobilePresetScript = `(() => {
+  const root = document.documentElement;
+  const mq = window.matchMedia("(max-width: 48rem)");
+
+  const apply = () => {
+    if (mq.matches) {
+      root.setAttribute("data-platform", "mobile");
+      root.setAttribute("data-density", "compact");
+      return;
+    }
+    root.removeAttribute("data-platform");
+    root.removeAttribute("data-density");
+  };
+
+  apply();
+
+  if (typeof mq.addEventListener === "function") {
+    mq.addEventListener("change", apply);
+  } else if (typeof mq.addListener === "function") {
+    mq.addListener(apply);
+  }
+})();`;
+
   return (
-    <html
-      lang="en"
-      data-platform="mobile"
-      data-density="compact"
-      className={`${inter.variable} ${display.variable} ${firaCode.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${inter.variable} ${display.variable} ${firaCode.variable}`} suppressHydrationWarning>
       <head>
         <ThemeInitScript />
+        <script dangerouslySetInnerHTML={{ __html: mobilePresetScript }} />
       </head>
       <body>
         <a className="ui-skip-link" href="#main">
