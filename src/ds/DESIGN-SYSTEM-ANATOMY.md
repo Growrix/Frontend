@@ -1,5 +1,9 @@
 # Blueprint Design System (DS) — Anatomy, Rules, and Operating Guide
 
+**IMPORTANT:** Before making any DS/UI change, you MUST read [`DS_instruciton.md`](DS_instruciton.md) for strict rules, anti-hallucination protocol, and the system operating contract.
+
+**Last updated:** 2026-02-10
+
 **Location:** `src/ds/`
 
 This document explains how the Design System (DS) in this repo is structured, how it works at runtime, and the strict rules for using/extending it while building frontend.
@@ -20,6 +24,13 @@ This DS is a **class-based design system**:
   - **CSS layer ordering** to guarantee predictable cascade.
 
 **Single public API:** `@/ds` (backed by `src/ds/index.ts`). Import UI ONLY from there.
+
+**Two distinct UX surfaces (core goal):**
+
+- **Desktop (classic):** no platform presets on `<html>` → classic layout + typography.
+- **Mobile (app-like):** DS-owned platform presets on `<html>` (via `app.PlatformPresetScript`) + app-like runtime shells (via `app.mobile.*`).
+
+**Rule:** Mobile behavior/styling must be enabled by DS knobs (`data-platform`, `data-density`, `data-visual`) and DS runtime shells — never by ad-hoc feature code.
 
 ---
 
@@ -112,7 +123,7 @@ The legacy folder `src/ds/tokens/` is intentionally present but **not** the sour
 ```ts
 import { tokens } from "@/ds";
 
-// example: tokens.tokens.vars.space.cardPadding (actual surface is foundation/tokens)
+// example: tokens.space.cardPadding
 ```
 
 (Use token references sparingly; prefer DS classes/components.)
@@ -125,6 +136,11 @@ import { tokens } from "@/ds";
 - Density via `data-density="compact"` (on `html` or any wrapper).
 - Visual variants via `data-visual="glass" | "neumorph" | "sleek"`.
 - Platform presets via `data-platform="mobile"`.
+
+**Canonical place to control these knobs globally:**
+
+- Use `app.PlatformPresetScript` (exported from `@/ds`) in `src/app/layout.tsx`.
+- Do not duplicate/inline a second platform script in app/feature code.
 
 **Rule:** Prefer setting these knobs at a **page shell/root wrapper** instead of sprinkling per-component overrides.
 
@@ -230,6 +246,12 @@ Use primitives to assemble new UI before reaching for heavier components.
 #### `src/ds/components/`
 Higher-level components that combine primitives, behaviors, and DS class conventions.
 
+This folder is now organized by **platform variants**:
+
+- `src/ds/components/shared/` — default, cross-platform components (baseline)
+- `src/ds/components/mobile/` — app-like mobile variants (when UX diverges)
+- `src/ds/components/desktop/` — desktop-specific variants (when UX diverges)
+
 Examples:
 - `Modal`, `Drawer`, `Tabs`, `Toast`, `DataTable`, `MarkdownEditor`, `ThemeSwitcher`
 
@@ -248,6 +270,18 @@ Runtime “platform” helpers and re-exports.
 
 - `runtime/web/shells.ts` re-exports layout shells.
 - `runtime/app/*` contains presets for mobile/tablet style shells.
+
+**Runtime is exposed as namespaces via the public DS barrel:**
+
+```ts
+import { app, web } from "@/ds";
+
+// Global platform knobs
+// <app.PlatformPresetScript />
+
+// Mobile app-like shells
+// <app.mobile.MobileAppShell />
+```
 
 Treat this as the DS “integration layer” for different app surfaces.
 
@@ -341,6 +375,14 @@ It exports:
 - Docs → `DocsShell`
 - Simple centered content → `CenteredShell`
 
+**If the screen must have different UX on mobile vs desktop (app-like vs classic):**
+
+- Render both branches in the page and swap using DS utilities:
+  - `.ui-only-mobile-block`
+  - `.ui-only-desktop-block`
+- Mobile branch should use `app.mobile.MobileAppShell` (app-like defaults).
+- Desktop branch should use classic shells (`PublicShell`, `DashboardShell`, etc.).
+
 2) Layout with primitives + utilities:
 
 - `Container` for width
@@ -362,7 +404,9 @@ It exports:
 
 1. Create the implementation file in the correct folder:
    - primitive → `src/ds/primitives/NewThing.tsx`
-   - component → `src/ds/components/NewThing.tsx`
+  - component (default) → `src/ds/components/shared/NewThing.tsx`
+  - component (mobile variant, if needed) → `src/ds/components/mobile/NewThing.tsx`
+  - component (desktop variant, if needed) → `src/ds/components/desktop/NewThing.tsx`
 
 2. Implement it in the DS style:
    - add DS classes (e.g. `ui-newthing`)
@@ -440,207 +484,44 @@ It exports:
 
 ## 11) Current DS file tree (snapshot)
 
-This is the current `src/ds` tree as captured by `tree src\\ds /F /A`:
+High-level snapshot of `src/ds/` (kept intentionally stable; internals can move but the barrel stays the contract):
 
 ```text
-SRC/DS
-|   icons.ts
-|   index.ts
-|
-+---components
-|   Accordion.tsx
-|   Alert.tsx
-|   AppBar.tsx
-|   Autocomplete.tsx
-|   AvatarGroup.tsx
-|   Badge.tsx
-|   Banner.tsx
-|   BottomNav.tsx
-|   Breadcrumbs.tsx
-|   BulkActionsToolbar.tsx
-|   Card.tsx
-|   Carousel.tsx
-|   Charts.tsx
-|   ConfirmDialog.tsx
-|   ContextMenu.tsx
-|   CookieConsentBanner.tsx
-|   DataGrid.tsx
-|   DataTable.tsx
-|   DateTimePickers.tsx
-|   Drawer.tsx
-|   DropdownMenu.tsx
-|   EmptyState.tsx
-|   ErrorBoundary.tsx
-|   Field.tsx
-|   FileDropzone.tsx
-|   FilterPanel.tsx
-|   FormHelpers.tsx
-|   Icon.tsx
-|   IconCard.tsx
-|   ImageCard.tsx
-|   List.tsx
-|   MarkdownEditor.tsx
-|   Marketing.tsx
-|   MetricCard.tsx
-|   Modal.tsx
-|   MultiSelect.tsx
-|   Pagination.tsx
-|   Patterns.tsx
-|   Popover.tsx
-|   Progress.tsx
-|   PublicBlocks.tsx
-|   ResourceTable.tsx
-|   ResponsiveImage.tsx
-|   ScrollToTopButton.tsx
-|   Section.tsx
-|   SectionHeader.tsx
-|   Skeleton.tsx
-|   Sparkline.tsx
-|   SplitSection.tsx
-|   Status.tsx
-|   Tabs.tsx
-|   TagInput.tsx
-|   ThemeSwitcher.tsx
-|   Timeline.tsx
-|   Toast.tsx
-|   Tooltip.tsx
-|   VideoPlayer.tsx
-|
-+---composition
-|   index.ts
-|   +---blocks
-|   |   index.ts
-|   |   MarketingBlocks.ts
-|   |   PublicBlocks.ts
-|   +---patterns
-|   |   index.ts
-|   |   SectionPattern.tsx
-|   \---templates
-|       index.ts
-|       PageTemplate.tsx
-|
-+---foundation
-|   index.ts
-|   +---a11y
-|   |   index.ts
-|   |   usePrefersReducedMotion.ts
-|   |   VisuallyHidden.tsx
-|   +---motion
-|   |   index.ts
-|   |   tokens.ts
-|   +---semantics
-|   |   index.ts
-|   |   registry.ts
-|   +---themes
-|   |   index.ts
-|   |   registry.ts
-|   |   theme.ts
-|   |   ThemeInitScript.tsx
-|   \---tokens
-|       index.ts
-|       vars.ts
-|
-+---interactions
-|   ContextMenu.ts
-|   Drawer.ts
-|   Dropdown.ts
-|   index.ts
-|   Modal.ts
-|   Popover.ts
-|   Tooltip.ts
-|
-+---layouts
-|   CenteredShell.tsx
-|   DashboardShell.tsx
-|   DocsShell.tsx
-|   PublicShell.tsx
-|   \---__tests__
-|       shells.snapshot.test.tsx
-|       \---__snapshots__
-|           shells.snapshot.test.tsx.snap
-|
-+---patterns
-|   AsyncBoundary.tsx
-|   ErrorBlock.tsx
-|   index.ts
-|
-+---preview
-|   PreviewPlatform.tsx
-|
-+---primitives
-|   Avatar.tsx
-|   Button.tsx
-|   Checkbox.tsx
-|   Container.tsx
-|   Divider.tsx
-|   Grid.tsx
-|   Input.tsx
-|   Radio.tsx
-|   RangeSlider.tsx
-|   Select.tsx
-|   Spacer.tsx
-|   Spinner.tsx
-|   Stack.tsx
-|   Switch.tsx
-|   Text.tsx
-|   Textarea.tsx
-|
-+---runtime
-|   index.ts
-|   +---app
-|   |   index.ts
-|   |   +---mobile
-|   |   |   BottomNavPreset.tsx
-|   |   |   FloatingAction.tsx
-|   |   |   index.ts
-|   |   |   Overlay.tsx
-|   |   |   Screen.tsx
-|   |   |   Sheet.tsx
-|   |   \---tablet
-|   |       index.ts
-|   |       SideRail.tsx
-|   |       SideRailPreset.tsx
-|   \---web
-|       index.ts
-|       shells.ts
-|       WidgetFrame.tsx
-|
-+---structures
-|   Card.ts
-|   Container.ts
-|   Grid.ts
-|   index.ts
-|   Stack.ts
-|
-+---styles
-|   ds.base.css
-|   ds.components.css
-|   ds.theme.css
-|   ds.tokens.css
-|   ds.utilities.css
-|   index.css
-|
-+---themes
-|   registry.ts
-|   theme.ts
-|   ThemeInitScript.tsx
-|
-+---tokens
-|   README.md
-|
-+---visuals
-|   BackgroundFX.tsx
-|   Glow.tsx
-|   index.ts
-|   NoiseOverlay.tsx
-|
-\---widgets
-    index.ts
-    ListWidget.tsx
-    MediaWidget.tsx
-    MetricWidget.tsx
-    StatWidget.tsx
-    WidgetShell.tsx
+src/ds/
+  index.ts                 (ONLY public entrypoint; import from "@/ds")
+  icons.ts                 (curated icons)
+
+  styles/                  (CSS implementation; token-first)
+    index.css              (layer order)
+    ds.tokens.css          (tokens + knobs: theme/density/visual/platform)
+    ds.theme.css           (color-scheme mapping)
+    ds.base.css            (base reset)
+    ds.utilities.css       (semantic utilities + visibility helpers)
+    ds.components.css      (component styles + runtime surfaces)
+
+  primitives/              (low-level building blocks)
+  layouts/                 (PublicShell/DashboardShell/etc.)
+
+  components/
+    shared/                (default cross-platform components)
+    mobile/                (mobile-only variants when UX diverges)
+    desktop/               (desktop-only variants when UX diverges)
+
+  runtime/                 (integration layer; exported as namespaces)
+    index.ts               (exports: app, web)
+    app/
+      PlatformPresetScript.tsx   (controls <html data-*> globally)
+      mobile/
+        AppShell.tsx             (MobileAppShell)
+        Screen.tsx               (mobile surface wrapper)
+        Sheet.tsx/Overlay.tsx/FloatingAction.tsx/BottomNavPreset.tsx
+      tablet/...
+    web/
+      shells.ts, DeviceFrame.tsx, WidgetFrame.tsx
+
+  foundation/              (contracts: tokens/themes/semantics/a11y)
+  patterns/ visuals/ widgets/ composition/ preview/
+  structures/ interactions/ (organizational + compatibility layers)
 ```
 
 ---
