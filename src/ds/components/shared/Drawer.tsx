@@ -10,6 +10,7 @@ export type DrawerProps = {
   onClose: () => void;
   title?: React.ReactNode;
   description?: React.ReactNode;
+  headerActions?: React.ReactNode;
   side?: DrawerSide;
   closeOnOverlayClick?: boolean;
   children: React.ReactNode;
@@ -39,6 +40,7 @@ export function Drawer({
   onClose,
   title,
   description,
+  headerActions,
   side = "bottom",
   closeOnOverlayClick = true,
   children,
@@ -128,12 +130,15 @@ export function Drawer({
         tabIndex={-1}
       >
         {(title || description) && (
-          <header className="ui-modal__header">
-            {title ? <div className="text-heading-4">{title}</div> : null}
+          <header className="ui-drawer__header">
+            <div className="ui-drawer__title-row">
+              {title ? <div className="text-heading-4">{title}</div> : null}
+              {headerActions ? <div className="ui-drawer__actions ui-row">{headerActions}</div> : null}
+            </div>
             {description ? <div className="text-body-small ui-text-muted">{description}</div> : null}
           </header>
         )}
-        <div className="ui-modal__body">{children}</div>
+        <div className="ui-drawer__body">{children}</div>
       </div>
     </div>,
     document.body

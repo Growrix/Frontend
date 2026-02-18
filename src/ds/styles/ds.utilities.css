@@ -419,6 +419,57 @@
     color: var(--ds-color-text-muted);
   }
 
+  /* Eyebrow / section label (prototype-style uppercase tracking) */
+  .text-eyebrow {
+    font-size: var(--ds-font-size-1);
+    font-weight: var(--ds-font-weight-bold);
+    letter-spacing: var(--ds-letter-spacing-loose);
+    text-transform: uppercase;
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .text-eyebrow {
+    letter-spacing: var(--ds-letter-spacing-eyebrow, 0.2em);
+  }
+
+  /* Radius helpers (token-driven) */
+  .ui-radius-xl { border-radius: var(--ds-radius-xl); }
+  .ui-radius-2xl { border-radius: var(--ds-radius-2xl); }
+  .ui-radius-3xl { border-radius: var(--ds-radius-3xl); }
+
+  /* Soft / translucent surface helpers (good for mobile panels) */
+  .ui-surface--soft {
+    background: color-mix(in oklab, var(--ds-color-surface) 55%, transparent);
+    border-color: color-mix(in oklab, var(--ds-color-border) 60%, transparent);
+  }
+
+  .ui-border--dashed {
+    border-style: dashed;
+  }
+
+  /* Simple divider pattern for lists */
+  .ui-divide-y > * + * {
+    border-top: 1px solid color-mix(in oklab, var(--ds-color-border) 55%, transparent);
+  }
+
+  /* Scrollbar styling (mobile app feel) */
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--ds-color-border) 85%, transparent) transparent;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--ds-color-border) 80%, transparent);
+    border-radius: var(--ds-radius-full);
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
   .text-heading-1 {
     font-family: var(--ds-font-sans);
     font-size: var(--ds-font-size-7);

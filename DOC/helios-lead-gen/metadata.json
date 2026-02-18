@@ -1,0 +1,8 @@
+{
+  "name": "Helios Lead Gen",
+  "description": "A high-performance solar lead generation mobile UI with AI-powered savings analysis, dark theme, and dark red accents.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}

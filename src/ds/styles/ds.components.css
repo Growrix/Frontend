@@ -253,11 +253,13 @@
   }
   .ui-virtual-list__inner {
     position: relative;
+    height: var(--ui-virtual-total, auto);
   }
   .ui-virtual-list__item {
     position: absolute;
     left: 0;
     right: 0;
+    transform: translateY(var(--ui-virtual-y, 0px));
   }
 
   /* Reorderable list */
@@ -580,6 +582,12 @@
     text-align: center;
   }
 
+  .ui-hero--full {
+    min-height: 100dvh;
+    display: grid;
+    align-content: center;
+  }
+
   .ui-hero__actions {
     justify-content: center;
   }
@@ -618,6 +626,26 @@
   .ui-center {
     margin-inline: auto;
     max-width: 60ch;
+  }
+
+  /* Brand gradient surfaces (for app-like hero cards / newsletter bands) */
+  .ui-surface--brand-gradient {
+    background:
+      radial-gradient(
+        1200px 500px at 30% 20%,
+        rgb(var(--ds-color-accent-rgb) / 0.35),
+        transparent 60%
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--ds-color-accent) 72%, var(--ds-color-surface)),
+        color-mix(in oklab, var(--ds-color-background) 90%, var(--ds-color-accent))
+      );
+    border-color: color-mix(in oklab, var(--ds-color-border) 55%, rgb(var(--ds-color-accent-rgb) / 0.35));
+  }
+
+  .ui-surface--brand-gradient * {
+    color: var(--ds-color-foreground-secondary);
   }
   .ui-pricing__list {
     list-style: none;
@@ -1237,6 +1265,18 @@
     height: var(--ds-size-icon-button);
   }
 
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-button--icon {
+    border-radius: var(--ds-radius-card);
+    background: var(--ds-color-surface);
+    border-color: var(--ds-color-border);
+    color: var(--ds-color-text-muted);
+    box-shadow: var(--ds-shadow-sm);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-button--icon:active {
+    transform: scale(0.96);
+  }
+
   .ui-button--fab {
     padding: 0;
     width: var(--ds-size-fab);
@@ -1331,6 +1371,8 @@
     inset: 0;
     background: var(--ds-color-overlay);
     z-index: var(--ds-z-modal);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 
   .ui-sheet__backdrop {
@@ -1340,6 +1382,8 @@
     z-index: var(--ds-z-modal);
     display: grid;
     align-items: end;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 
   .ui-sheet {
@@ -2422,16 +2466,26 @@
     position: fixed;
     inset: 0;
     background: var(--ds-color-overlay);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 
-  .ui-modal,
-  .ui-drawer {
+  .ui-modal {
     position: fixed;
     inset: 0;
     z-index: var(--ds-z-modal);
     display: grid;
     place-items: center;
     padding: var(--ds-space-4);
+  }
+
+  .ui-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: var(--ds-z-drawer);
+    display: grid;
+    place-items: stretch;
+    padding: 0;
   }
 
   .ui-modal__panel {
@@ -2483,6 +2537,122 @@
     overflow: auto;
   }
 
+  /* Drawer header/body (distinct from modal) */
+  .ui-drawer__header {
+    display: grid;
+    gap: var(--ds-space-2);
+    margin-bottom: var(--ds-space-4);
+  }
+
+  .ui-drawer__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-3);
+    min-width: 0;
+  }
+
+  .ui-drawer__actions {
+    flex: 0 0 auto;
+  }
+
+  .ui-drawer__body {
+    display: grid;
+    gap: var(--ds-space-form-gap);
+  }
+
+  /* Mobile menu-like drawer layout (Helios reference) */
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-drawer[data-side='left'] .ui-drawer__panel {
+    padding: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-drawer[data-side='left'] .ui-drawer__header {
+    padding: var(--ds-space-6);
+    border-bottom: 1px solid var(--ds-color-border);
+    margin-bottom: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-drawer[data-side='left'] .ui-drawer__body {
+    padding: var(--ds-space-4);
+  }
+
+  /* Drawer menu pattern (sections + items) */
+  .ui-drawer-menu {
+    display: grid;
+    gap: var(--ds-space-7);
+  }
+
+  .ui-drawer-menu__section {
+    display: grid;
+    gap: var(--ds-space-2);
+  }
+
+  .ui-drawer-menu__label {
+    padding-inline: var(--ds-space-4);
+    font-size: var(--ds-font-size-1);
+    font-weight: var(--ds-font-weight-bold);
+    letter-spacing: var(--ds-letter-spacing-eyebrow);
+    text-transform: uppercase;
+    color: var(--ds-color-text-muted);
+  }
+
+  .ui-drawer-menu__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-3) var(--ds-space-4);
+    border-radius: var(--ds-radius-2xl);
+    border: 1px solid transparent;
+    color: var(--ds-color-text-muted);
+    background: transparent;
+    transition:
+      background var(--ds-duration-normal) var(--ds-ease-standard),
+      border-color var(--ds-duration-normal) var(--ds-ease-standard),
+      color var(--ds-duration-normal) var(--ds-ease-standard),
+      transform var(--ds-duration-fast) var(--ds-ease-standard);
+  }
+
+  .ui-drawer-menu__item:hover {
+    background: var(--ds-color-surface-2);
+    border-color: var(--ds-color-border);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  .ui-drawer-menu__item:active {
+    transform: scale(0.99);
+  }
+
+  .ui-drawer-menu__item--active {
+    background: color-mix(in oklab, var(--ds-color-accent) 14%, var(--ds-color-surface));
+    border-color: color-mix(in oklab, var(--ds-color-accent) 20%, var(--ds-color-border));
+    color: var(--ds-color-accent);
+  }
+
+  .ui-drawer-menu__item-text {
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-semibold);
+    color: inherit;
+  }
+
+  .ui-drawer-menu__footer {
+    padding-top: var(--ds-space-4);
+    border-top: 1px solid var(--ds-color-border);
+  }
+
+  .ui-drawer-menu__danger {
+    width: 100%;
+    justify-content: flex-start;
+    font-weight: var(--ds-font-weight-bold);
+    color: color-mix(in oklab, var(--ds-color-danger) 75%, var(--ds-color-text));
+  }
+
+  .ui-drawer-menu__danger:hover {
+    background: color-mix(in oklab, var(--ds-color-danger) 10%, var(--ds-color-surface));
+    border-color: color-mix(in oklab, var(--ds-color-danger) 18%, var(--ds-color-border));
+    color: var(--ds-color-danger);
+  }
+
   .ui-drawer[data-side='bottom'] .ui-drawer__panel {
     left: 0;
     right: 0;
@@ -2507,6 +2677,12 @@
     border-left: 0;
     border-top: 0;
     border-bottom: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-drawer[data-side='left'] .ui-drawer__panel {
+    width: 17.5rem; /* 280px (prototype side menu) */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .ui-drawer[data-side='right'] .ui-drawer__panel {
@@ -2731,7 +2907,9 @@
     right: 0;
     bottom: 0;
     z-index: var(--ds-z-sticky);
-    background: var(--ds-color-surface);
+    background: color-mix(in oklab, var(--ds-color-surface) 92%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     border-top: 1px solid var(--ds-color-border);
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -2747,6 +2925,10 @@
     padding: 0 var(--ds-space-2);
   }
 
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-bottom-nav__inner {
+    width: min(var(--ds-size-device-phone-w), 100%);
+  }
+
   .ui-bottom-nav__item {
     min-height: var(--ds-size-touch-target);
     min-width: var(--ds-size-touch-target);
@@ -2755,9 +2937,14 @@
     gap: var(--ds-space-1);
     padding: var(--ds-space-2);
     border-radius: var(--ds-radius-default);
-    color: var(--ds-color-foreground);
+    color: var(--ds-color-text-muted);
     text-decoration: none;
     border: 1px solid transparent;
+    transition:
+      transform var(--ds-duration-normal) var(--ds-ease-standard),
+      color var(--ds-duration-normal) var(--ds-ease-standard),
+      background var(--ds-duration-normal) var(--ds-ease-standard),
+      border-color var(--ds-duration-normal) var(--ds-ease-standard);
   }
 
   .ui-bottom-nav__item:hover {
@@ -2767,7 +2954,8 @@
   }
 
   .ui-bottom-nav__item--active {
-    color: var(--ds-color-foreground-secondary);
+    color: var(--ds-color-accent);
+    transform: scale(1.08);
   }
 
   .ui-bottom-nav__icon {
@@ -2798,6 +2986,20 @@
     border-radius: var(--ds-radius-default);
     transition: background var(--ds-duration-normal) var(--ds-ease-standard),
       border-color var(--ds-duration-normal) var(--ds-ease-standard);
+  }
+
+  /* Allow Pressable to act as a full Card surface when composed together. */
+  .ui-pressable.ui-card {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: var(--ds-space-card-padding);
+    text-align: left;
+  }
+
+  .ui-pressable.ui-card.ui-card--compact {
+    padding: var(--ds-space-4);
   }
 
   .ui-pressable:hover {
@@ -3119,5 +3321,1514 @@
   .ui-push__title {
     color: var(--ds-color-foreground-secondary);
     font-weight: 600;
+  }
+
+  /* Helios mobile dashboard (prototype parity) */
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-6);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-header__left {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-header__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-1);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-header__title {
+    font-size: var(--ds-font-size-3);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-header__subtitle {
+    font-size: var(--ds-font-size-1);
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-menu-btn.ui-pressable {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-color-surface-2);
+    border-color: var(--ds-color-border);
+    color: var(--ds-color-text-muted);
+    box-shadow: var(--ds-shadow-md);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-menu-btn.ui-pressable:hover {
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-sun-badge {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--ds-radius-full);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--ds-color-accent) 18%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 32%, var(--ds-color-border));
+    color: var(--ds-color-accent);
+    box-shadow: var(--ds-shadow-md);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-hero.ui-pressable {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 8.5rem;
+    padding: var(--ds-space-6);
+    border-radius: var(--ds-radius-2xl);
+    text-align: left;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--ds-color-accent) 70%, black),
+      color-mix(in oklab, var(--ds-color-accent) 18%, black)
+    );
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 28%, transparent);
+    box-shadow: var(--ds-shadow-xl);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-hero__body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-hero__title {
+    font-size: var(--ds-font-size-5);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-hero__lede {
+    font-size: var(--ds-font-size-2);
+    line-height: var(--ds-line-height-normal);
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 70%, transparent);
+    max-width: 42ch;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    color: var(--ds-color-foreground-secondary);
+    font-weight: var(--ds-font-weight-semibold);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-hero__mark {
+    position: absolute;
+    right: -1rem;
+    bottom: -1rem;
+    width: 8.75rem;
+    height: 8.75rem;
+    opacity: 0.2;
+    color: color-mix(in oklab, var(--ds-color-accent) 58%, transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-list {
+    display: grid;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item.ui-pressable {
+    width: 100%;
+    justify-content: space-between;
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-color-surface);
+    border-color: var(--ds-color-border);
+    box-shadow: var(--ds-shadow-sm);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item__left {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item__tile {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--ds-radius-lg);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--ds-color-accent) 16%, transparent);
+    color: var(--ds-color-accent);
+    flex: 0 0 auto;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item__text {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item__title {
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item__subtitle {
+    font-size: var(--ds-font-size-1);
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-item__chev {
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-stat.ui-card {
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-color-surface);
+    border: 1px solid var(--ds-color-border);
+    box-shadow: var(--ds-shadow-sm);
+    display: grid;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-stat__tile {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--ds-radius-lg);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--ds-color-surface-2) 70%, transparent);
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-stat__value {
+    font-size: var(--ds-font-size-6);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-stat__label {
+    font-size: var(--ds-font-size-1);
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai.ui-pressable {
+    width: 100%;
+    justify-content: space-between;
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-2xl);
+    background: var(--ds-color-surface);
+    border-color: var(--ds-color-border);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai__left {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai__tile {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--ds-radius-xl);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--ds-color-accent) 14%, transparent);
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai__text {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai__title {
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai__subtitle {
+    font-size: 0.625rem;
+    letter-spacing: var(--ds-letter-spacing-eyebrow, 0.2em);
+    text-transform: uppercase;
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-ai__chev {
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-section {
+    display: grid;
+    gap: var(--ds-space-4);
+    padding-top: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-section__title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ds-letter-spacing-eyebrow, 0.2em);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-section__title :where(svg) {
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-section__action.ui-pressable {
+    padding: 0;
+    min-height: auto;
+    min-width: auto;
+    border-color: transparent;
+    background: transparent;
+    color: var(--ds-color-accent);
+    font-size: var(--ds-font-size-1);
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ds-letter-spacing-loose);
+    gap: var(--ds-space-1);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-posts {
+    display: grid;
+    gap: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post.ui-pressable {
+    width: 100%;
+    padding: var(--ds-space-3);
+    border-radius: var(--ds-radius-2xl);
+    background: color-mix(in oklab, var(--ds-color-surface) 60%, transparent);
+    border-color: color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    justify-content: flex-start;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__thumb {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--ds-radius-xl);
+    overflow: hidden;
+    flex: 0 0 auto;
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    background: var(--ds-color-surface-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    opacity: 0.65;
+    transform: scale(1);
+    transition: filter var(--ds-duration-normal) var(--ds-ease-standard),
+      opacity var(--ds-duration-normal) var(--ds-ease-standard),
+      transform 700ms var(--ds-ease-standard);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post.ui-pressable:hover .ui-helios-post__img {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__body {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    font-size: 0.5625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__category {
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__time :where(svg) {
+    width: 0.75rem;
+    height: 0.75rem;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 75%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post__title {
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+    line-height: var(--ds-line-height-tight);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-market__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+    border-bottom: 1px solid color-mix(in oklab, var(--ds-color-border) 45%, transparent);
+    padding-bottom: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-market__kicker {
+    font-size: 0.5625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 75%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse {
+    border-radius: var(--ds-radius-3xl);
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 60%, transparent);
+    background: color-mix(in oklab, var(--ds-color-surface) 35%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__item.ui-pressable {
+    width: 100%;
+    padding: var(--ds-space-4);
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    min-height: auto;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__source {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__time {
+    font-size: 0.625rem;
+    color: var(--ds-color-text-muted);
+    font-weight: var(--ds-font-weight-medium);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__title {
+    font-size: var(--ds-font-size-3);
+    font-weight: var(--ds-font-weight-bold);
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 90%, var(--ds-color-foreground));
+    line-height: var(--ds-line-height-section);
+    flex: 1 1 auto;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-pulse__link {
+    flex: 0 0 auto;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 75%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-trending {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--ds-radius-full);
+    background: color-mix(in oklab, var(--ds-color-accent) 14%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 18%, transparent);
+    color: var(--ds-color-accent);
+    font-size: 0.5rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-trending :where(svg) {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-archive.ui-pressable {
+    width: 100%;
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-2xl);
+    border: 1px dashed color-mix(in oklab, var(--ds-color-border) 75%, transparent);
+    background: transparent;
+    color: var(--ds-color-text-muted);
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ds-letter-spacing-eyebrow, 0.2em);
+    justify-content: center;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-dot {
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: var(--ds-radius-full);
+    background: color-mix(in oklab, var(--ds-color-border) 85%, transparent);
+    display: inline-block;
+    flex: 0 0 auto;
+  }
+
+  /* Helios blog (prototype parity) */
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    --ui-helios-blog-bleed: var(--ds-space-6);
+    --ui-helios-post-xpad: calc(var(--ds-space-6) + var(--ds-space-2));
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--ds-z-sticky);
+    margin-inline: calc(var(--ui-helios-blog-bleed) * -1);
+    padding: var(--ds-space-4) var(--ui-helios-blog-bleed);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+    background: color-mix(in oklab, var(--ds-color-background) 80%, transparent);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid color-mix(in oklab, var(--ds-color-border) 35%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header__left {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header__text {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header__title {
+    font-size: var(--ds-font-size-3);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    letter-spacing: var(--ds-letter-spacing-tight);
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header__kicker {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--ds-letter-spacing-eyebrow, 0.2em);
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header__badge {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--ds-radius-full);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--ds-color-accent) 14%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 18%, transparent);
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-header__right {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-icon-btn.ui-pressable {
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: var(--ds-radius-xl);
+    background: color-mix(in oklab, var(--ds-color-surface) 45%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 60%, transparent);
+    color: color-mix(in oklab, var(--ds-color-text-muted) 80%, var(--ds-color-foreground-secondary));
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-icon-btn.ui-pressable :where(svg) {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-body {
+    margin-inline: calc(var(--ui-helios-blog-bleed) * -1);
+    padding-inline: var(--ui-helios-blog-bleed);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-6);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-search {
+    position: relative;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-search__icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.125rem;
+    height: 1.125rem;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+    pointer-events: none;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-search__input.ui-input {
+    padding-left: 2.75rem;
+    padding-right: 3rem;
+    border-radius: var(--ds-radius-2xl);
+    background: color-mix(in oklab, var(--ds-color-surface) 60%, transparent);
+    border-color: color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-search__filter.ui-pressable {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: var(--ds-radius-full);
+    background: transparent;
+    border-color: transparent;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 90%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-chips {
+    display: flex;
+    gap: var(--ds-space-2);
+    overflow-x: auto;
+    padding-bottom: var(--ds-space-2);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-section {
+    display: grid;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-section__label {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-section__bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--ds-space-3);
+    border-bottom: 1px solid color-mix(in oklab, var(--ds-color-border) 35%, transparent);
+    padding-bottom: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-section__bar--between {
+    justify-content: space-between;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-blog-section__bar :where(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+    opacity: 0.9;
+    flex: 0 0 auto;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured.ui-pressable {
+    width: 100%;
+    padding: 0;
+    border-radius: var(--ds-radius-3xl);
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 75%, transparent);
+    background: var(--ds-color-surface);
+    box-shadow: var(--ds-shadow-xl);
+    text-align: left;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__media {
+    position: relative;
+    height: 22rem;
+    background: var(--ds-color-surface-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    transform: scale(1);
+    transition: transform 2000ms var(--ds-ease-standard);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured.ui-pressable:hover .ui-helios-featured__img {
+    transform: scale(1.06);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      color-mix(in oklab, var(--ds-color-background) 92%, transparent),
+      color-mix(in oklab, var(--ds-color-background) 35%, transparent),
+      transparent
+    );
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: var(--ds-space-8);
+    display: grid;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__pill {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: var(--ds-radius-full);
+    background: color-mix(in oklab, var(--ds-color-background) 45%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 60%, transparent);
+    color: var(--ds-color-foreground-secondary);
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__pill :where(svg) {
+    width: 0.85rem;
+    height: 0.85rem;
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__body {
+    display: none;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__date {
+    font-size: 0.625rem;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+    font-weight: var(--ds-font-weight-bold);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__tag {
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--ds-radius-lg);
+    background: var(--ds-color-accent);
+    color: var(--ds-color-accent-contrast);
+    font-size: 0.5625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__title {
+    font-size: var(--ds-font-size-6);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__author {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    padding-top: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-avatar {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--ds-radius-full);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 25%, transparent);
+    object-fit: cover;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-featured__author-name {
+    font-size: 0.6875rem;
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 85%, transparent);
+    font-weight: var(--ds-font-weight-bold);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed {
+    display: grid;
+    gap: var(--ds-space-5);
+    padding-top: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item.ui-pressable {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--ds-space-5);
+    text-align: left;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item.ui-pressable {
+    padding-block: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__thumb {
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--ds-radius-3xl);
+    overflow: hidden;
+    flex: 0 0 auto;
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 75%, transparent);
+    background: var(--ds-color-surface);
+    box-shadow: var(--ds-shadow-md);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    opacity: 0.65;
+    transform: scale(1);
+    transition: filter var(--ds-duration-normal) var(--ds-ease-standard),
+      opacity var(--ds-duration-normal) var(--ds-ease-standard),
+      transform 700ms var(--ds-ease-standard);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item.ui-pressable:hover .ui-helios-feed-item__img {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 0.25rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    font-size: 0.5625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__category {
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__title {
+    font-size: var(--ds-font-size-3);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    color: var(--ds-color-foreground-secondary);
+    line-height: var(--ds-line-height-section);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.25rem;
+    color: color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__byline {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    min-width: 0;
+    font-size: 0.625rem;
+    color: var(--ds-color-text-muted);
+    font-weight: var(--ds-font-weight-medium);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__avatar {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: var(--ds-radius-full);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 25%, transparent);
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__byline-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-feed-item__row :where(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 auto;
+    opacity: 0.9;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--ds-z-sticky);
+    margin-inline: calc(var(--ui-helios-blog-bleed) * -1);
+    padding: var(--ds-space-4) var(--ui-helios-post-xpad);
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    background: color-mix(in oklab, var(--ds-color-background) 80%, transparent);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid color-mix(in oklab, var(--ds-color-border) 35%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-header__actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-header__text {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-header__title {
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-header__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-header__kicker :where(svg) {
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-body {
+    margin-inline: calc(var(--ui-helios-blog-bleed) * -1);
+    padding: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-hero {
+    position: relative;
+    height: min(24rem, 55vh);
+    background: var(--ds-color-surface-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      color-mix(in oklab, var(--ds-color-background) 95%, transparent),
+      color-mix(in oklab, var(--ds-color-background) 45%, transparent),
+      transparent
+    );
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-hero__content {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: var(--ds-space-8) var(--ui-helios-post-xpad);
+    display: grid;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-hero__pill {
+    justify-self: start;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--ds-radius-full);
+    background: var(--ds-color-accent);
+    color: var(--ds-color-accent-contrast);
+    font-size: 0.5625rem;
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-hero__title {
+    font-size: clamp(1.5rem, 1rem + 2.2vw, 1.875rem);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    line-height: 1.15;
+    letter-spacing: var(--ds-letter-spacing-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-meta {
+    padding: var(--ds-space-6) var(--ui-helios-post-xpad);
+    border-bottom: 1px solid color-mix(in oklab, var(--ds-color-border) 35%, transparent);
+    background: color-mix(in oklab, var(--ds-color-surface) 35%, transparent);
+    display: grid;
+    gap: var(--ds-space-5);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-meta__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-author {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-author__avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--ds-radius-full);
+    object-fit: cover;
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 25%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-author__text {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-author__name {
+    font-size: 0.875rem;
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+    line-height: 1.2;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-author__role {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-medium);
+    color: var(--ds-color-text-muted);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-meta__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    font-size: 0.6875rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-meta__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-meta__item :where(svg) {
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-article {
+    padding: var(--ds-space-8) var(--ui-helios-post-xpad);
+    display: grid;
+    gap: var(--ds-space-5);
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 70%, transparent);
+    line-height: var(--ds-line-height-relaxed);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-p {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-h {
+    font-size: 1.125rem;
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+    padding-left: var(--ds-space-4);
+    border-left: 0.25rem solid color-mix(in oklab, var(--ds-color-accent) 70%, transparent);
+    margin: 0;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-takeaway.ui-card {
+    border-radius: var(--ds-radius-3xl);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    background: color-mix(in oklab, var(--ds-color-surface) 55%, transparent);
+    padding: var(--ds-space-6);
+    box-shadow: var(--ds-shadow-lg);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-takeaway__title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    font-size: 0.6875rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ds-color-foreground-secondary);
+    padding-bottom: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-takeaway__title :where(svg) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-body .ui-helios-blog-section {
+    padding: 0 var(--ui-helios-post-xpad) var(--ds-space-8);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments {
+    padding: 0 var(--ui-helios-post-xpad) calc(var(--ds-space-9) + var(--ds-space-6));
+    display: grid;
+    gap: var(--ds-space-6);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+    border-bottom: 1px solid color-mix(in oklab, var(--ds-color-border) 35%, transparent);
+    padding-bottom: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-3);
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__label :where(svg) {
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__count {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    color: color-mix(in oklab, var(--ds-color-border) 85%, transparent);
+    background: color-mix(in oklab, var(--ds-color-surface-2) 60%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 55%, transparent);
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--ds-radius-md);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__input {
+    position: relative;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__input .ui-textarea {
+    width: 100%;
+    border-radius: var(--ds-radius-2xl);
+    background: color-mix(in oklab, var(--ds-color-surface) 55%, transparent);
+    border-color: color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    padding: var(--ds-space-5);
+    padding-right: calc(var(--ds-space-5) + 3rem);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__send.ui-pressable {
+    position: absolute;
+    right: var(--ds-space-4);
+    bottom: var(--ds-space-4);
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: var(--ds-radius-xl);
+    background: var(--ds-color-accent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 55%, transparent);
+    color: var(--ds-color-accent-contrast);
+    box-shadow: var(--ds-shadow-lg);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__send[data-disabled="true"] {
+    opacity: 0.35;
+    filter: grayscale(1);
+    pointer-events: none;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__send :where(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comments__list {
+    display: grid;
+    gap: var(--ds-space-6);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--ds-radius-full);
+    background: color-mix(in oklab, var(--ds-color-surface-2) 65%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    display: grid;
+    place-items: center;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+    flex: 0 0 auto;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__avatar :where(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    gap: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__user {
+    font-size: 0.75rem;
+    font-weight: var(--ds-font-weight-bold);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__date {
+    font-size: 0.5625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 75%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__text {
+    font-size: 0.9375rem;
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 65%, transparent);
+    line-height: var(--ds-line-height-relaxed);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-4);
+    padding-top: var(--ds-space-2);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__like-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ds-space-2);
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__like[data-liked="true"] .ui-helios-comment__like-pill {
+    color: var(--ds-color-accent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__like-pill :where(svg) {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-comment__reply.ui-pressable {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    color: color-mix(in oklab, var(--ds-color-text-muted) 80%, transparent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--ds-z-modal) + 1);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in oklab, var(--ds-color-background) 65%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__sheet {
+    position: absolute;
+    left: var(--ds-space-6);
+    right: var(--ds-space-6);
+    bottom: var(--ds-space-6);
+    border-radius: calc(var(--ds-radius-3xl) + var(--ds-radius-xl));
+    background: color-mix(in oklab, var(--ds-color-surface) 92%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 70%, transparent);
+    box-shadow: var(--ds-shadow-2xl);
+    padding: var(--ds-space-7);
+    display: grid;
+    gap: var(--ds-space-6);
+    overflow: hidden;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__title {
+    font-size: var(--ds-font-size-5);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--ds-space-5);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__item.ui-pressable {
+    display: grid;
+    justify-items: center;
+    gap: var(--ds-space-3);
+    padding: var(--ds-space-3);
+    border-radius: var(--ds-radius-3xl);
+    background: color-mix(in oklab, var(--ds-color-surface-2) 65%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 60%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--ds-radius-3xl);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--ds-color-background) 40%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 55%, transparent);
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 80%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__icon[data-copied="true"] {
+    background: color-mix(in oklab, var(--ds-color-success) 22%, transparent);
+    border-color: color-mix(in oklab, var(--ds-color-success) 35%, transparent);
+    color: var(--ds-color-success);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__icon :where(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__label {
+    font-size: 0.625rem;
+    font-weight: var(--ds-font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__url {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ds-space-4);
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-2xl);
+    background: color-mix(in oklab, var(--ds-color-background) 35%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ds-color-border) 60%, transparent);
+    color: color-mix(in oklab, var(--ds-color-text-muted) 85%, transparent);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-share__url-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: var(--ds-font-weight-medium);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-title {
+    font-size: clamp(1.5rem, 2.6vw + 1rem, 2.25rem);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    line-height: var(--ds-line-height-tight);
+    color: var(--ds-color-foreground-secondary);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-post-related {
+    display: grid;
+    gap: var(--ds-space-5);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-newsletter.ui-card {
+    border-radius: var(--ds-radius-3xl);
+    padding: var(--ds-space-8);
+    border: 1px solid color-mix(in oklab, var(--ds-color-accent) 18%, transparent);
+    box-shadow: var(--ds-shadow-xl);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-newsletter__grid {
+    display: grid;
+    gap: var(--ds-space-6);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-newsletter__copy {
+    display: grid;
+    gap: var(--ds-space-3);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-newsletter__title {
+    font-size: var(--ds-font-size-6);
+    font-weight: var(--ds-font-weight-black, var(--ds-font-weight-bold));
+    color: var(--ds-color-foreground-secondary);
+    line-height: var(--ds-line-height-tight);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-newsletter__lede {
+    font-size: var(--ds-font-size-3);
+    color: color-mix(in oklab, var(--ds-color-foreground-secondary) 75%, transparent);
+    line-height: var(--ds-line-height-relaxed);
+  }
+
+  :where(html[data-platform="mobile"], [data-platform="mobile"]) .ui-helios-newsletter__form {
+    display: grid;
+    gap: var(--ds-space-3);
   }
 }

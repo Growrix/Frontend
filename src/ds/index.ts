@@ -40,6 +40,7 @@ export * from "./components/shared/Alert";
 export * from "./components/shared/Icon";
 export * from "./components/shared/Modal";
 export * from "./components/shared/Drawer";
+export * from "./components/shared/DrawerMenu";
 export * from "./components/shared/Tabs";
 export * from "./components/shared/DropdownMenu";
 export * from "./components/shared/Tooltip";

@@ -31,6 +31,7 @@
 
     --ds-letter-spacing-tight: -0.02em;
     --ds-letter-spacing-loose: 0.02em;
+    --ds-letter-spacing-eyebrow: 0.08em;
 
     /* Spacing (4px base) */
     --ds-space-0: 0;
@@ -60,6 +61,11 @@
     --ds-radius-card: 0.5rem;
     --ds-radius-modal: 0.5rem;
     --ds-radius-full: 9999px;
+
+    /* Extended radius scale (utilities / richer prototypes) */
+    --ds-radius-xl: 0.75rem;
+    --ds-radius-2xl: 1rem;
+    --ds-radius-3xl: 1.5rem;
 
     /* Radius scale aliases (used by existing component CSS) */
     --ds-radius-sm: var(--ds-radius-default);
@@ -154,6 +160,7 @@
     /* Effects */
     --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.45);
     --ds-color-overlay: rgb(0 0 0 / 0.55);
+    --ds-color-selection: color-mix(in oklab, var(--ds-color-primary) 35%, transparent);
 
     /* Interactive states */
     --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, white);
@@ -296,6 +303,30 @@
 
   /* Platform presets (scopable per page via a wrapper) */
   :where(html[data-platform="mobile"], [data-platform="mobile"]) {
+     /* Helios-style app surface (mobile-only)
+       Keeps desktop classic by scoping to data-platform. */
+     --ds-color-background: #020617; /* slate-950 */
+     --ds-color-surface: #0f172a; /* slate-900 */
+     --ds-color-border: #1e293b; /* slate-800 */
+     --ds-color-overlay: rgb(2 6 23 / 0.8);
+
+     /* App-like text hierarchy (prototype uses light text + muted gray) */
+     --ds-color-foreground: #f8fafc; /* slate-50 */
+     --ds-color-foreground-secondary: #ffffff;
+     --ds-color-text-muted: #64748b; /* slate-500 */
+
+     /* Accent (prototype red) */
+     --ds-color-accent: #ef4444; /* red-500 */
+     --ds-color-accent-foreground: #7f1d1d; /* red-900-ish for mixes */
+     --ds-color-on-primary: #ffffff;
+     --ds-color-accent-rgb: 239 68 68;
+
+    /* Text selection (prototype: red tint) */
+    --ds-color-selection: rgb(var(--ds-color-accent-rgb) / 0.3);
+
+     /* Common surfaces used by hover/secondary states */
+     --ds-color-surface-2: #1e293b; /* slate-800 */
+
     /* App-like mobile typography: smaller headings, clearer body text.
        Scoped to data-platform so desktop remains classic. */
     --ds-font-size-1: 0.75rem; /* 12px */
@@ -316,8 +347,18 @@
     --ds-radius-card: 0.75rem;
     --ds-radius-modal: 0.75rem;
 
+    --ds-radius-xl: 0.75rem;
+    --ds-radius-2xl: 1rem;
+    --ds-radius-3xl: 1.5rem;
+
+    /* Bring back app-like elevation even when data-visual="sleek" is enabled */
+    --ds-shadow-sm: 0 1px 3px rgb(0 0 0 / 0.35);
+    --ds-shadow-md: 0 18px 42px rgb(0 0 0 / 0.45);
+
     --ds-size-touch-target: 3rem;
     --ds-size-bottom-nav-h: 4.25rem;
     --ds-size-tabs-h: var(--ds-size-touch-target);
+
+    --ds-letter-spacing-eyebrow: 0.2em;
   }
 }

@@ -21,6 +21,10 @@ export function SwipeableListItem({ className, actions, maxSwipe, ...props }: Sw
   const startRef = React.useRef<Point | null>(null);
   const draggingRef = React.useRef(false);
 
+  React.useEffect(() => {
+    rootRef.current?.style.setProperty("--ui-swipe-x", `${x}px`);
+  }, [x]);
+
   const clamp = React.useCallback((nextX: number, max: number) => {
     return Math.min(0, Math.max(-max, nextX));
   }, []);
@@ -35,7 +39,6 @@ export function SwipeableListItem({ className, actions, maxSwipe, ...props }: Sw
     <div
       ref={rootRef}
       className={cx("ui-swipe", className)}
-      style={{ ["--ui-swipe-x" as any]: `${x}px` }}
       onPointerDown={(e) => {
         if (!actions) return;
         startRef.current = { x: e.clientX, y: e.clientY };

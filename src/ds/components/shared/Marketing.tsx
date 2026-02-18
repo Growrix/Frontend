@@ -12,11 +12,12 @@ export type HeroSectionProps = {
   lede?: React.ReactNode;
   primaryAction?: { label: string; onClick?: () => void; href?: string };
   secondaryAction?: { label: string; onClick?: () => void; href?: string };
+  className?: string;
 };
 
-export function HeroSection({ kicker, title, lede, primaryAction, secondaryAction }: HeroSectionProps) {
+export function HeroSection({ kicker, title, lede, primaryAction, secondaryAction, className }: HeroSectionProps) {
   return (
-    <div className="ui-hero">
+    <div className={className ? `ui-hero ${className}` : "ui-hero"}>
       <Stack>
         {kicker ? <div className="ui-kicker">{kicker}</div> : null}
         <h1 className="text-heading-1">{title}</h1>

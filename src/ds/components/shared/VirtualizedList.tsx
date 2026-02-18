@@ -23,6 +23,7 @@ function readCssPx(el: HTMLElement, varName: string): number {
 
 export function VirtualizedList<T>({ items, renderItem, getItemKey, overscan = 4, className, ariaLabel }: VirtualizedListProps<T>) {
   const rootRef = React.useRef<HTMLDivElement | null>(null);
+  const innerRef = React.useRef<HTMLDivElement | null>(null);
   const [scrollTop, setScrollTop] = React.useState(0);
   const [viewportH, setViewportH] = React.useState(0);
   const [rowH, setRowH] = React.useState<number | null>(null);
@@ -50,6 +51,10 @@ export function VirtualizedList<T>({ items, renderItem, getItemKey, overscan = 4
   const effectiveRowH = rowH ?? 1;
   const totalH = items.length * effectiveRowH;
 
+  React.useEffect(() => {
+    innerRef.current?.style.setProperty("--ui-virtual-total", `${totalH}px`);
+  }, [totalH]);
+
   const startIndex = Math.max(0, Math.floor(scrollTop / effectiveRowH) - overscan);
   const endIndex = Math.min(items.length - 1, Math.ceil((scrollTop + viewportH) / effectiveRowH) + overscan);
 
@@ -63,7 +68,7 @@ export function VirtualizedList<T>({ items, renderItem, getItemKey, overscan = 4
       aria-label={ariaLabel}
       onScroll={(e) => setScrollTop((e.currentTarget as HTMLDivElement).scrollTop)}
     >
-      <div className="ui-virtual-list__inner" style={{ height: totalH }}>
+      <div ref={innerRef} className="ui-virtual-list__inner">
         {visible.map((item, offset) => {
           const index = startIndex + offset;
           const key = getItemKey?.(item, index) ?? String(index);
@@ -73,7 +78,10 @@ export function VirtualizedList<T>({ items, renderItem, getItemKey, overscan = 4
               key={key}
               role="listitem"
               className="ui-virtual-list__item ui-list__item"
-              style={{ transform: `translateY(${index * effectiveRowH}px)` }}
+              ref={(el) => {
+                if (!el) return;
+                el.style.setProperty("--ui-virtual-y", `${index * effectiveRowH}px`);
+              }}
             >
               <div className="ui-list__content">{renderItem(item, index)}</div>
             </div>

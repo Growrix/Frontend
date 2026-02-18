@@ -19,7 +19,7 @@ export type ReorderableListProps<T> = {
 
 export function ReorderableList<T>({ items, getItemId, renderItem, onReorder, className, ariaLabel }: ReorderableListProps<T>) {
   const [order, setOrder] = React.useState(() => items.map(getItemId));
-  const draggingIdRef = React.useRef<string | null>(null);
+  const [draggingId, setDraggingId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setOrder(items.map(getItemId));
@@ -65,12 +65,12 @@ export function ReorderableList<T>({ items, getItemId, renderItem, onReorder, cl
         const dragHandleProps: React.HTMLAttributes<HTMLElement> = {
           draggable: true,
           onDragStart: (e) => {
-            draggingIdRef.current = id;
+            setDraggingId(id);
             e.dataTransfer.effectAllowed = "move";
             e.dataTransfer.setData("text/plain", id);
           },
           onDragEnd: () => {
-            draggingIdRef.current = null;
+            setDraggingId(null);
           },
           onKeyDown: (e) => {
             if (e.key === "ArrowUp" && index > 0) {
@@ -94,7 +94,7 @@ export function ReorderableList<T>({ items, getItemId, renderItem, onReorder, cl
             }}
             onDrop={(e) => {
               e.preventDefault();
-              const from = draggingIdRef.current ?? e.dataTransfer.getData("text/plain");
+              const from = draggingId ?? e.dataTransfer.getData("text/plain");
               if (!from) return;
               move(from, id);
             }}

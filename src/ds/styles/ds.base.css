@@ -43,7 +43,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--ds-color-primary) 35%, transparent);
+    background: var(--ds-color-selection);
   }
 
   @media (prefers-reduced-motion: reduce) {
