@@ -1,0 +1,6 @@
+# One task file path per line.
+# Lines starting with # are ignored.
+# The Aider loop will process these files sequentially.
+
+docs/feature-a/TASKS.md
+docs/feature-b/TASKS.md

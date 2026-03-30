@@ -5,13 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "typegen": "next typegen",
+    "typecheck": "npm run typegen && tsc --noEmit",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint .",
     "ds:audit": "node scripts/ds-audit.mjs",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci",
-    "verify": "npm run lint && npm test && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run ds:audit"
   },
   "dependencies": {
     "lucide-react": "^0.563.0",
