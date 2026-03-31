@@ -13,7 +13,8 @@ Quick reference for the **token-driven** `ui-*` classes used across the app.
 - Entry wiring:
 	- `src/app/globals.css` imports `src/ds/styles/index.css`
 - Working examples:
-	- `src/app/component-library/*`
+	- `DOC/PROTOTYPE TO DS/templates/*`
+	- current route-group pages under `src/app/*`
 
 ## Rules
 

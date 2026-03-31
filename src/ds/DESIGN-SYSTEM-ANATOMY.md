@@ -568,7 +568,7 @@ The DS enforces these accessibility patterns:
 - Multiple shells (public/dashboard/docs/centered) with responsive behavior
 - Curated icon surface
 - Keyboard/a11y-tested interactive components
-- Component-library pages that exercise the DS
+- Reusable migration packet templates and DS tests that exercise the system contract
 
 ### Current limitations (do not fight these)
 

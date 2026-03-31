@@ -69,4 +69,4 @@ npm run verify           # All of the above in sequence
 
 - [ ] `src/ds/DESIGN-SYSTEM-ANATOMY.md` updated if the change affects architecture, tokens, knobs, or component catalog.
 - [ ] `DOC/SEMANTIC-CLASSES-REGISTRY.md` updated if any `ui-*` class is added or renamed.
-- [ ] Component-library pages updated if the change should be visible in the showcase (`src/app/component-library/*`).
+- [ ] If the change affects reusable migration guidance or DS consumption examples, update `DOC/PROTOTYPE TO DS/` and any live DS showcase references.
