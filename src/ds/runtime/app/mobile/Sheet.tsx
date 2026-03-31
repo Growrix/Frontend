@@ -3,9 +3,7 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../../../utils/cx";
 
 export type SheetProps = {
   open: boolean;

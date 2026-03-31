@@ -1,25 +1,28 @@
 import * as React from "react";
+import { cx } from "../utils/cx";
 
-export type GridCols = 1 | 2 | 3;
+export type GridColumns = 1 | 2 | 3 | 4 | "auto-fill";
+export type GridGap = "tight" | "compact" | "default" | "loose" | "spacious";
 
 export type GridProps = React.HTMLAttributes<HTMLDivElement> & {
-  cols?: GridCols;
+  columns?: GridColumns;
+  gap?: GridGap;
 };
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export function Grid({ cols = 1, className, ...props }: GridProps) {
+export const Grid = React.forwardRef<HTMLDivElement, GridProps>(function Grid(
+  { columns = 1, gap = "default", className, ...props },
+  ref,
+) {
   return (
     <div
+      ref={ref}
       className={cx(
         "ui-grid",
-        cols === 2 && "ui-grid--2",
-        cols === 3 && "ui-grid--3",
-        className
+        columns === "auto-fill" ? "ui-grid--auto" : columns !== 1 && `ui-grid--${columns}`,
+        gap !== "default" && `ui-grid--gap-${gap}`,
+        className,
       )}
       {...props}
     />
   );
-}
+});

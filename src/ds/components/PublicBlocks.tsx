@@ -8,7 +8,7 @@ import { BlogCard } from "./Marketing";
 
 export function BlogList({ posts }: { posts: Array<{ id: string; title: string; excerpt?: string; href: string }> }) {
   return (
-    <Grid cols={3}>
+    <Grid columns={3}>
       {posts.map((p) => (
         <BlogCard key={p.id} title={p.title} excerpt={p.excerpt} href={p.href} />
       ))}
@@ -39,7 +39,7 @@ export function SiteFooter({
 }) {
   return (
     <footer className="ui-footer">
-      <Grid cols={3}>
+      <Grid columns={3}>
         {columns.map((c) => (
           <Stack key={c.id} gap="compact">
             <div className="text-heading-4">{c.title}</div>

@@ -1,11 +1,23 @@
 import * as React from "react";
+import { cx } from "../utils/cx";
 
-export type DividerProps = React.HTMLAttributes<HTMLHRElement>;
+export type DividerOrientation = "horizontal" | "vertical";
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+export type DividerProps = React.HTMLAttributes<HTMLHRElement> & {
+  orientation?: DividerOrientation;
+};
 
-export function Divider({ className, ...props }: DividerProps) {
-  return <hr className={cx("ui-divider", className)} {...props} />;
-}
+export const Divider = React.forwardRef<HTMLHRElement, DividerProps>(function Divider(
+  { orientation = "horizontal", className, ...props },
+  ref,
+) {
+  return (
+    <hr
+      ref={ref}
+      role={orientation === "vertical" ? "separator" : undefined}
+      aria-orientation={orientation === "vertical" ? "vertical" : undefined}
+      className={cx("ui-divider", orientation === "vertical" && "ui-divider--vertical", className)}
+      {...props}
+    />
+  );
+});

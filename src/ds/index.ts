@@ -74,20 +74,26 @@ export * from "./components/Marketing";
 export * from "./components/SectionHeader";
 export * from "./components/SplitSection";
 export * from "./components/ThemeSwitcher";
+export * from "./components/SegmentedControl";
+export * from "./components/CommandPalette";
+export * from "./components/MegaMenu";
+export * from "./components/StepperNav";
+export * from "./components/Lightbox";
+export * from "./components/NotificationPanel";
 
 export * from "./layouts/PublicShell";
 export * from "./layouts/CenteredShell";
 export * from "./layouts/DashboardShell";
 export * from "./layouts/DocsShell";
 
-export * from "./themes/ThemeInitScript";
+export * from "./foundation/themes/ThemeInitScript";
 
-// Updated blueprint layers (scaffolded, non-breaking)
+// Foundation layers (active)
 export * from "./foundation";
 export * from "./runtime";
 
-export * from "./structures";
-export * from "./interactions";
+// structures/ and interactions/ barrels removed — Phase 0 T004
+// All components already exported from ./components/* above.
 export * from "./patterns";
 export * from "./visuals";
 export * from "./widgets";

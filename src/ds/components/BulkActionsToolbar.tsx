@@ -1,10 +1,7 @@
 import * as React from "react";
 
+import { cx } from "../utils/cx";
 import { Button } from "../primitives/Button";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export type BulkAction = {
   id: string;

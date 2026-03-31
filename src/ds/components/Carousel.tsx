@@ -2,11 +2,8 @@
 
 import * as React from "react";
 
+import { cx } from "../utils/cx";
 import { Button } from "../primitives/Button";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export type CarouselProps = {
   children: React.ReactNode;
@@ -20,8 +17,13 @@ export function Carousel({ children, className }: CarouselProps) {
     ref.current?.scrollBy({ left: delta, behavior: "smooth" });
   };
 
+  const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); scrollBy(-320); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); scrollBy(320); }
+  }, []);
+
   return (
-    <div className={cx("ui-carousel", className)}>
+    <div className={cx("ui-carousel", className)} onKeyDown={handleKeyDown}>
       <div className="ui-carousel__controls">
         <Button size="sm" variant="secondary" onClick={() => scrollBy(-320)} aria-label="Previous">
           Prev
@@ -30,7 +32,7 @@ export function Carousel({ children, className }: CarouselProps) {
           Next
         </Button>
       </div>
-      <div ref={ref} className="ui-carousel__track" role="region" aria-label="Carousel">
+      <div ref={ref} className="ui-carousel__track" role="region" aria-label="Carousel" tabIndex={0}>
         {children}
       </div>
     </div>

@@ -2,13 +2,10 @@
 
 import * as React from "react";
 
+import { cx } from "../utils/cx";
 import { Badge } from "./Badge";
 import { Button } from "../primitives/Button";
 import { Input } from "../primitives/Input";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export type TagInputProps = {
   value: string[];

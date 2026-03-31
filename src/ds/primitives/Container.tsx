@@ -1,26 +1,25 @@
 import * as React from "react";
+import { cx } from "../utils/cx";
 
-export type ContainerWidth = "default" | "narrow" | "wide" | "full";
+export type ContainerSize = "narrow" | "default" | "wide" | "xl" | "full";
 
 export type ContainerProps = React.HTMLAttributes<HTMLDivElement> & {
-  width?: ContainerWidth;
+  size?: ContainerSize;
 };
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export function Container({ width = "default", className, ...props }: ContainerProps) {
+export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(function Container(
+  { size = "default", className, ...props },
+  ref,
+) {
   return (
     <div
+      ref={ref}
       className={cx(
         "ui-container",
-        width === "narrow" && "ui-container--narrow",
-        width === "wide" && "ui-container--wide",
-        width === "full" && "ui-container--full",
-        className
+        size !== "default" && `ui-container--${size}`,
+        className,
       )}
       {...props}
     />
   );
-}
+});

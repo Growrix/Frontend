@@ -3,6 +3,9 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+import { cx } from "../utils/cx";
+
+export type ModalSize = "sm" | "default" | "lg" | "xl" | "full";
 export type ModalVariant = "center" | "bottom-sheet";
 
 export type ModalProps = {
@@ -11,14 +14,11 @@ export type ModalProps = {
   title?: React.ReactNode;
   description?: React.ReactNode;
   variant?: ModalVariant;
+  size?: ModalSize;
   closeOnOverlayClick?: boolean;
   children: React.ReactNode;
   className?: string;
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function getFocusable(container: HTMLElement) {
   const selector = [
@@ -40,6 +40,7 @@ export function Modal({
   title,
   description,
   variant = "center",
+  size = "default",
   closeOnOverlayClick = true,
   children,
   className,
@@ -123,7 +124,7 @@ export function Modal({
       />
       <div
         ref={panelRef}
-        className={cx("ui-modal__panel", className)}
+        className={cx("ui-modal__panel", size !== "default" && `ui-modal__panel--${size}`, className)}
         role="dialog"
         aria-modal="true"
         aria-label={typeof title === "string" ? undefined : "Modal"}

@@ -54,6 +54,16 @@ For backend, auth, billing, data, or operations work, also load:
 
 Do not load the full folder tree by default.
 
+For tasks that touch billing, webhooks, jobs, tenant lifecycle, domain modeling, data privacy, notifications, file storage, caching, rate limiting, migrations, admin ops, real-time, or analytics:
+
+- Read `CORE/HANDBOOK-ROUTING.md` to find the correct reference handbook chapter.
+- Load only the specific chapter listed — not the full handbook.
+- Handbooks are reference, not operational authority. CORE rules always win.
+
+For DS theory or component design rationale:
+
+- Consult `DOC/DS BUILDING/HandBook_Frontend/` via the routing table.
+
 ## Folder Map
 
 - `CORE/`: always-on operating rules

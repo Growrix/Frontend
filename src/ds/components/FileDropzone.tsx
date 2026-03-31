@@ -2,12 +2,9 @@
 
 import * as React from "react";
 
+import { cx } from "../utils/cx";
 import { Button } from "../primitives/Button";
 import { Text } from "../primitives/Text";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export type FileDropzoneProps = {
   label?: string;

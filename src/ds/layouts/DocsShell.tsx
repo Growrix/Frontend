@@ -17,7 +17,7 @@ export function DocsShell({ title = "Docs", nav, children }: DocsShellProps) {
   return (
     <div className="ui-page">
       <div className="ui-band ui-band--surface ui-sticky-top">
-        <Container width="wide">
+        <Container size="wide">
           <div className="ui-header-pad ui-row ui-row--between">
             <strong>{title}</strong>
             <a className="ui-navlink ui-focus-ring" href="#main">
@@ -28,7 +28,7 @@ export function DocsShell({ title = "Docs", nav, children }: DocsShellProps) {
       </div>
 
       <main className="ui-page-main" id="main">
-        <Container width="wide">
+        <Container size="wide">
           <div className="ui-docs-shell">
             <aside className="ui-docs-nav" aria-label="Docs navigation">
               <nav>

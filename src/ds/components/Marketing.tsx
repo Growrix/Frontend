@@ -51,7 +51,7 @@ export function HeroSection({ kicker, title, lede, primaryAction, secondaryActio
 export type Feature = { id: string; title: React.ReactNode; description?: React.ReactNode };
 export function FeatureGrid({ features }: { features: Feature[] }) {
   return (
-    <Grid cols={3}>
+    <Grid columns={3}>
       {features.map((f) => (
         <Card key={f.id}>
           <Stack gap="compact">
@@ -81,7 +81,7 @@ export function TestimonialCard({ quote, name, meta }: { quote: React.ReactNode;
 export type PriceTier = { id: string; title: React.ReactNode; price: React.ReactNode; bullets: React.ReactNode[]; featured?: boolean };
 export function PricingTable({ tiers }: { tiers: PriceTier[] }) {
   return (
-    <Grid cols={3}>
+    <Grid columns={3}>
       {tiers.map((t) => (
         <Card key={t.id}>
           <div className={t.featured ? "ui-pricing ui-pricing--featured" : "ui-pricing"}>

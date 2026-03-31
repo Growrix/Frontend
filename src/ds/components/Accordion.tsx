@@ -2,9 +2,7 @@
 
 import * as React from "react";
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 export type AccordionProps = {
   children: React.ReactNode;
@@ -28,11 +26,30 @@ export function Accordion({ children, className, type = "single", defaultValue }
         return isOpen ? prev.filter((v) => v !== value) : [...prev, value];
       });
     },
-    [type]
+    [type],
   );
 
+  const handleKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const triggers = Array.from(
+      (e.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>(".ui-accordion__trigger"),
+    );
+    const idx = triggers.indexOf(e.target as HTMLButtonElement);
+    if (idx < 0) return;
+
+    let next = -1;
+    if (e.key === "ArrowDown") next = (idx + 1) % triggers.length;
+    else if (e.key === "ArrowUp") next = (idx - 1 + triggers.length) % triggers.length;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = triggers.length - 1;
+
+    if (next >= 0) {
+      e.preventDefault();
+      triggers[next].focus();
+    }
+  }, []);
+
   return (
-    <div className={cx("ui-accordion", className)}>
+    <div className={cx("ui-accordion", className)} onKeyDown={handleKeyDown}>
       {React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return child;
         if (child.type !== AccordionItem) return child;
@@ -57,13 +74,21 @@ export type AccordionItemProps = {
 
 export function AccordionItem({ title, children, className, open, onToggle }: AccordionItemProps) {
   const id = React.useId();
+  const triggerId = `${id}-trigger`;
   return (
     <div className={cx("ui-accordion__item", className)} data-open={open ? "true" : "false"}>
-      <button className="ui-accordion__trigger ui-focus-ring" type="button" aria-expanded={open} aria-controls={id} onClick={onToggle}>
+      <button
+        id={triggerId}
+        className="ui-accordion__trigger ui-focus-ring"
+        type="button"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={onToggle}
+      >
         <span className="ui-accordion__title text-body-small">{title}</span>
         <span className="ui-accordion__chev" aria-hidden="true" />
       </button>
-      <div id={id} className="ui-accordion__panel" hidden={!open}>
+      <div id={id} className="ui-accordion__panel" role="region" aria-labelledby={triggerId} hidden={!open}>
         <div className="ui-accordion__content">{children}</div>
       </div>
     </div>

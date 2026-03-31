@@ -73,6 +73,8 @@ For backend, auth, billing, data, or operations tasks, add:
 9. `STANDARDS/SAAS-FOUNDATIONS.md`
 10. the smallest relevant subset from `STACK_PROFILES/NEXTJS-SAAS/architecture/`, `security/`, `testing/`, `devops/`, or `operations/`
 
+If the task touches a domain listed in `CORE/HANDBOOK-ROUTING.md`, also load the specific handbook chapter listed there. Do not load handbooks by default.
+
 ## Change Management
 
 - If new work is discovered, add it to `tasks.md` before doing it.

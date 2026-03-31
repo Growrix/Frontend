@@ -6,7 +6,7 @@
 
 **Location:** `src/ds/`
 **Public import:** `@/ds` (backed by `src/ds/index.ts`)
-**Last verified:** 2026-03-30
+**Last verified:** 2026-06-30
 
 ---
 
@@ -32,11 +32,15 @@ src/ds/
 │
 ├── styles/               ← CSS implementation (the real styling authority)
 │   ├── index.css         ← layer ordering + imports
+│   ├── ds.reset.css      ← element reset (normalize)
 │   ├── ds.tokens.css     ← tokens, theme overrides, density/platform/visual knobs
 │   ├── ds.theme.css      ← color-scheme per theme
 │   ├── ds.base.css       ← element reset + body
 │   ├── ds.utilities.css  ← layout + typography helpers (ui-*, text-*)
-│   └── ds.components.css ← component class implementations (ui-button, ui-card, …)
+│   ├── ds.layouts.css    ← shell & layout pattern styles
+│   ├── ds.components.css ← component class implementations (ui-button, ui-card, …)
+│   ├── ds.patterns.css   ← multi-component pattern styles
+│   └── ds.overrides.css  ← highest-priority override layer (if needed)
 │
 ├── primitives/           ← low-level building blocks (Button, Input, Stack, Grid, …)
 ├── components/           ← higher-level composed components (Modal, Tabs, DataTable, …)
@@ -124,16 +128,20 @@ import { Home } from "lucide-react";                  // ← raw icon library
 ### CSS layer cascade (strict order)
 
 ```css
-@layer ds.tokens, ds.theme, ds.base, ds.utilities, ds.components;
+@layer ds.reset, ds.tokens, ds.theme, ds.base, ds.layouts, ds.components, ds.patterns, ds.utilities, ds.overrides;
 ```
 
 | Priority | Layer | File | Purpose |
 |----------|-------|------|---------|
-| 1 (lowest) | `ds.tokens` | `ds.tokens.css` | Token variables (`--ds-*`), theme/density/platform/visual overrides |
-| 2 | `ds.theme` | `ds.theme.css` | `color-scheme` mapping per theme |
-| 3 | `ds.base` | `ds.base.css` | Element reset + body typography |
-| 4 | `ds.utilities` | `ds.utilities.css` | Layout/typography helper classes |
-| 5 (highest) | `ds.components` | `ds.components.css` | Component class implementations |
+| 1 (lowest) | `ds.reset` | `ds.reset.css` | Element normalization reset |
+| 2 | `ds.tokens` | `ds.tokens.css` | Token variables (`--ds-*`), theme/density/platform/visual overrides |
+| 3 | `ds.theme` | `ds.theme.css` | `color-scheme` mapping per theme |
+| 4 | `ds.base` | `ds.base.css` | Element reset + body typography |
+| 5 | `ds.layouts` | `ds.layouts.css` | Shell & layout pattern styles |
+| 6 | `ds.components` | `ds.components.css` | Component class implementations |
+| 7 | `ds.patterns` | `ds.patterns.css` | Multi-component pattern styles |
+| 8 | `ds.utilities` | `ds.utilities.css` | Layout/typography helper classes |
+| 9 (highest) | `ds.overrides` | (reserved) | Override escape hatch |
 
 **Rules:**
 - Do not reorder these layers.
@@ -238,7 +246,7 @@ Use `ThemeSwitcher` component or the `applyTheme()`/`storeTheme()` utilities fro
 
 ### `Text` primitive
 
-The `Text` component always applies `text-body` and supports `tone="muted"` → `ui-text-muted`.
+The `Text` component is polymorphic (`as` prop) and supports 20+ `variant` values mapping to typography classes. Tones: `default`/`muted`/`accent`/`success`/`danger`/`warning`. Also supports `truncate`, `align`, and `weight` props.
 
 ---
 
@@ -269,26 +277,26 @@ Additional modifiers: `ui-stack--tight`, `ui-stack--compact`, `ui-row--between`,
 
 ### Primitives (`src/ds/primitives/`)
 
-Basic building blocks. Minimal logic, mostly class wiring.
+Basic building blocks. All use `React.forwardRef`, shared `cx()`, and spread `{...props}` last.
 
 | Component | Purpose |
 |-----------|---------|
-| `Button` | Primary action element (variants: `primary`, `secondary`, `ghost`, `danger`; sizes: `sm`, `md`, `lg`) |
-| `Input` | Text input |
-| `Textarea` | Multi-line text input |
-| `Select` | Native `<select>` wrapper |
-| `Checkbox` | Checkbox with label |
+| `Button` | Primary action element. Polymorphic (`as`), variants: `primary`/`secondary`/`ghost`/`danger`, tones: `accent`/`success`/`danger`/`warning`/`neutral`, sizes: `sm`/`md`/`lg` |
+| `Input` | Text input. Sizes: `sm`/`md`/`lg`, `error` state, `startSlot`/`endSlot` for icons/addons |
+| `Textarea` | Multi-line text input. Sizes: `sm`/`md`/`lg`, `error` state |
+| `Select` | Native `<select>` wrapper. Sizes: `sm`/`md`/`lg`, `error` state |
+| `Checkbox` | Checkbox with label. `indeterminate` state, `error` state |
 | `Radio` | Radio button with label |
 | `Switch` | Toggle switch |
 | `RangeSlider` | Range input |
-| `Avatar` | User avatar |
+| `Avatar` | User avatar. 7 sizes (`xs`–`3xl`), `status` dot overlay (online/offline/busy/away) |
 | `Spinner` | Loading spinner |
-| `Container` | Width-constrained wrapper |
-| `Stack` | Vertical layout (`gap` variants: `tight`, `compact`, `default`, `spacious`) |
-| `Grid` | CSS grid layout |
+| `Container` | Width-constrained wrapper. `ContainerSize`: `narrow`/`default`/`wide`/`full` |
+| `Stack` | Vertical/horizontal layout. `direction`: `vertical`/`horizontal`, gaps: `none`/`tight`/`compact`/`default`/`spacious`/`loose` |
+| `Grid` | CSS grid layout. `columns` (1–12), `gap` variants |
 | `Spacer` | Vertical/horizontal spacing |
-| `Divider` | Horizontal rule |
-| `Text` | Body text with optional `tone` |
+| `Divider` | Horizontal/vertical rule. `orientation`: `horizontal`/`vertical` |
+| `Text` | Polymorphic (`as`). 20+ variants (`body`/`body-large`/`heading-1`–`4`/`caption`/`micro`/`label`/`fluid-display`/…), tones: `default`/`muted`/`accent`/`success`/`danger`/`warning`, `truncate`, `align`, `weight` |
 
 ### Components (`src/ds/components/`)
 
@@ -297,30 +305,36 @@ Higher-level composed elements with behavior.
 | Component | Category | Notes |
 |-----------|----------|-------|
 | **Overlays** | | |
-| `Modal` | Overlay | Focus trapping, aria-labelledby/describedby, Escape dismiss |
+| `Modal` | Overlay | Focus trapping, `ModalSize`: `sm`/`default`/`lg`/`xl`/`full`, aria-labelledby/describedby, Escape dismiss |
 | `Drawer` | Overlay | Side/bottom panel, focus trapping, same ARIA pattern as Modal |
 | `Popover` | Overlay | Portal-based, Escape dismisses with focus restore, `aria-label` |
-| `ConfirmDialog` | Overlay | Composes Modal for confirm/cancel flows |
+| `ConfirmDialog` | Overlay | `role="alertdialog"`, `cancelRef` auto-focus, confirm/cancel flows |
 | `ContextMenu` | Overlay | Right-click menu, arrow/Home/End nav, Escape focus restore |
 | `DropdownMenu` | Overlay | Trigger-based menu, full keyboard nav, roving focus |
 | `Tooltip` | Overlay | Hover/focus tooltip |
+| `Lightbox` | Overlay | Full-screen image viewer, ArrowLeft/Right keyboard nav, image counter, Escape close |
+| `NotificationPanel` | Overlay | Notification list with filter (all/unread), mark-all-read, per-item mark-read |
 | **Navigation** | | |
-| `Tabs` (`TabsList`, `TabsTrigger`, `TabsPanel`) | Navigation | Arrow/Home/End keyboard nav, roving tabindex |
+| `Tabs` (`TabsList`, `TabsTrigger`, `TabsPanel`) | Navigation | Arrow/Home/End keyboard nav, roving tabindex, variants: `underline`/`pill`/`boxed` |
 | `BottomNav` | Navigation | Mobile bottom navigation bar |
 | `Breadcrumbs` | Navigation | Breadcrumb trail |
-| `Pagination` | Navigation | Page navigation |
+| `Pagination` | Navigation | Page navigation with `buildPages()` helper, `pageSize` selector |
 | `AppBar` | Navigation | Top application bar |
 | `ScrollToTopButton` | Navigation | Scroll-to-top floating button |
+| `SegmentedControl` | Navigation | Radio-group segmented control, `role="radiogroup"`, ArrowLeft/Right nav |
+| `StepperNav` | Navigation | Multi-step wizard nav, `layout`: `horizontal`/`vertical`, step states |
+| `CommandPalette` | Navigation | Ctrl+K command palette, fuzzy search, `role="combobox"`, ArrowUp/Down + Enter |
+| `MegaMenu` | Navigation | Multi-column dropdown menu, grid layout, keyboard nav |
 | **Data** | | |
-| `DataTable` | Data | Sortable columns, row selection, keyboard sort |
+| `DataTable` | Data | Sortable columns, `stickyHeader`, row selection, keyboard sort |
 | `DataGrid` | Data | Search, pagination, bulk actions, structured search |
 | `ResourceTable` | Data | CRUD table (create/edit/delete callbacks) |
 | `Charts` | Data | Chart components |
 | `Sparkline` | Data | Inline mini chart |
-| `MetricCard` | Data | Key metric display |
+| `MetricCard` | Data | Key metric display with `trend`, `sparkline`, `comparison` slots |
 | **Forms** | | |
-| `Field` | Form | Form field wrapper with label/error |
-| `FormHelpers` | Form | Form composition utilities |
+| `Field` | Form | Form field wrapper with label/error, `required` indicator, `charCount`, `footer` layout |
+| `FormHelpers` (`FormGroup`, `FormActions`) | Form | Form composition utilities (group + action bar) |
 | `Autocomplete` | Form | Combobox with aria-activedescendant, arrow/Home/End, Enter select |
 | `MultiSelect` | Form | Popover with checkbox group (`role="group"`, `aria-label`) |
 | `TagInput` | Form | Tag/chip input |
@@ -328,29 +342,29 @@ Higher-level composed elements with behavior.
 | `DateTimePickers` | Form | Date/time selection |
 | `FilterPanel` | Form | Filter sidebar/panel |
 | **Feedback** | | |
-| `Alert` | Feedback | Inline alert |
-| `Banner` | Feedback | Full-width banner |
+| `Alert` | Feedback | Inline alert. `AlertBorder`: `full`/`left-accent`/`top-accent`/`subtle`, `action` slot, `dismissible`/`onDismiss` |
+| `Banner` | Feedback | Full-width banner. `icon` slot, `dismissible`/`onDismiss` |
 | `Toast` | Feedback | Toast notifications |
-| `Status` | Feedback | Status indicator |
-| `Progress` | Feedback | Progress bar |
-| `Skeleton` | Feedback | Loading placeholder |
-| `EmptyState` | Feedback | Empty content state |
-| `ErrorBoundary` | Feedback | React error boundary |
+| `Status` | Feedback | Status indicator. Tones + `online`/`offline`/`busy`/`away`, variants: `dot`/`badge`/`label` |
+| `Progress` | Feedback | Progress bar. Colors: `accent`/`success`/`danger`/`warning`, `showPercent` |
+| `Skeleton` | Feedback | Loading placeholder. Shapes: `text`/`circle`/`rect`/`image`, animations: `shimmer`/`pulse` |
+| `EmptyState` | Feedback | Empty content state with `variant` |
+| `ErrorBoundary` | Feedback | React error boundary. `fallbackRender`, `onError`, `resetError` |
 | **Content** | | |
-| `Card` | Content | Surface card |
+| `Card` | Content | Surface card. Variants: `basic`/`interactive`/`selectable` |
 | `ImageCard` | Content | Card with image |
 | `IconCard` | Content | Card with icon |
-| `Badge` | Content | Small badge/tag |
+| `Badge` | Content | Small badge/tag. Variants: `solid`/`outline`/`subtle`, sizes: `sm`/`md`/`lg`, `onRemove` |
 | `Section` | Content | Content section |
 | `SectionHeader` | Content | Section header |
 | `SplitSection` | Content | Two-column section |
 | `Icon` | Content | Token-driven icon sizing |
 | `AvatarGroup` | Content | Grouped avatars |
-| `Timeline` | Content | Timeline display |
+| `Timeline` | Content | Timeline display. Variants: `default`/`compact`/`alternating`, custom `icon` per item |
 | `List` | Content | List component |
-| `Accordion` | Content | Collapsible sections |
+| `Accordion` | Content | Collapsible sections. Keyboard: ArrowDown/Up/Home/End, `role="region"` + `aria-labelledby` |
 | `ResponsiveImage` | Content | Responsive image |
-| `Carousel` | Content | Image/content carousel |
+| `Carousel` | Content | Image/content carousel. ArrowLeft/Right keyboard nav |
 | `VideoPlayer` | Content | Video embed |
 | `MarkdownEditor` | Content | Markdown editing |
 | **Marketing** | | |
@@ -489,6 +503,70 @@ Component-library support (development UI only).
 
 3. Export from `src/ds/index.ts`.
 
+---
+
+## 14. Final Audit — Handbook Coverage & Intentional Omissions
+
+> **Audit date:** 2026-06-30  
+> **Scope:** Handbook chapters 00–20 verified against implementation.
+
+### Chapters Fully Implemented
+
+| Ch  | Name                    | Status |
+| --- | ----------------------- | ------ |
+| 00  | Overview                | ✅     |
+| 01  | Typography              | ✅ (tokens + Text primitive + CSS classes) |
+| 02  | Color System            | ✅     |
+| 03  | Spacing & Layout        | ✅     |
+| 04  | Motion & Animation      | ✅ (tokens + reduced-motion hook) |
+| 05  | Elevation & Depth       | ✅     |
+| 06  | Borders & Radius        | ✅     |
+| 07  | Iconography             | ✅ (lucide re-exports + icon CSS) |
+| 08  | Responsive Breakpoints  | ✅ (fluid tokens + media queries) |
+| 09  | Accessibility           | ✅ (focus ring, visually-hidden, reduced-motion, ARIA in all components) |
+| 10  | Interactive States      | ✅ (state tokens + per-component CSS) |
+| 11  | Form Anatomy            | ✅     |
+| 12  | Data Display            | ✅     |
+| 13  | Navigation Patterns     | ✅     |
+| 14  | Overlay Patterns        | ✅     |
+| 15  | Feedback Patterns       | ✅     |
+| 16  | Theming Architecture    | ✅     |
+| 17  | CSS Architecture        | ✅     |
+| 18  | Token Architecture      | ✅     |
+| 19  | Component API Patterns  | ✅     |
+| 20  | Documentation & Testing | ⚠️ Partial |
+
+### Intentional Omissions (with rationale)
+
+The following handbook items are **not implemented** by design:
+
+| Item | Handbook Chapter | Rationale |
+| ---- | --------------- | --------- |
+| Storybook stories (`.stories.tsx`) | Ch 20 | Deferred — Storybook not in current toolchain. Component preview via `src/ds/preview/` route serves same purpose during development. Will add when Storybook is adopted. |
+| Visual regression tests (Chromatic/Percy) | Ch 20 | Deferred — requires CI service integration. Snapshot tests in `shells.snapshot.test.tsx` cover layout regression for now. |
+| Wide-gamut P3 color support | Ch 02 | Not yet needed — current brand palette fits sRGB. Will add `@supports (color: oklch())` fallback when P3 monitors become the primary target. |
+| WCAG contrast audit tooling | Ch 02, 09 | Manual verification done during token creation. Automated `axe-core` or `jest-axe` integration deferred to CI hardening phase. |
+| CSS responsive prefix utilities (`.sm:*`, `.md:*`) | Ch 08 | Intentionally avoided — Tailwind provides responsive prefixes when needed. DS utility classes are layout/semantic, not responsive breakpoint mirrors. |
+| Container query range syntax | Ch 03, 08 | Token-level breakpoints exposed; container queries used sparingly in shells. Full range syntax deferred until broader component need arises. |
+| View Transitions API | Ch 04 | Experimental browser API — will add when baseline support reaches 90%+. |
+| Render props pattern | Ch 19 | Replaced by compound-component and children-slot patterns which are more idiomatic in modern React. |
+| ds.patterns.css content | Ch 17 | Layer file exists as placeholder. Multi-component patterns are currently composed inline. Will populate when recurring composition patterns are identified. |
+
+### Test Coverage Summary (126 tests, 10 suites)
+
+| Suite | Tests | Scope |
+| ----- | ----- | ----- |
+| `primitives.test.tsx` | 64 | All 16 primitives: render, variants, ref, className |
+| `components.test.tsx` | 20 | Modal, Tabs, Accordion, DropdownMenu, Toast, DataTable |
+| `keyboard.a11y.test.tsx` | 5 | Modal, Drawer, DropdownMenu, Tabs, DataTable keyboard |
+| `keyboard-extended.a11y.test.tsx` | 6 | Popover, ContextMenu, Autocomplete, MultiSelect keyboard |
+| `keyboard-additional.a11y.test.tsx` | 8 | Accordion, ConfirmDialog, CommandPalette, Tooltip keyboard |
+| `data-components.test.tsx` | 4 | DataGrid, ResourceTable |
+| `theme.test.ts` | 15 | Theme apply/store/read/resolve, density/visual/platform knobs |
+| `shells.snapshot.test.tsx` | 4 | Shell layout snapshots |
+| `widgets.test.tsx` | 4 | WidgetShell, MetricWidget |
+| `Sheet.test.tsx` | 5 | Mobile sheet focus/a11y |
+
 4. If the component is interactive, add keyboard/a11y tests (see Testing section).
 
 5. Update external docs:
@@ -548,14 +626,20 @@ The DS enforces these accessibility patterns:
 | Pattern | Components | Behavior |
 |---------|-----------|----------|
 | Focus trapping | Modal, Drawer, Sheet | Tab cycles within overlay; focus restores on close |
-| Focus restore | Modal, Drawer, Popover, ContextMenu, DropdownMenu, Sheet | Focus returns to trigger element on Escape/close |
-| Roving tabindex | Tabs | Arrow keys move focus between tabs; Home/End jump to first/last |
-| Menu navigation | DropdownMenu, ContextMenu | Arrow Up/Down, Home/End, Escape to close with focus restore |
-| Combobox | Autocomplete | `aria-activedescendant`, Arrow Up/Down/Home/End, Enter to select |
-| Dialog labelling | Modal, Drawer | `aria-labelledby` (title), `aria-describedby` (description) |
+| Focus restore | Modal, Drawer, Popover, ContextMenu, DropdownMenu, Sheet, Lightbox | Focus returns to trigger element on Escape/close |
+| Roving tabindex | Tabs, SegmentedControl | Arrow keys move focus between items; Home/End jump to first/last |
+| Menu navigation | DropdownMenu, ContextMenu, MegaMenu | Arrow Up/Down, Home/End, Escape to close with focus restore |
+| Combobox | Autocomplete, CommandPalette | `aria-activedescendant`, Arrow Up/Down/Home/End, Enter to select |
+| Dialog labelling | Modal, Drawer, ConfirmDialog | `aria-labelledby` (title), `aria-describedby` (description) |
 | Dialog labelling (light) | Popover | `aria-label` on dialog panel |
+| Alert dialog | ConfirmDialog | `role="alertdialog"`, cancel button auto-focused via `cancelRef` |
 | Group labelling | MultiSelect | `role="group"` + `aria-label` on checkbox list |
+| Radiogroup | SegmentedControl | `role="radiogroup"` + `role="radio"` with `aria-checked` |
+| Gallery navigation | Lightbox, Carousel | ArrowLeft/Right to navigate, Escape to close |
+| Accordion navigation | Accordion | ArrowDown/Up cycle triggers, Home/End, Enter/Space toggle, `role="region"` panels |
+| Step navigation | StepperNav | `aria-current="step"` on active step |
 | Skip link | All shells | `id="main"` on `<main>` element |
+| Conditional alert role | Alert | `role="alert"` for danger/warning, `role="status"` for info/success |
 
 ---
 

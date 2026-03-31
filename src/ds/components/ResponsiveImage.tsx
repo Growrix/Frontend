@@ -1,12 +1,10 @@
 import * as React from "react";
 
+import { cx } from "../utils/cx";
+
 export type ResponsiveImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   aspect?: "square" | "video" | "auto";
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export function ResponsiveImage({ className, aspect = "auto", ...props }: ResponsiveImageProps) {
   return (

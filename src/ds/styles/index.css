@@ -1,7 +1,15 @@
-@layer ds.tokens, ds.theme, ds.base, ds.utilities, ds.components;
+/* ==========================================================================
+   Design System — Master Cascade (Handbook Ch 17 §2.2)
+   9-layer architecture. Import order mirrors layer priority.
+   ========================================================================== */
 
+@layer ds.reset, ds.tokens, ds.theme, ds.base, ds.layouts, ds.components, ds.patterns, ds.utilities, ds.overrides;
+
+@import "./ds.reset.css";
 @import "./ds.tokens.css";
 @import "./ds.theme.css";
 @import "./ds.base.css";
-@import "./ds.utilities.css";
+@import "./ds.layouts.css";
 @import "./ds.components.css";
+@import "./ds.patterns.css";
+@import "./ds.utilities.css";

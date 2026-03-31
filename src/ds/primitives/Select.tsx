@@ -1,18 +1,28 @@
 import * as React from "react";
+import { cx } from "../utils/cx";
 
-export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement>;
+export type SelectSize = "sm" | "md" | "lg";
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
+  size?: SelectSize;
+  error?: boolean;
+};
 
-export function Select({ className, children, ...props }: SelectProps) {
+export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function Select(
+  { className, children, size = "md", error, ...props },
+  ref,
+) {
   return (
-    <div className={cx("ui-select", className)}>
-      <select className="ui-select__control ui-focus-ring" {...props}>
+    <div className={cx("ui-select", `ui-select--${size}`, error && "ui-select--error", className)}>
+      <select
+        ref={ref}
+        aria-invalid={error || undefined}
+        className="ui-select__control ui-focus-ring"
+        {...props}
+      >
         {children}
       </select>
       <span className="ui-select__chevron" aria-hidden="true" />
     </div>
   );
-}
+});

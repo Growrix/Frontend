@@ -19,15 +19,23 @@ export type ConfirmDialogProps = {
 };
 
 export function ConfirmDialog({ open, onClose, title, description, confirmLabel = "Confirm", cancelLabel = "Cancel", tone = "neutral", onConfirm }: ConfirmDialogProps) {
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => cancelRef.current?.focus());
+    }
+  }, [open]);
+
   return (
-    <Modal open={open} onClose={onClose} title={title} description={description}>
+    <Modal open={open} onClose={onClose} title={title} description={description} closeOnOverlayClick={false}>
       <Stack gap="compact">
         {description ? <Text tone="muted">{description}</Text> : null}
         <div className="ui-row">
-          <Button variant={tone === "danger" ? "primary" : "primary"} onClick={onConfirm}>
+          <Button variant="primary" tone={tone === "danger" ? "danger" : undefined} onClick={onConfirm}>
             {confirmLabel}
           </Button>
-          <Button variant="secondary" onClick={onClose}>
+          <Button ref={cancelRef} variant="secondary" onClick={onClose}>
             {cancelLabel}
           </Button>
         </div>

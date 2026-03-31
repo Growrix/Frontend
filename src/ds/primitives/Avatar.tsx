@@ -1,20 +1,17 @@
 import * as React from "react";
+import { cx } from "../utils/cx";
 
-export type AvatarSize = "xs" | "sm" | "md" | "lg";
+export type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 export type AvatarShape = "circle" | "rounded";
 
-export type AvatarProps = {
+export type AvatarProps = React.HTMLAttributes<HTMLSpanElement> & {
   src?: string;
   alt?: string;
   name?: string;
   size?: AvatarSize;
   shape?: AvatarShape;
-  className?: string;
+  status?: "online" | "offline" | "busy" | "away";
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/g).filter(Boolean);
@@ -23,20 +20,23 @@ function initials(name: string) {
   return (first + last).toUpperCase();
 }
 
-export function Avatar({ src, alt, name, size = "md", shape = "circle", className }: AvatarProps) {
+export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
+  { src, alt, name, size = "md", shape = "circle", status, className, ...props },
+  ref,
+) {
   const label = alt ?? name ?? "Avatar";
+
   return (
     <span
+      ref={ref}
       className={cx(
         "ui-avatar",
-        size === "xs" && "ui-avatar--xs",
-        size === "sm" && "ui-avatar--sm",
-        size === "md" && "ui-avatar--md",
-        size === "lg" && "ui-avatar--lg",
+        `ui-avatar--${size}`,
         shape === "rounded" && "ui-avatar--rounded",
-        className
+        className,
       )}
       aria-label={label}
+      {...props}
     >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -44,6 +44,7 @@ export function Avatar({ src, alt, name, size = "md", shape = "circle", classNam
       ) : (
         <span className="ui-avatar__fallback">{name ? initials(name) : "?"}</span>
       )}
+      {status && <span className={cx("ui-avatar__status", `ui-avatar__status--${status}`)} aria-hidden="true" />}
     </span>
   );
-}
+});

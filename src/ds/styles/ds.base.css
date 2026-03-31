@@ -1,20 +1,13 @@
+/* ==========================================================================
+   ds.base — HTML Element Base Styles (Handbook Ch 17 §15.2)
+   Layer: ds.base
+   Reset rules live in ds.reset.css. This file styles semantic HTML elements.
+   ========================================================================== */
+
 @layer ds.base {
-  html,
   body {
-    max-width: 100vw;
-  }
-
-  body {
-    overflow-x: hidden;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    color: var(--ds-color-text);
-    background: var(--ds-color-bg);
+    color: var(--ds-color-foreground);
+    background: var(--ds-color-background);
     font-family: var(--ds-font-sans);
     line-height: var(--ds-line-height-normal);
     -webkit-font-smoothing: antialiased;
@@ -22,37 +15,49 @@
     text-rendering: optimizeLegibility;
   }
 
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-
   a {
     color: inherit;
     text-decoration: none;
+    text-decoration-skip-ink: auto;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ds-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--ds-color-accent);
   }
 
   code {
     font-family: var(--ds-font-mono);
     font-size: 0.95em;
     padding: 0.1em 0.35em;
-    border-radius: var(--ds-radius-default);
+    border-radius: var(--ds-radius-sm);
     border: 1px solid var(--ds-color-border);
-    background: color-mix(in oklab, var(--ds-color-surface) 88%, var(--ds-color-primary) 12%);
+    background: color-mix(in oklab, var(--ds-color-surface) 88%, var(--ds-color-accent) 12%);
+  }
+
+  pre {
+    font-family: var(--ds-font-mono);
+    overflow-x: auto;
+    padding: var(--ds-space-4);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-color-surface-sunken);
+    border: 1px solid var(--ds-color-border);
+  }
+
+  pre code {
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: inherit;
+    border-radius: 0;
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--ds-color-primary) 35%, transparent);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      scroll-behavior: auto !important;
-      transition: none !important;
-      animation: none !important;
-    }
+    background: color-mix(in oklab, var(--ds-color-accent) 35%, transparent);
   }
 }

@@ -1,12 +1,9 @@
 import * as React from "react";
 
+import { cx } from "../../utils/cx";
 import { Section, type SectionProps } from "../../components/Section";
 import { SectionHeader, type SectionHeaderProps } from "../../components/SectionHeader";
 import { Stack } from "../../primitives/Stack";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export type SectionPatternProps = Omit<SectionProps, "children"> & {
   header?: SectionHeaderProps;

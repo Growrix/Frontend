@@ -22,6 +22,23 @@ For backend tasks, also read:
 5. `DOC_UNIVERSAL/STANDARDS/API-BACKEND-RULES.md` — contracts, services, data access
 6. `DOC_UNIVERSAL/STANDARDS/SAAS-FOUNDATIONS.md` — tenancy, auth, billing, stack
 
+## Handbook Routing (On-Demand Only)
+
+When a task touches billing, webhooks, jobs, tenant lifecycle, domain modeling, data privacy, email, file storage, caching, rate limiting, migrations, admin ops, real-time, or analytics:
+
+- Read `DOC_UNIVERSAL/CORE/HANDBOOK-ROUTING.md` to find the correct chapter.
+- Load the specific chapter from `DOC/SAAS HANDBOOK/` — not the full handbook.
+
+When a task requires DS theory or component design rationale:
+
+- Load the specific chapter from `DOC/DS BUILDING/HandBook_Frontend/` (chapters 00–20).
+
+When a task needs stack-specific implementation guidance (Next.js architecture, auth, security, CI/CD, testing):
+
+- Load only the relevant subset from `DOC_UNIVERSAL/STACK_PROFILES/NEXTJS-SAAS/`.
+
+**Rule**: Handbooks are reference, not operational authority. CORE rules always win.
+
 ## Key Constraints
 
 - **DS-first**: import from `@/ds` only. Shells → primitives → components → semantic classes → Tailwind.

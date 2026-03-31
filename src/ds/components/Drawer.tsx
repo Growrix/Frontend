@@ -3,6 +3,8 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+import { cx } from "../utils/cx";
+
 export type DrawerSide = "bottom" | "left" | "right";
 
 export type DrawerProps = {
@@ -15,10 +17,6 @@ export type DrawerProps = {
   children: React.ReactNode;
   className?: string;
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function getFocusable(container: HTMLElement) {
   const selector = [

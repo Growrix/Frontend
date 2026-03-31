@@ -2,7 +2,10 @@ export type CssVar = `var(--${string})`;
 
 export const space = {
   0: "var(--ds-space-0)",
+  px: "var(--ds-space-px)",
+  0.5: "var(--ds-space-0\\.5)",
   1: "var(--ds-space-1)",
+  1.5: "var(--ds-space-1\\.5)",
   2: "var(--ds-space-2)",
   3: "var(--ds-space-3)",
   4: "var(--ds-space-4)",
@@ -11,42 +14,123 @@ export const space = {
   7: "var(--ds-space-7)",
   8: "var(--ds-space-8)",
   9: "var(--ds-space-9)",
+  10: "var(--ds-space-10)",
+  12: "var(--ds-space-12)",
+  14: "var(--ds-space-14)",
+  16: "var(--ds-space-16)",
+  20: "var(--ds-space-20)",
+  24: "var(--ds-space-24)",
+  32: "var(--ds-space-32)",
+  pageInset: "var(--ds-space-page-inset)",
   cardPadding: "var(--ds-space-card-padding)",
   modalPadding: "var(--ds-space-modal-padding)",
   formGap: "var(--ds-space-form-gap)",
+  sectionPadding: "var(--ds-space-section-padding)",
+  sectionMargin: "var(--ds-space-section-margin)",
+  headingMargin: "var(--ds-space-heading-margin)",
+  buttonPadX: "var(--ds-space-button-pad-x)",
+  buttonPadY: "var(--ds-space-button-pad-y)",
+  inputPadX: "var(--ds-space-input-pad-x)",
+  inputPadY: "var(--ds-space-input-pad-y)",
+  navPadding: "var(--ds-space-nav-padding)",
+  popoverPad: "var(--ds-space-popover-pad)",
+  tooltipGap: "var(--ds-space-tooltip-gap)",
+  stackGap: "var(--ds-space-stack-gap)",
+  inlineGap: "var(--ds-space-inline-gap)",
 } as const satisfies Record<string, CssVar>;
 
 export const radius = {
-  default: "var(--ds-radius-default)",
-  card: "var(--ds-radius-card)",
-  modal: "var(--ds-radius-modal)",
-  full: "var(--ds-radius-full)",
-  // Compatibility aliases
+  none: "var(--ds-radius-none)",
+  xs: "var(--ds-radius-xs)",
   sm: "var(--ds-radius-sm)",
-  1: "var(--ds-radius-1)",
-  2: "var(--ds-radius-2)",
-  3: "var(--ds-radius-3)",
+  md: "var(--ds-radius-md)",
+  lg: "var(--ds-radius-lg)",
+  xl: "var(--ds-radius-xl)",
+  "2xl": "var(--ds-radius-2xl)",
+  full: "var(--ds-radius-full)",
+} as const satisfies Record<string, CssVar>;
+
+export const border = {
+  0: "var(--ds-border-0)",
+  hairline: "var(--ds-border-hairline)",
+  thin: "var(--ds-border-thin)",
+  medium: "var(--ds-border-medium)",
+  thick: "var(--ds-border-thick)",
+  heavy: "var(--ds-border-heavy)",
+  default: "var(--ds-border-default)",
+  subtle: "var(--ds-border-subtle)",
+  strong: "var(--ds-border-strong)",
+  muted: "var(--ds-border-muted)",
+  hover: "var(--ds-border-hover)",
+  focus: "var(--ds-border-focus)",
+  active: "var(--ds-border-active)",
+  selected: "var(--ds-border-selected)",
+  disabled: "var(--ds-border-disabled)",
+  success: "var(--ds-border-success)",
+  warning: "var(--ds-border-warning)",
+  danger: "var(--ds-border-danger)",
+  info: "var(--ds-border-info)",
 } as const satisfies Record<string, CssVar>;
 
 export const z = {
+  base: "var(--ds-z-base)",
   sticky: "var(--ds-z-sticky)",
-  modal: "var(--ds-z-modal)",
   dropdown: "var(--ds-z-dropdown)",
+  topbar: "var(--ds-z-topbar)",
   drawer: "var(--ds-z-drawer)",
-  tooltip: "var(--ds-z-tooltip)",
+  modal: "var(--ds-z-modal)",
+  modalContent: "var(--ds-z-modal-content)",
   toast: "var(--ds-z-toast)",
+  tooltip: "var(--ds-z-tooltip)",
 } as const satisfies Record<string, CssVar>;
 
 export const motion = {
-  easeStandard: "var(--ds-ease-standard)",
+  durationInstant: "var(--ds-duration-instant)",
+  durationFastest: "var(--ds-duration-fastest)",
   durationFast: "var(--ds-duration-fast)",
   durationNormal: "var(--ds-duration-normal)",
+  durationModerate: "var(--ds-duration-moderate)",
   durationSlow: "var(--ds-duration-slow)",
+  durationSlower: "var(--ds-duration-slower)",
+  durationSlowest: "var(--ds-duration-slowest)",
+  easeLinear: "var(--ds-ease-linear)",
+  easeStandard: "var(--ds-ease-standard)",
+  easeIn: "var(--ds-ease-in)",
+  easeOut: "var(--ds-ease-out)",
+  easeInOut: "var(--ds-ease-in-out)",
+  easeBounce: "var(--ds-ease-bounce)",
+  easeSpring: "var(--ds-ease-spring)",
+  easeElastic: "var(--ds-ease-elastic)",
+  easeSnap: "var(--ds-ease-snap)",
+  easeEmphasized: "var(--ds-ease-emphasized)",
 } as const satisfies Record<string, CssVar>;
 
 export const shadow = {
+  none: "var(--ds-shadow-none)",
+  xs: "var(--ds-shadow-xs)",
   sm: "var(--ds-shadow-sm)",
   md: "var(--ds-shadow-md)",
+  lg: "var(--ds-shadow-lg)",
+  xl: "var(--ds-shadow-xl)",
+  "2xl": "var(--ds-shadow-2xl)",
+  insetXs: "var(--ds-shadow-inset-xs)",
+  insetSm: "var(--ds-shadow-inset-sm)",
+  insetMd: "var(--ds-shadow-inset-md)",
+} as const satisfies Record<string, CssVar>;
+
+export const ring = {
+  width: "var(--ds-ring-width)",
+  offset: "var(--ds-ring-offset)",
+  color: "var(--ds-ring-color)",
+} as const satisfies Record<string, CssVar>;
+
+export const blur = {
+  none: "var(--ds-blur-none)",
+  sm: "var(--ds-blur-sm)",
+  md: "var(--ds-blur-md)",
+  lg: "var(--ds-blur-lg)",
+  xl: "var(--ds-blur-xl)",
+  "2xl": "var(--ds-blur-2xl)",
 } as const satisfies Record<string, CssVar>;
 
 export const size = {
@@ -57,6 +141,9 @@ export const size = {
   inputMinH: "var(--ds-size-input-min-h)",
   buttonSm: "var(--ds-size-button-sm)",
   buttonMinH: "var(--ds-size-button-min-h)",
+  controlHeightSm: "var(--ds-control-height-sm)",
+  controlHeightMd: "var(--ds-control-height-md)",
+  controlHeightLg: "var(--ds-control-height-lg)",
   iconXs: "var(--ds-size-icon-xs)",
   iconSm: "var(--ds-size-icon-sm)",
   iconMd: "var(--ds-size-icon-md)",
@@ -79,26 +166,49 @@ export const size = {
 export const color = {
   background: "var(--ds-color-background)",
   surface: "var(--ds-color-surface)",
-  surface2: "var(--ds-color-surface-2)",
+  surfaceRaised: "var(--ds-color-surface-raised)",
+  surfaceSunken: "var(--ds-color-surface-sunken)",
+  surfaceOverlay: "var(--ds-color-surface-overlay)",
+  surfaceInteractive: "var(--ds-color-surface-interactive)",
   border: "var(--ds-color-border)",
+  borderStrong: "var(--ds-color-border-strong)",
+  borderMuted: "var(--ds-color-border-muted)",
+  borderFocus: "var(--ds-color-border-focus)",
+  borderError: "var(--ds-color-border-error)",
   foreground: "var(--ds-color-foreground)",
   foregroundSecondary: "var(--ds-color-foreground-secondary)",
-  text: "var(--ds-color-text)",
-  textMuted: "var(--ds-color-text-muted)",
-  fg: "var(--ds-color-fg)",
-  fgMuted: "var(--ds-color-fg-muted)",
+  foregroundMuted: "var(--ds-color-foreground-muted)",
+  foregroundInverse: "var(--ds-color-foreground-inverse)",
+  foregroundOnAccent: "var(--ds-color-foreground-on-accent)",
   accent: "var(--ds-color-accent)",
-  accentForeground: "var(--ds-color-accent-foreground)",
   accentHover: "var(--ds-color-accent-hover)",
   accentActive: "var(--ds-color-accent-active)",
-  primary: "var(--ds-color-primary)",
-  onPrimary: "var(--ds-color-on-primary)",
+  accentMuted: "var(--ds-color-accent-muted)",
+  accentForeground: "var(--ds-color-accent-foreground)",
   success: "var(--ds-color-success)",
+  successBg: "var(--ds-color-success-bg)",
+  successText: "var(--ds-color-success-text)",
   warning: "var(--ds-color-warning)",
+  warningBg: "var(--ds-color-warning-bg)",
+  warningText: "var(--ds-color-warning-text)",
   danger: "var(--ds-color-danger)",
+  dangerBg: "var(--ds-color-danger-bg)",
+  dangerText: "var(--ds-color-danger-text)",
   info: "var(--ds-color-info)",
+  infoBg: "var(--ds-color-info-bg)",
+  infoText: "var(--ds-color-info-text)",
   focusRing: "var(--ds-color-focus-ring)",
   overlay: "var(--ds-color-overlay)",
+} as const satisfies Record<string, CssVar>;
+
+export const state = {
+  hoverOpacity: "var(--ds-state-hover-opacity)",
+  activeOpacity: "var(--ds-state-active-opacity)",
+  focusRingWidth: "var(--ds-state-focus-ring-width)",
+  focusRingOffset: "var(--ds-state-focus-ring-offset)",
+  disabledOpacity: "var(--ds-state-disabled-opacity)",
+  dragOpacity: "var(--ds-state-drag-opacity)",
+  selectedBg: "var(--ds-state-selected-bg)",
 } as const satisfies Record<string, CssVar>;
 
 export const palette = {
@@ -126,10 +236,32 @@ export const palette = {
   brand800: "var(--ds-palette-brand-800)",
   brand900: "var(--ds-palette-brand-900)",
   brand950: "var(--ds-palette-brand-950)",
+  success500: "var(--ds-palette-success-500)",
   success600: "var(--ds-palette-success-600)",
+  success700: "var(--ds-palette-success-700)",
+  warning500: "var(--ds-palette-warning-500)",
   warning600: "var(--ds-palette-warning-600)",
+  warning700: "var(--ds-palette-warning-700)",
+  danger500: "var(--ds-palette-danger-500)",
   danger600: "var(--ds-palette-danger-600)",
+  danger700: "var(--ds-palette-danger-700)",
+  info500: "var(--ds-palette-info-500)",
   info600: "var(--ds-palette-info-600)",
+  info700: "var(--ds-palette-info-700)",
+} as const satisfies Record<string, CssVar>;
+
+export const container = {
+  narrow: "var(--ds-container-narrow)",
+  default: "var(--ds-container-default)",
+  wide: "var(--ds-container-wide)",
+  xl: "var(--ds-container-xl)",
+} as const satisfies Record<string, CssVar>;
+
+export const grid = {
+  columns: "var(--ds-grid-columns)",
+  gap: "var(--ds-grid-gap)",
+  gapSm: "var(--ds-grid-gap-sm)",
+  gapLg: "var(--ds-grid-gap-lg)",
 } as const satisfies Record<string, CssVar>;
 
 export const fontFamily = {
@@ -146,26 +278,60 @@ export const fontSize = {
   5: "var(--ds-font-size-5)",
   6: "var(--ds-font-size-6)",
   7: "var(--ds-font-size-7)",
+  8: "var(--ds-font-size-8)",
+  9: "var(--ds-font-size-9)",
+  10: "var(--ds-font-size-10)",
+  11: "var(--ds-font-size-11)",
+  12: "var(--ds-font-size-12)",
+  fluidBody: "var(--ds-font-size-fluid-body)",
+  fluidH2: "var(--ds-font-size-fluid-h2)",
+  fluidH1: "var(--ds-font-size-fluid-h1)",
+  fluidDisplay: "var(--ds-font-size-fluid-display)",
 } as const satisfies Record<string, CssVar>;
 
 export const fontWeight = {
+  thin: "var(--ds-font-weight-thin)",
+  light: "var(--ds-font-weight-light)",
   regular: "var(--ds-font-weight-regular)",
   book: "var(--ds-font-weight-book)",
   medium: "var(--ds-font-weight-medium)",
-  demibold: "var(--ds-font-weight-demibold)",
   semibold: "var(--ds-font-weight-semibold)",
   bold: "var(--ds-font-weight-bold)",
+  extrabold: "var(--ds-font-weight-extrabold)",
+  black: "var(--ds-font-weight-black)",
 } as const satisfies Record<string, CssVar>;
 
 export const lineHeight = {
+  none: "var(--ds-line-height-none)",
   tight: "var(--ds-line-height-tight)",
-  section: "var(--ds-line-height-section)",
-  meta: "var(--ds-line-height-meta)",
+  snug: "var(--ds-line-height-snug)",
   normal: "var(--ds-line-height-normal)",
   relaxed: "var(--ds-line-height-relaxed)",
+  loose: "var(--ds-line-height-loose)",
 } as const satisfies Record<string, CssVar>;
 
 export const letterSpacing = {
+  tighter: "var(--ds-letter-spacing-tighter)",
   tight: "var(--ds-letter-spacing-tight)",
-  loose: "var(--ds-letter-spacing-loose)",
+  normal: "var(--ds-letter-spacing-normal)",
+  wide: "var(--ds-letter-spacing-wide)",
+  wider: "var(--ds-letter-spacing-wider)",
+  widest: "var(--ds-letter-spacing-widest)",
+} as const satisfies Record<string, CssVar>;
+
+export const icon = {
+  xs: "var(--ds-icon-xs)",
+  sm: "var(--ds-icon-sm)",
+  md: "var(--ds-icon-md)",
+  lg: "var(--ds-icon-lg)",
+  xl: "var(--ds-icon-xl)",
+  "2xl": "var(--ds-icon-2xl)",
+  "3xl": "var(--ds-icon-3xl)",
+  default: "var(--ds-icon-default)",
+  muted: "var(--ds-icon-muted)",
+  accent: "var(--ds-icon-accent)",
+  success: "var(--ds-icon-success)",
+  warning: "var(--ds-icon-warning)",
+  danger: "var(--ds-icon-danger)",
+  onAccent: "var(--ds-icon-on-accent)",
 } as const satisfies Record<string, CssVar>;

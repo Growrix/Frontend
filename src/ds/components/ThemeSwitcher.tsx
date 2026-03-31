@@ -6,8 +6,8 @@ import { Button } from "../primitives/Button";
 import { DropdownMenu, DropdownMenuButton } from "./DropdownMenu";
 import { Icon } from "./Icon";
 import { Check, Sun, Zap } from "../icons";
-import { THEMES, type ThemeName } from "../themes/registry";
-import { applyTheme, readStoredTheme, storeTheme } from "../themes/theme";
+import { THEMES, type ThemeName } from "../foundation/themes/registry";
+import { applyTheme, readStoredTheme, storeTheme } from "../foundation/themes/theme";
 
 export type ThemeSwitcherProps = {
   className?: string;

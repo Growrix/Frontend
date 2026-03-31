@@ -1,100 +1,105 @@
+/* ==========================================================================
+   Design System — Token Architecture (Handbook Ch 18)
+   ==========================================================================
+
+   Three-Tier Token Model
+   ──────────────────────
+   Component Tokens  (scoped to a single component, e.g. --ds-button-bg)
+       ↑ aliases
+   Semantic Tokens   (describe intent, e.g. --ds-accent, --ds-text)
+       ↑ aliases
+   Primitive Tokens  (raw palette values, e.g. --ds-blue-600)
+
+   Resolution: Component → Semantic → Primitive → Raw Value
+
+   Naming Convention  (Ch 18 §6)
+   ──────────────────
+   --ds-{category}-{property}-{variant}-{state}
+   • Kebab-case only
+   • "ds-" namespace prefix on every token
+   • Category first for discoverability
+   • Generic before specific (--ds-text before --ds-text-secondary)
+   • Never encode raw value in semantic name
+   • Max depth: 4 segments
+
+   Tier Responsibilities
+   ─────────────────────
+   Primitive   → DS core team defines, semantic tokens consume.
+                  Changes = palette changes (rare).
+   Semantic    → DS core team defines, components + app code consume.
+                  Changes = theme changes (medium frequency).
+   Component   → Component author defines, component CSS consumes.
+                  Changes = component redesign (frequent).
+
+   Rules
+   ─────
+   1. Never reference primitive tokens directly in component CSS.
+   2. Semantic tokens are the primary consumers of primitive tokens.
+   3. Component tokens default to semantic tokens.
+   4. Max alias depth: 3 levels (component → semantic → primitive).
+   ========================================================================== */
+
 @layer ds.tokens {
   :root {
-    /* Yahoo-like typography (fonts via Google/Next self-hosting; palette unchanged) */
-    --ds-font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-      Arial, sans-serif;
+    /* ── Typography (Ch 01) ── */
+
+    /* Font families */
+    --ds-font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+      Roboto, Arial, sans-serif;
     --ds-font-display: var(--font-display), var(--ds-font-sans);
     --ds-font-mono: var(--font-fira-code), "Fira Code", Consolas, Monaco, "Courier New",
       monospace;
 
-    /* Typography (Yahoo-like scale) */
-    --ds-font-size-1: 0.625rem; /* 10px */
-    --ds-font-size-2: 0.8125rem; /* 13px */
-    --ds-font-size-3: 1rem; /* 16px */
-    --ds-font-size-4: 1.125rem; /* 18px */
-    --ds-font-size-5: 1.25rem; /* 20px */
-    --ds-font-size-6: 1.875rem; /* 30px */
-    --ds-font-size-7: 2rem; /* 32px */
+    /* Font size scale (12 steps) — Ch 01 §2 */
+    --ds-font-size-1: 0.625rem;   /* 10px */
+    --ds-font-size-2: 0.75rem;    /* 12px */
+    --ds-font-size-3: 0.8125rem;  /* 13px */
+    --ds-font-size-4: 0.875rem;   /* 14px */
+    --ds-font-size-5: 1rem;       /* 16px — base */
+    --ds-font-size-6: 1.125rem;   /* 18px */
+    --ds-font-size-7: 1.25rem;    /* 20px */
+    --ds-font-size-8: 1.5rem;     /* 24px */
+    --ds-font-size-9: 1.875rem;   /* 30px */
+    --ds-font-size-10: 2.25rem;   /* 36px */
+    --ds-font-size-11: 3rem;      /* 48px */
+    --ds-font-size-12: 3.75rem;   /* 60px */
 
+    /* Fluid font sizes — Ch 01 §11 */
+    --ds-font-size-fluid-body: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
+    --ds-font-size-fluid-h2: clamp(1.25rem, 1rem + 0.75vw, 1.875rem);
+    --ds-font-size-fluid-h1: clamp(1.5rem, 1.1rem + 1.25vw, 2.25rem);
+    --ds-font-size-fluid-display: clamp(2.25rem, 1.5rem + 2.5vw, 3.75rem);
+
+    /* Font weights — Ch 01 §3 */
+    --ds-font-weight-thin: 100;
+    --ds-font-weight-light: 300;
     --ds-font-weight-regular: 400;
     --ds-font-weight-book: 450;
     --ds-font-weight-medium: 500;
-    --ds-font-weight-demibold: 550;
     --ds-font-weight-semibold: 600;
     --ds-font-weight-bold: 700;
+    --ds-font-weight-extrabold: 800;
+    --ds-font-weight-black: 900;
 
+    /* Line heights — Ch 01 §4 */
+    --ds-line-height-none: 1;
     --ds-line-height-tight: 1.2;
-    --ds-line-height-section: 1.2778;
-    --ds-line-height-meta: 1.4;
+    --ds-line-height-snug: 1.3;
     --ds-line-height-normal: 1.5;
     --ds-line-height-relaxed: 1.75;
+    --ds-line-height-loose: 2;
 
+    /* Letter spacing — Ch 01 §5 */
+    --ds-letter-spacing-tighter: -0.05em;
     --ds-letter-spacing-tight: -0.02em;
-    --ds-letter-spacing-loose: 0.02em;
+    --ds-letter-spacing-normal: 0;
+    --ds-letter-spacing-wide: 0.02em;
+    --ds-letter-spacing-wider: 0.05em;
+    --ds-letter-spacing-widest: 0.1em;
 
-    /* Spacing (4px base) */
-    --ds-space-0: 0;
-    --ds-space-1: 0.25rem;
-    --ds-space-2: 0.5rem;
-    --ds-space-3: 0.75rem;
-    --ds-space-4: 1rem;
-    --ds-space-5: 1.25rem;
-    --ds-space-6: 1.5rem;
-    --ds-space-7: 2rem;
-    --ds-space-8: 2.5rem;
-    --ds-space-9: 3rem;
+    /* ── Palette: Primitives (Ch 02) ── */
 
-    /* Semantic spacing */
-    --ds-space-card-padding: var(--ds-space-6);
-    --ds-space-modal-padding: var(--ds-space-6);
-    --ds-space-form-gap: var(--ds-space-4);
-    --ds-space-section-margin: var(--ds-space-9);
-    --ds-space-heading-margin: var(--ds-space-4);
-    --ds-space-button-pad-x: var(--ds-space-4);
-    --ds-space-button-pad-y: var(--ds-space-2);
-    --ds-space-input-pad-x: var(--ds-space-4);
-    --ds-space-input-pad-y: var(--ds-space-2);
-    --ds-space-nav-padding: var(--ds-space-4);
-
-    /* Radii */
-    --ds-radius-default: 0.25rem;
-    --ds-radius-card: 0.5rem;
-    --ds-radius-modal: 0.5rem;
-    --ds-radius-full: 9999px;
-
-    /* Radius scale aliases (used by existing component CSS) */
-    --ds-radius-sm: var(--ds-radius-default);
-    --ds-radius-1: var(--ds-radius-default);
-    --ds-radius-2: var(--ds-radius-default);
-    --ds-radius-3: var(--ds-radius-card);
-
-    /* Motion */
-    --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-    --ds-duration-fast: 120ms;
-    --ds-duration-normal: 200ms;
-    --ds-duration-slow: 300ms;
-
-    /* Shadows */
-    --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-
-    /* Z-index */
-    --ds-z-modal: 1000;
-    --ds-z-drawer: 1100;
-    --ds-z-dropdown: 1050;
-    --ds-z-tooltip: 1200;
-    --ds-z-toast: 1300;
-    --ds-z-sticky: 100;
-
-    /* Semantic colors (SolarConnect Dark) */
-    /*
-      Pro-grade structure:
-      - Palette tokens: scale-able building blocks (neutral/brand/status)
-      - Semantic tokens: what components should consume
-      - Theme selectors (html.theme-*) override palette + semantic mapping
-    */
-
-    /* Palette: neutrals (default = dark theme baseline) */
+    /* Neutrals (dark baseline) */
     --ds-palette-neutral-0: #ffffff;
     --ds-palette-neutral-50: #f3f4f6;
     --ds-palette-neutral-100: #e5e7eb;
@@ -109,7 +114,7 @@
     --ds-palette-neutral-900: #151419;
     --ds-palette-neutral-950: #0b0b0c;
 
-    /* Palette: brand (default accent) */
+    /* Brand */
     --ds-palette-brand-50: #f4f0ff;
     --ds-palette-brand-100: #e7dcff;
     --ds-palette-brand-200: #cebaff;
@@ -122,30 +127,72 @@
     --ds-palette-brand-900: #2e1660;
     --ds-palette-brand-950: #230f4f;
 
-    /* Palette: status base (kept minimal; scale can expand later) */
+    /* Status ramps (Ch 02 §2) — minimum 3 stops for hover/active */
+    --ds-palette-success-500: #22c55e;
     --ds-palette-success-600: #16a34a;
-    --ds-palette-warning-600: #f59e0b;
-    --ds-palette-danger-600: #dc2626;
-    --ds-palette-info-600: #2563eb;
+    --ds-palette-success-700: #15803d;
 
-    /* Semantic colors (default = dark) */
+    --ds-palette-warning-500: #fbbf24;
+    --ds-palette-warning-600: #f59e0b;
+    --ds-palette-warning-700: #d97706;
+
+    --ds-palette-danger-500: #ef4444;
+    --ds-palette-danger-600: #dc2626;
+    --ds-palette-danger-700: #b91c1c;
+
+    --ds-palette-info-500: #3b82f6;
+    --ds-palette-info-600: #2563eb;
+    --ds-palette-info-700: #1d4ed8;
+
+    /* ── Semantic Colors (Ch 02 §4–§8) ── */
+
+    /* Background / Surface */
     --ds-color-background: var(--ds-palette-neutral-900);
     --ds-color-surface: var(--ds-palette-neutral-850);
-    --ds-color-border: var(--ds-palette-neutral-800);
+    --ds-color-surface-raised: color-mix(in oklab, var(--ds-color-surface) 70%, var(--ds-color-background));
+    --ds-color-surface-sunken: var(--ds-palette-neutral-950);
+    --ds-color-surface-overlay: var(--ds-palette-neutral-800);
+    --ds-color-surface-interactive: var(--ds-palette-neutral-800);
+
+    /* Foreground / Text */
     --ds-color-foreground: var(--ds-palette-neutral-400);
     --ds-color-foreground-secondary: var(--ds-palette-neutral-50);
+    --ds-color-foreground-muted: color-mix(in oklab, var(--ds-color-foreground) 78%, var(--ds-color-background));
+    --ds-color-foreground-inverse: var(--ds-palette-neutral-900);
+    --ds-color-foreground-on-accent: var(--ds-palette-neutral-0);
+
+    /* Border */
+    --ds-color-border: var(--ds-palette-neutral-800);
+    --ds-color-border-strong: var(--ds-palette-neutral-600);
+    --ds-color-border-muted: var(--ds-palette-neutral-850);
+    --ds-color-border-focus: var(--ds-palette-brand-500);
+    --ds-color-border-error: var(--ds-palette-danger-600);
+
+    /* Accent */
     --ds-color-accent: var(--ds-palette-brand-600);
+    --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, white);
+    --ds-color-accent-active: color-mix(in oklab, var(--ds-color-accent) 78%, black);
+    --ds-color-accent-muted: color-mix(in oklab, var(--ds-color-accent) 20%, var(--ds-color-background));
     --ds-color-accent-foreground: var(--ds-palette-brand-950);
 
-    --ds-color-primary: var(--ds-color-accent);
-    --ds-color-on-primary: var(--ds-color-foreground-secondary);
-
+    /* Status (Ch 02 §8) */
     --ds-color-success: var(--ds-palette-success-600);
-    --ds-color-warning: var(--ds-palette-warning-600);
-    --ds-color-danger: var(--ds-palette-danger-600);
-    --ds-color-info: var(--ds-palette-info-600);
+    --ds-color-success-bg: color-mix(in oklab, var(--ds-palette-success-600) 15%, var(--ds-color-background));
+    --ds-color-success-text: var(--ds-palette-success-500);
 
-    /* RGB helpers (space-separated, for use with rgb(var(--x) / a)) */
+    --ds-color-warning: var(--ds-palette-warning-600);
+    --ds-color-warning-bg: color-mix(in oklab, var(--ds-palette-warning-600) 15%, var(--ds-color-background));
+    --ds-color-warning-text: var(--ds-palette-warning-500);
+
+    --ds-color-danger: var(--ds-palette-danger-600);
+    --ds-color-danger-bg: color-mix(in oklab, var(--ds-palette-danger-600) 15%, var(--ds-color-background));
+    --ds-color-danger-text: var(--ds-palette-danger-500);
+
+    --ds-color-info: var(--ds-palette-info-600);
+    --ds-color-info-bg: color-mix(in oklab, var(--ds-palette-info-600) 15%, var(--ds-color-background));
+    --ds-color-info-text: var(--ds-palette-info-500);
+
+    /* RGB helpers (space-separated for alpha variations) */
     --ds-color-accent-rgb: 109 59 226;
     --ds-color-success-rgb: 22 163 74;
     --ds-color-warning-rgb: 245 158 11;
@@ -156,42 +203,213 @@
     --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.45);
     --ds-color-overlay: rgb(0 0 0 / 0.55);
 
-    /* Interactive states */
-    --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, white);
-    --ds-color-accent-active: color-mix(in oklab, var(--ds-color-accent) 78%, black);
+    /* Interactive state tokens (Ch 10 §18) */
+    --ds-state-hover-opacity: 0.08;
+    --ds-state-active-opacity: 0.12;
+    --ds-state-focus-ring-width: 2px;
+    --ds-state-focus-ring-offset: 2px;
+    --ds-state-disabled-opacity: 0.4;
+    --ds-state-drag-opacity: 0.5;
+    --ds-state-selected-bg: var(--ds-color-accent-muted);
 
-    /* Legacy aliases (kept for existing classnames) */
-    --ds-color-bg: var(--ds-color-background);
-    --ds-color-text: var(--ds-color-foreground);
-    --ds-color-text-muted: color-mix(in oklab, var(--ds-color-foreground) 78%, var(--ds-color-background));
-    --ds-color-surface-2: color-mix(in oklab, var(--ds-color-surface) 70%, var(--ds-color-background));
+    /* ── Spacing (Ch 03 §1) ── */
 
-    /* Internal aliases used by some DS styles */
-    --ds-color-fg: var(--ds-color-foreground-secondary);
-    --ds-color-fg-muted: var(--ds-color-text-muted);
+    --ds-space-0: 0;
+    --ds-space-px: 1px;
+    --ds-space-0\.5: 0.125rem;   /* 2px */
+    --ds-space-1: 0.25rem;       /* 4px */
+    --ds-space-1\.5: 0.375rem;   /* 6px */
+    --ds-space-2: 0.5rem;        /* 8px */
+    --ds-space-3: 0.75rem;       /* 12px */
+    --ds-space-4: 1rem;          /* 16px */
+    --ds-space-5: 1.25rem;       /* 20px */
+    --ds-space-6: 1.5rem;        /* 24px */
+    --ds-space-7: 1.75rem;       /* 28px */
+    --ds-space-8: 2rem;          /* 32px */
+    --ds-space-9: 2.25rem;       /* 36px */
+    --ds-space-10: 2.5rem;       /* 40px */
+    --ds-space-12: 3rem;         /* 48px */
+    --ds-space-14: 3.5rem;       /* 56px */
+    --ds-space-16: 4rem;         /* 64px */
+    --ds-space-20: 5rem;         /* 80px */
+    --ds-space-24: 6rem;         /* 96px */
+    --ds-space-32: 8rem;         /* 128px */
 
-    /* Layout dimensions */
-    --ds-container-max: 64rem;
-    --ds-container-narrow: 56rem;
+    /* Semantic spacing (Ch 03 §2) */
+    --ds-space-page-inset: var(--ds-space-4);
+    --ds-space-card-padding: var(--ds-space-6);
+    --ds-space-modal-padding: var(--ds-space-6);
+    --ds-space-form-gap: var(--ds-space-4);
+    --ds-space-section-padding: var(--ds-space-8);
+    --ds-space-section-margin: var(--ds-space-12);
+    --ds-space-heading-margin: var(--ds-space-4);
+    --ds-space-button-pad-x: var(--ds-space-4);
+    --ds-space-button-pad-y: var(--ds-space-2);
+    --ds-space-input-pad-x: var(--ds-space-4);
+    --ds-space-input-pad-y: var(--ds-space-2);
+    --ds-space-nav-padding: var(--ds-space-4);
+    --ds-space-popover-pad: var(--ds-space-2);
+    --ds-space-tooltip-gap: var(--ds-space-2);
+    --ds-space-stack-gap: var(--ds-space-6);
+    --ds-space-inline-gap: var(--ds-space-2);
+
+    /* Container tokens (Ch 03 §5) */
+    --ds-container-narrow: 48rem;
+    --ds-container-default: 64rem;
     --ds-container-wide: 72rem;
+    --ds-container-xl: 80rem;
 
-    /* Sizing */
+    /* Grid tokens (Ch 03 §3) */
+    --ds-grid-columns: 12;
+    --ds-grid-gap: var(--ds-space-6);
+    --ds-grid-gap-sm: var(--ds-space-4);
+    --ds-grid-gap-lg: var(--ds-space-8);
+
+    /* ── Border / Radius (Ch 06) ── */
+
+    /* Radius scale — Ch 06 §5 */
+    --ds-radius-none: 0;
+    --ds-radius-xs: 0.125rem;   /* 2px */
+    --ds-radius-sm: 0.25rem;    /* 4px */
+    --ds-radius-md: 0.5rem;     /* 8px */
+    --ds-radius-lg: 0.75rem;    /* 12px */
+    --ds-radius-xl: 1rem;       /* 16px */
+    --ds-radius-2xl: 1.5rem;    /* 24px */
+    --ds-radius-full: 9999px;
+
+    /* Border width — Ch 06 §2 */
+    --ds-border-0: 0;
+    --ds-border-hairline: 0.5px;
+    --ds-border-thin: 1px;
+    --ds-border-medium: 2px;
+    --ds-border-thick: 3px;
+    --ds-border-heavy: 4px;
+
+    /* Border color — Ch 06 §4 (aliases into semantic color tokens) */
+    --ds-border-default: var(--ds-color-border);
+    --ds-border-subtle: var(--ds-color-border-muted);
+    --ds-border-strong: var(--ds-color-border-strong);
+    --ds-border-muted: var(--ds-color-border-muted);
+    --ds-border-hover: var(--ds-color-border-strong);
+    --ds-border-focus: var(--ds-color-border-focus);
+    --ds-border-active: var(--ds-color-accent);
+    --ds-border-selected: var(--ds-color-accent);
+    --ds-border-disabled: var(--ds-color-border-muted);
+    --ds-border-success: var(--ds-color-success);
+    --ds-border-warning: var(--ds-color-warning);
+    --ds-border-danger: var(--ds-color-danger);
+    --ds-border-info: var(--ds-color-info);
+
+    /* ── Motion (Ch 04) ── */
+
+    /* Duration — Ch 04 §2 */
+    --ds-duration-instant: 0ms;
+    --ds-duration-fastest: 50ms;
+    --ds-duration-fast: 120ms;
+    --ds-duration-normal: 200ms;
+    --ds-duration-moderate: 300ms;
+    --ds-duration-slow: 400ms;
+    --ds-duration-slower: 500ms;
+    --ds-duration-slowest: 700ms;
+
+    /* Easing — Ch 04 §3 */
+    --ds-ease-linear: linear;
+    --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ds-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ds-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ds-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ds-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ds-ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ds-ease-snap: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    --ds-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+    /* ── Shadows / Elevation (Ch 05) ── */
+
+    /* Shadow scale — Ch 05 §3 */
+    --ds-shadow-none: none;
+    --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --ds-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --ds-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --ds-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+    --ds-shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+
+    /* Inset shadows — Ch 05 §6 */
+    --ds-shadow-inset-xs: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+    --ds-shadow-inset-sm: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+    --ds-shadow-inset-md: inset 0 4px 8px rgba(0, 0, 0, 0.12);
+
+    /* Ring — Ch 05 §7 */
+    --ds-ring-width: 2px;
+    --ds-ring-offset: 2px;
+    --ds-ring-color: var(--ds-color-focus-ring);
+
+    /* Backdrop blur — Ch 05 §11 */
+    --ds-blur-none: 0;
+    --ds-blur-sm: 4px;
+    --ds-blur-md: 8px;
+    --ds-blur-lg: 16px;
+    --ds-blur-xl: 24px;
+    --ds-blur-2xl: 40px;
+
+    /* ── Z-Index (Ch 14 §2) ── */
+
+    --ds-z-base: 0;
+    --ds-z-sticky: 100;
+    --ds-z-dropdown: 200;
+    --ds-z-topbar: 300;
+    --ds-z-drawer: 400;
+    --ds-z-modal: 500;
+    --ds-z-modal-content: 510;
+    --ds-z-toast: 600;
+    --ds-z-tooltip: 700;
+
+    /* ── Icon Tokens (Ch 07) ── */
+
+    /* Icon sizes — Ch 07 §3 */
+    --ds-icon-xs: 0.75rem;    /* 12px */
+    --ds-icon-sm: 1rem;       /* 16px */
+    --ds-icon-md: 1.25rem;    /* 20px */
+    --ds-icon-lg: 1.5rem;     /* 24px */
+    --ds-icon-xl: 2rem;       /* 32px */
+    --ds-icon-2xl: 3rem;      /* 48px */
+    --ds-icon-3xl: 4rem;      /* 64px */
+
+    /* Icon colors — Ch 07 §10 */
+    --ds-icon-default: var(--ds-color-foreground);
+    --ds-icon-muted: var(--ds-color-foreground-muted);
+    --ds-icon-accent: var(--ds-color-accent);
+    --ds-icon-success: var(--ds-color-success);
+    --ds-icon-warning: var(--ds-color-warning);
+    --ds-icon-danger: var(--ds-color-danger);
+    --ds-icon-on-accent: var(--ds-color-foreground-on-accent);
+
+    /* ── Component Sizing ── */
+
     --ds-size-hero-min-h: 28rem;
-     /* Header band height (used for sticky offsets + viewport calculations).
-       Matches shells that use .ui-header-pad (padding-block: --ds-space-4)
-       around a row of controls that are at least --ds-size-touch-target tall. */
-     --ds-size-header-h: calc(var(--ds-size-touch-target) + var(--ds-space-4) + var(--ds-space-4));
+    --ds-size-header-h: calc(var(--ds-size-touch-target) + var(--ds-space-4) + var(--ds-space-4));
     --ds-size-viewport-minus-header: calc(100dvh - var(--ds-size-header-h));
 
     --ds-size-touch-target: 2.75rem;
     --ds-size-input-min-h: var(--ds-size-touch-target);
     --ds-size-button-sm: 2.5rem;
     --ds-size-button-min-h: var(--ds-size-touch-target);
-    --ds-size-icon-xs: 0.875rem;
-    --ds-size-icon-sm: 1rem;
-    --ds-size-icon-md: 1.25rem;
-    --ds-size-icon-lg: 1.5rem;
-    --ds-size-icon-xl: 2rem;
+
+    /* Control heights (Ch 16 density) */
+    --ds-control-height-sm: 2rem;     /* 32px */
+    --ds-control-height-md: 2.5rem;   /* 40px */
+    --ds-control-height-lg: 3rem;     /* 48px */
+
+    /* Component icon sizing (aliases into icon token scale) */
+    --ds-size-icon-xs: var(--ds-icon-xs);
+    --ds-size-icon-sm: var(--ds-icon-sm);
+    --ds-size-icon-md: var(--ds-icon-md);
+    --ds-size-icon-lg: var(--ds-icon-lg);
+    --ds-size-icon-xl: var(--ds-icon-xl);
+    --ds-size-icon-2xl: var(--ds-icon-2xl);
+    --ds-size-icon-3xl: var(--ds-icon-3xl);
+
     --ds-size-icon-button: var(--ds-size-touch-target);
     --ds-size-fab: 3.25rem;
     --ds-size-tabs-h: var(--ds-size-touch-target);
@@ -200,50 +418,63 @@
     --ds-size-stepper-dot: 0.625rem;
     --ds-size-preview-panel: 28rem;
 
-    /* Device preview sizing (used by component-library previews) */
-    --ds-size-device-phone-w: 24.375rem; /* 390px */
-    --ds-size-device-phone-h: 52.75rem; /* 844px */
+    /* Device preview sizing */
+    --ds-size-device-phone-w: 24.375rem;
+    --ds-size-device-phone-h: 52.75rem;
 
     /* Dashboard shell sizing */
     --ds-size-shell-left: 13rem;
     --ds-size-shell-right: 16rem;
     --ds-size-shell-collapsed: 4.5rem;
-
-    /* Popovers / tooltips */
-    --ds-space-popover-pad: var(--ds-space-2);
-    --ds-space-tooltip-gap: var(--ds-space-2);
   }
 
-  /* Theme: light (semantic + palette overrides) */
+  /* ── Theme: Light ──
+     Overrides only tokens that genuinely differ from the dark (:root) defaults.
+     Tokens using var() refs to overridden tokens (e.g. accent-muted, status-bg)
+     auto-resolve — no redundant re-declaration needed.
+     Neutral palette is NOT overridden because the scale is identical across themes;
+     only the semantic mappings change. */
+
   html.theme-light {
-    --ds-palette-neutral-0: #ffffff;
-    --ds-palette-neutral-50: #f9fafb;
-    --ds-palette-neutral-100: #f3f4f6;
-    --ds-palette-neutral-200: #e5e7eb;
-    --ds-palette-neutral-300: #d1d5db;
-    --ds-palette-neutral-400: #9ca3af;
-    --ds-palette-neutral-500: #6b7280;
-    --ds-palette-neutral-600: #4b5563;
-    --ds-palette-neutral-700: #374151;
-    --ds-palette-neutral-800: #1f2937;
-    --ds-palette-neutral-850: #111827;
-    --ds-palette-neutral-900: #0f172a;
-    --ds-palette-neutral-950: #020617;
+    /* Surface / Background — light endpoints of neutral scale */
+    --ds-color-background: var(--ds-palette-neutral-0);
+    --ds-color-surface: var(--ds-palette-neutral-0);
+    --ds-color-surface-raised: var(--ds-palette-neutral-50);
+    --ds-color-surface-sunken: var(--ds-palette-neutral-100);
+    --ds-color-surface-overlay: var(--ds-palette-neutral-0);
+    --ds-color-surface-interactive: var(--ds-palette-neutral-100);
 
-    --ds-color-background: #ffffff;
-    --ds-color-surface: #ffffff;
-    --ds-color-border: #e5e7eb;
-    --ds-color-foreground: #374151;
-    --ds-color-foreground-secondary: #111827;
+    /* Foreground — dark text on light backgrounds */
+    --ds-color-foreground: var(--ds-palette-neutral-700);
+    --ds-color-foreground-secondary: var(--ds-palette-neutral-850);
+    --ds-color-foreground-muted: var(--ds-palette-neutral-400);
+    --ds-color-foreground-inverse: var(--ds-palette-neutral-0);
 
-    --ds-color-accent: var(--ds-palette-brand-600);
-    --ds-color-accent-foreground: #ffffff;
-    --ds-color-on-primary: #ffffff;
+    /* Border — lighter neutral stops */
+    --ds-color-border: var(--ds-palette-neutral-200);
+    --ds-color-border-strong: var(--ds-palette-neutral-300);
+    --ds-color-border-muted: var(--ds-palette-neutral-100);
 
+    /* Accent — hover/active darken on light backgrounds (reverse of dark theme) */
+    --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, black);
+    --ds-color-accent-active: color-mix(in oklab, var(--ds-color-accent) 72%, black);
+    --ds-color-accent-foreground: var(--ds-palette-neutral-0);
+
+    /* Status text — use 700-stop for WCAG AA readability on light bg */
+    --ds-color-success-text: var(--ds-palette-success-700);
+    --ds-color-warning-text: var(--ds-palette-warning-700);
+    --ds-color-danger-text: var(--ds-palette-danger-700);
+    --ds-color-info-text: var(--ds-palette-info-700);
+
+    /* Effects — softer on light */
     --ds-color-overlay: rgb(0 0 0 / 0.35);
+    --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.35);
   }
 
-  /* Theme: purple (example variant; keeps dark surfaces, shifts brand scale) */
+  /* ── Theme: Purple ──
+     Overrides brand palette + accent chain. All other semantic tokens
+     auto-resolve through their var() references. */
+
   html.theme-purple {
     --ds-palette-brand-50: #faf5ff;
     --ds-palette-brand-100: #f3e8ff;
@@ -258,39 +489,68 @@
     --ds-palette-brand-950: #3b0764;
 
     --ds-color-accent-rgb: 147 51 234;
+    --ds-color-accent-foreground: var(--ds-palette-neutral-0);
   }
 
-  /* Density + platform knobs (scopable per page via a wrapper) */
+  /* ── Density knobs (Ch 16 §6) ── */
+
   :where(html[data-density="compact"], [data-density="compact"]) {
-    --ds-space-card-padding: var(--ds-space-4);
+    --ds-control-height-sm: 1.75rem;   /* 28px */
+    --ds-control-height-md: 2.25rem;   /* 36px */
+    --ds-control-height-lg: 2.75rem;   /* 44px */
+    --ds-space-card-padding: var(--ds-space-3);
     --ds-space-modal-padding: var(--ds-space-4);
-    --ds-space-form-gap: var(--ds-space-3);
+    --ds-space-form-gap: var(--ds-space-2);
     --ds-space-section-margin: var(--ds-space-8);
-    --ds-space-nav-padding: var(--ds-space-3);
+    --ds-space-nav-padding: var(--ds-space-2);
   }
 
-  /* Visual variants (token-first; component styles may optionally respond) */
+  :where(html[data-density="spacious"], [data-density="spacious"]) {
+    --ds-control-height-sm: 2.5rem;    /* 40px */
+    --ds-control-height-md: 3rem;      /* 48px */
+    --ds-control-height-lg: 3.5rem;    /* 56px */
+    --ds-space-card-padding: var(--ds-space-8);
+    --ds-space-modal-padding: var(--ds-space-8);
+    --ds-space-form-gap: var(--ds-space-5);
+    --ds-space-section-margin: var(--ds-space-16);
+    --ds-space-nav-padding: var(--ds-space-5);
+  }
+
+  /* ── Visual knobs (Ch 16 §5) ── */
+
   :where(html[data-visual="glass"], [data-visual="glass"]) {
+    --ds-color-surface: rgb(255 255 255 / 0.06);
+    --ds-color-surface-raised: rgb(255 255 255 / 0.1);
+    --ds-color-surface-overlay: rgb(255 255 255 / 0.08);
     --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
     --ds-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.18);
+    --ds-blur-surface: var(--ds-blur-lg);
   }
 
   :where(html[data-visual="neumorph"], [data-visual="neumorph"]) {
-    --ds-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
-    --ds-shadow-md: 0 14px 38px rgba(0, 0, 0, 0.28);
+    --ds-shadow-sm: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.05);
+    --ds-shadow-md: 8px 8px 16px rgba(0, 0, 0, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.06);
+    --ds-shadow-inset-sm: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.05);
   }
 
   :where(html[data-visual="sleek"], [data-visual="sleek"]) {
+    --ds-shadow-xs: none;
     --ds-shadow-sm: none;
     --ds-shadow-md: none;
-    --ds-radius-default: 0.375rem;
-    --ds-radius-card: 0.5rem;
+    --ds-shadow-lg: none;
+    --ds-radius-xs: 0.125rem;
+    --ds-radius-sm: 0.25rem;
+    --ds-radius-md: 0.375rem;
+    --ds-radius-lg: 0.5rem;
   }
 
-  /* Platform presets (scopable per page via a wrapper) */
+  /* ── Platform knobs (Ch 16 §8) ── */
+
   :where(html[data-platform="mobile"], [data-platform="mobile"]) {
-    --ds-size-touch-target: 3rem;
+    --ds-size-touch-target: 3rem;       /* 48px — Apple HIG minimum */
+    --ds-size-button-min-h: 3rem;
     --ds-size-bottom-nav-h: 4.25rem;
     --ds-size-tabs-h: var(--ds-size-touch-target);
+    --ds-space-card-padding: var(--ds-space-4);
   }
 }

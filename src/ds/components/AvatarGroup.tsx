@@ -1,10 +1,7 @@
 import * as React from "react";
 
 import { Avatar, type AvatarProps } from "../primitives/Avatar";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 export type AvatarGroupProps = {
   people: Array<Pick<AvatarProps, "name" | "src" | "alt">>;

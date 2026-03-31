@@ -4,10 +4,7 @@ import { Card } from "./Card";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { Stack } from "../primitives/Stack";
 import { Text } from "../primitives/Text";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 export type ImageCardProps = {
   imageSrc: string;

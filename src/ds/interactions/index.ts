@@ -1,6 +1,5 @@
-export * from "./ContextMenu";
-export * from "./Drawer";
-export * from "./Dropdown";
-export * from "./Modal";
-export * from "./Popover";
-export * from "./Tooltip";
+/**
+ * @deprecated — interactions/ barrel removed in DS rebuild Phase 0 (T004).
+ * Import from "@/ds" directly. All components are exported at the top level.
+ */
+export {};

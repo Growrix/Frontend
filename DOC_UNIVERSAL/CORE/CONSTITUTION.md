@@ -58,6 +58,7 @@ Stop and ask for confirmation if:
 - the task requires destructive data changes
 - the requirement is ambiguous enough to create product risk
 - the existing system violates the rules and the fix would broaden scope significantly
+- the task requires domain knowledge (billing, webhooks, jobs, migrations, etc.) not covered by operational rules — check `CORE/HANDBOOK-ROUTING.md` before inventing patterns
 
 ## Definition Of Professional Output
 

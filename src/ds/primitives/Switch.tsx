@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { cx } from "../utils/cx";
 
 export type SwitchProps = {
   checked?: boolean;
@@ -11,11 +12,10 @@ export type SwitchProps = {
   className?: string;
 };
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export function Switch({ checked, defaultChecked, onCheckedChange, disabled, label, className }: SwitchProps) {
+export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(function Switch(
+  { checked, defaultChecked, onCheckedChange, disabled, label, className },
+  ref,
+) {
   const [uncontrolled, setUncontrolled] = React.useState(Boolean(defaultChecked));
   const isControlled = typeof checked === "boolean";
   const value = isControlled ? checked : uncontrolled;
@@ -28,11 +28,12 @@ export function Switch({ checked, defaultChecked, onCheckedChange, disabled, lab
   return (
     <div className={cx("ui-switch-row", className)}>
       <button
+        ref={ref}
         type="button"
         className={cx("ui-switch ui-focus-ring", value && "ui-switch--on")}
         role="switch"
         aria-checked={value}
-        aria-disabled={disabled ? true : undefined}
+        aria-disabled={disabled || undefined}
         disabled={disabled}
         onClick={() => set(!value)}
       >
@@ -41,4 +42,4 @@ export function Switch({ checked, defaultChecked, onCheckedChange, disabled, lab
       {label ? <span className={cx("text-body-small", disabled && "ui-text-muted")}>{label}</span> : null}
     </div>
   );
-}
+});

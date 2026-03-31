@@ -1,4 +1,5 @@
-export * from "./Card";
-export * from "./Container";
-export * from "./Grid";
-export * from "./Stack";
+/**
+ * @deprecated — structures/ barrel removed in DS rebuild Phase 0 (T004).
+ * Import from "@/ds" directly. All components are exported at the top level.
+ */
+export {};

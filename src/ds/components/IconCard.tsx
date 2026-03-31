@@ -6,10 +6,7 @@ import { Card } from "./Card";
 import { Icon } from "./Icon";
 import { Stack } from "../primitives/Stack";
 import { Text } from "../primitives/Text";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 export type IconCardProps = {
   icon: LucideIcon;

@@ -1,10 +1,7 @@
 import * as React from "react";
 
-import { Card } from "../../structures/Card";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../../utils/cx";
+import { Card } from "../../components/Card";
 
 export type WebWidgetFrameProps = React.HTMLAttributes<HTMLDivElement> & {
   /** Defaults to Card for web runtime. */

@@ -1,3 +1,8 @@
+/* ==========================================================================
+   ds.theme — Color-Scheme & Theme Configuration (Handbook Ch 16 §3)
+   Layer: ds.theme
+   ========================================================================== */
+
 @layer ds.theme {
   :root {
     color-scheme: dark;
@@ -13,5 +18,73 @@
 
   html.theme-purple {
     color-scheme: dark;
+  }
+
+  /* Scoped theme support (Ch 16 §10) — allows <div data-theme="dark"> sections */
+  [data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+  }
+
+  /* ── High-Contrast & Forced-Colors (Ch 16 §11) ── */
+
+  @media (forced-colors: active) {
+    :root {
+      --ds-color-background: Canvas;
+      --ds-color-surface: Canvas;
+      --ds-color-foreground: CanvasText;
+      --ds-color-foreground-secondary: CanvasText;
+      --ds-color-foreground-muted: GrayText;
+      --ds-color-border: ButtonBorder;
+      --ds-color-border-strong: ButtonBorder;
+      --ds-color-border-focus: Highlight;
+      --ds-color-accent: Highlight;
+      --ds-color-accent-foreground: HighlightText;
+      --ds-color-danger: LinkText;
+      --ds-color-focus-ring: Highlight;
+      --ds-shadow-xs: none;
+      --ds-shadow-sm: none;
+      --ds-shadow-md: none;
+      --ds-shadow-lg: none;
+      --ds-shadow-xl: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    :root {
+      --ds-color-foreground: var(--ds-palette-neutral-0);
+      --ds-color-foreground-muted: var(--ds-palette-neutral-200);
+      --ds-color-border: var(--ds-palette-neutral-500);
+      --ds-color-border-strong: var(--ds-palette-neutral-300);
+      --ds-color-border-muted: var(--ds-palette-neutral-600);
+      --ds-state-disabled-opacity: 0.55;
+    }
+
+    html.theme-light {
+      --ds-color-foreground: var(--ds-palette-neutral-950);
+      --ds-color-foreground-muted: var(--ds-palette-neutral-600);
+      --ds-color-border: var(--ds-palette-neutral-400);
+      --ds-color-border-strong: var(--ds-palette-neutral-600);
+      --ds-color-border-muted: var(--ds-palette-neutral-300);
+    }
+  }
+
+  @media (prefers-contrast: less) {
+    :root {
+      --ds-color-foreground: var(--ds-palette-neutral-500);
+      --ds-color-foreground-muted: var(--ds-palette-neutral-600);
+      --ds-color-border: var(--ds-palette-neutral-850);
+      --ds-color-border-strong: var(--ds-palette-neutral-700);
+    }
+
+    html.theme-light {
+      --ds-color-foreground: var(--ds-palette-neutral-500);
+      --ds-color-foreground-muted: var(--ds-palette-neutral-300);
+      --ds-color-border: var(--ds-palette-neutral-100);
+      --ds-color-border-strong: var(--ds-palette-neutral-200);
+    }
   }
 }

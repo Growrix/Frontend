@@ -1,0 +1,82 @@
+/* ==========================================================================
+   ds.layouts — Shell & Layout Patterns (Handbook Ch 03 / Ch 17 §2.2)
+   Layer: ds.layouts
+   Contextual layout utilities for shells, sidebars, footers, dashboard grids.
+   ========================================================================== */
+
+@layer ds.layouts {
+  /* ── Footer ── */
+
+  .ui-footer-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 1fr;
+    gap: var(--ds-space-6);
+    padding-block: var(--ds-space-8);
+  }
+
+  @media (max-width: 48rem) {
+    .ui-footer-grid {
+      grid-template-columns: 1fr;
+      padding-block: var(--ds-space-7);
+    }
+  }
+
+  .ui-footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--ds-space-2);
+  }
+
+  /* ── Sidebar / Rightbar ── */
+
+  .ui-sidebar {
+    position: sticky;
+    top: calc(var(--ds-space-6) + var(--ds-size-header-h));
+    align-self: start;
+  }
+
+  .ui-rightbar {
+    position: sticky;
+    top: calc(var(--ds-space-6) + var(--ds-size-header-h));
+    align-self: start;
+  }
+
+  @media (max-width: 48rem) {
+    .ui-sidebar,
+    .ui-rightbar {
+      position: static;
+    }
+  }
+
+  .ui-sidebar-nav {
+    display: grid;
+    gap: var(--ds-space-2);
+  }
+
+  .ui-sidebar-nav__title {
+    font-size: var(--ds-font-size-2);
+    font-weight: var(--ds-font-weight-medium);
+    color: var(--ds-color-foreground-secondary);
+    margin-bottom: var(--ds-space-2);
+  }
+
+  /* ── Search ── */
+
+  .ui-search {
+    width: min(26rem, 70vw);
+  }
+
+  @media (max-width: 48rem) {
+    .ui-search {
+      width: min(22rem, 86vw);
+    }
+  }
+
+  /* ── Header Pad ── */
+
+  .ui-header-pad {
+    padding-block: var(--ds-space-4);
+  }
+}

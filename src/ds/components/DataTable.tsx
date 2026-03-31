@@ -2,9 +2,7 @@
 
 import * as React from "react";
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 export type SortDirection = "asc" | "desc";
 
@@ -34,6 +32,7 @@ export type DataTableProps<T> = {
   selectable?: boolean;
   selectedRowIds?: string[];
   onSelectedRowIdsChange?: (ids: string[]) => void;
+  stickyHeader?: boolean;
   empty?: React.ReactNode;
 };
 
@@ -53,6 +52,7 @@ export function DataTable<T>({
   selectable,
   selectedRowIds,
   onSelectedRowIdsChange,
+  stickyHeader,
   empty,
 }: DataTableProps<T>) {
   const derivedSelected = selectedRowIds ?? [];
@@ -84,7 +84,7 @@ export function DataTable<T>({
   };
 
   return (
-    <div className={cx("ui-table", className)}>
+    <div className={cx("ui-table", stickyHeader && "ui-table--sticky", className)}>
       <table className="ui-table__table">
         {caption ? <caption className="ui-table__caption text-caption ui-text-muted">{caption}</caption> : null}
         <thead className="ui-table__head">

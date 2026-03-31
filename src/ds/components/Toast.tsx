@@ -19,9 +19,7 @@ type ToastContextValue = {
 
 const ToastContext = React.createContext<ToastContextValue | null>(null);
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 function randomId() {
   return `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;

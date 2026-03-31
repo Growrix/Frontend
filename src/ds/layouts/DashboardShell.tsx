@@ -1,8 +1,9 @@
 import * as React from "react";
 
+import { cx } from "../utils/cx";
 import { Container } from "../primitives/Container";
 
-import type { ContainerWidth } from "../primitives/Container";
+import type { ContainerSize } from "../primitives/Container";
 
 export type DashboardShellProps = {
   topbar?: React.ReactNode;
@@ -11,15 +12,11 @@ export type DashboardShellProps = {
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
   bottomNav?: React.ReactNode;
-  containerWidth?: ContainerWidth;
+  containerWidth?: ContainerSize;
   leftCollapsed?: boolean;
   rightCollapsed?: boolean;
   children: React.ReactNode;
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export function DashboardShell({
   topbar,
@@ -41,7 +38,7 @@ export function DashboardShell({
     <div className="ui-page ui-page--dashboard">
       {topbar ? <div className="ui-band ui-band--surface ui-sticky-top">{topbar}</div> : null}
       <main className="ui-page-main" id="main">
-        <Container width={containerWidth}>
+        <Container size={containerWidth}>
           <div
             className={cx(
               "ui-shell-grid",

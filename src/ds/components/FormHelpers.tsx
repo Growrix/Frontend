@@ -1,8 +1,5 @@
 import * as React from "react";
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
 
 export type FormErrorSummaryProps = {
   title?: string;
@@ -38,5 +35,29 @@ export function Fieldset({ legend, className, children, ...props }: FieldsetProp
       {legend ? <legend className="ui-fieldset__legend text-body-small">{legend}</legend> : null}
       <div className="ui-fieldset__body">{children}</div>
     </fieldset>
+  );
+}
+
+export type FormGroupProps = React.HTMLAttributes<HTMLDivElement>;
+
+export function FormGroup({ className, ...props }: FormGroupProps) {
+  return <div className={cx("ui-form-group", className)} {...props} />;
+}
+
+export type FormActionsProps = React.HTMLAttributes<HTMLDivElement> & {
+  align?: "start" | "end" | "between";
+};
+
+export function FormActions({ align = "end", className, ...props }: FormActionsProps) {
+  return (
+    <div
+      className={cx(
+        "ui-form-actions",
+        align === "start" && "ui-form-actions--start",
+        align === "between" && "ui-form-actions--between",
+        className,
+      )}
+      {...props}
+    />
   );
 }

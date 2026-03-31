@@ -5755,3 +5755,7 @@ End Phase 2 explicitly with:
 -------------------------------------------------------------------------------
 
 in order to avoid miscommunications and confusions I want to read back and audit back as per needed and pin point the accurate tasks stepy by step. Create a phase in the DOC\Features\BLOG\tasks.md with all the remaining tasks by also referring all the important audit reports and docuemntations including SOT and plans within it . So that everything will be traceable , where now we are lacking of it and that is creating confusions and wrong implimenetations. must create the pashe in DOC\Features\BLOG\tasks.md to impliment next tasks. If you are confused then audit back accordingly and replan if needed and make sure we are doing everything based on the exactly current state and accurately. 
+
+-----------------------------------------------------
+
+I have added some more handbook and also updated several files but I need you to checkback everything deeply and make sure eveything is aligned and core is AI friendly and not messy or confusing overall. I need more clarity and clean system where AI and human will understand clearly and get contexts as per as much needed,not too much unnecesary ,not less that disobey my rules. read back D:\Desktop Mass\Blueprint\DOC_UNIVERSAL\README.md , D:\Desktop Mass\Blueprint\DOC\SAAS HANDBOOK, D:\Desktop Mass\Blueprint\DOC\DS BUILDING

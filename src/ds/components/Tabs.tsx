@@ -16,19 +16,20 @@ function useTabsContext() {
   return ctx;
 }
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cx } from "../utils/cx";
+
+export type TabsVariant = "underline" | "pill" | "boxed";
 
 export type TabsProps = {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  variant?: TabsVariant;
   className?: string;
   children: React.ReactNode;
 };
 
-export function Tabs({ value, defaultValue, onValueChange, className, children }: TabsProps) {
+export function Tabs({ value, defaultValue, onValueChange, variant = "underline", className, children }: TabsProps) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue ?? "");
   const isControlled = typeof value === "string";
   const current = isControlled ? value : uncontrolled;
@@ -41,7 +42,7 @@ export function Tabs({ value, defaultValue, onValueChange, className, children }
 
   return (
     <TabsContext.Provider value={{ baseId, value: current, setValue }}>
-      <div className={cx("ui-tabs", className)}>{children}</div>
+      <div className={cx("ui-tabs", `ui-tabs--${variant}`, className)}>{children}</div>
     </TabsContext.Provider>
   );
 }

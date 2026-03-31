@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { cx } from "../utils/cx";
+
 export type SectionTone = "default" | "surface";
 export type SectionSize = "sm" | "md" | "lg";
 export type SectionContainer = "default" | "narrow" | "wide" | "full";
@@ -10,10 +12,6 @@ export type SectionProps = React.HTMLAttributes<HTMLElement> & {
   container?: SectionContainer;
   bandClassName?: string;
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export function Section({
   tone = "default",

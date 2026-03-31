@@ -1,14 +1,12 @@
 import * as React from "react";
 
+import { cx } from "../utils/cx";
+
 export type SplitSectionProps = React.HTMLAttributes<HTMLDivElement> & {
   reverse?: boolean;
   left: React.ReactNode;
   right: React.ReactNode;
 };
-
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export function SplitSection({ reverse = false, left, right, className, ...props }: SplitSectionProps) {
   return (

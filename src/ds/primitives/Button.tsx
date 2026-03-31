@@ -1,58 +1,60 @@
 import * as React from "react";
+import { cx } from "../utils/cx";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "text" | "icon" | "fab";
 export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonTone = "accent" | "danger" | "success";
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  isLoading?: boolean;
-  loadingText?: string;
-};
+type ButtonElement = "button" | "a";
 
-function cx(...classes: Array<string | false | undefined | null>) {
-  return classes.filter(Boolean).join(" ");
-}
+export type ButtonProps<T extends ButtonElement = "button"> = React.ButtonHTMLAttributes<HTMLButtonElement> &
+  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    as?: T;
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    tone?: ButtonTone;
+    isLoading?: boolean;
+    loadingText?: string;
+  };
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function Button(
   {
+    as,
     className,
     variant = "primary",
     size = "md",
+    tone,
     isLoading,
     loadingText,
-    type = "button",
+    type,
     disabled,
     children,
     ...props
   },
-  ref
+  ref,
 ) {
+  const Tag = (as ?? "button") as React.ElementType;
   const computedDisabled = Boolean(disabled || isLoading);
+  const defaultType = Tag === "button" ? (type ?? "button") : undefined;
 
   return (
-    <button
+    <Tag
       ref={ref}
-      type={type}
-      disabled={computedDisabled}
-      aria-busy={isLoading ? true : undefined}
+      type={defaultType}
+      disabled={Tag === "button" ? computedDisabled : undefined}
+      aria-disabled={computedDisabled || undefined}
+      aria-busy={isLoading || undefined}
       className={cx(
         "ui-button ui-focus-ring",
-        size === "sm" && "ui-button--sm",
-        size === "md" && "ui-button--md",
-        size === "lg" && "ui-button--lg",
-        variant === "primary" && "ui-button--primary",
-        variant === "secondary" && "ui-button--secondary",
-        variant === "ghost" && "ui-button--ghost",
-        variant === "text" && "ui-button--text",
-        variant === "icon" && "ui-button--icon",
-        variant === "fab" && "ui-button--fab",
+        `ui-button--${variant}`,
+        `ui-button--${size}`,
+        tone && `ui-button--tone-${tone}`,
         isLoading && "ui-button--loading",
-        className
+        className,
       )}
       {...props}
     >
-      {isLoading ? (loadingText ?? "Loading…") : children}
-    </button>
+      {isLoading ? (loadingText ?? "Loading\u2026") : children}
+    </Tag>
   );
 });
