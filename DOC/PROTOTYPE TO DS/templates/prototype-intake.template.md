@@ -7,6 +7,9 @@
 - Target DS path:
 - Target app path:
 - Prototype type: Vite / HTML-CSS / AI Studio / React / Other
+- UI mode: `app-like-plus-desktop` / `desktop-plus-responsive`
+- DS policy: `approved-ds-change` (Phase 3) / `consume-only` (Phase 4)
+- Scope: `full site rebuild` / `single-route` / `ds-only` / `audit-only`
 - Owner or source link:
 - Read-only reference path:
 - Protected zones:

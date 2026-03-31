@@ -1,12 +1,14 @@
 # Prototype Parity Checklist
 
-## 1. Visual Parity
+**Important**: AI cannot compare screenshots pixel-by-pixel. Parity verification is structural: compare DOM structure, DS class usage, layout behavior, and interaction behavior against the prototype source code and documented inventory in `prototype-intake.template.md`.
 
-- [ ] Typography scale matches the prototype
-- [ ] Spacing rhythm matches the prototype
-- [ ] card, surface, border, and shadow behavior match the prototype
-- [ ] icons, badges, inputs, buttons, and media blocks match the prototype
-- [ ] no unintended DS visual pattern overrides the prototype intent
+## 1. Visual Parity (structural comparison)
+
+- [ ] Typography classes match the prototype's text hierarchy (headings, body, captions)
+- [ ] Spacing rhythm uses DS tokens consistent with prototype layout
+- [ ] Card, surface, border, and shadow behavior match prototype patterns
+- [ ] Icons, badges, inputs, buttons, and media blocks use the correct DS components
+- [ ] No unintended DS visual overrides — all deviations are documented below
 
 ## 2. Layout Parity
 

@@ -2,154 +2,113 @@
 
 ## Fast Start
 
-If you want the simple entry point, use `DOC/PROTOTYPE TO DS/START-HERE.md` only.
+Use `START-HERE.md` only. Copy the prompt, fill the placeholders, send to AI.
 
-That file is the user-facing prompt template. The rest of this folder exists to keep the AI structured.
-
-The AI should prepare the working packet and begin execution from that prompt unless you explicitly limit the scope to `audit-only`.
-
-This folder is the reusable operating packet for migrating any external prototype into the Blueprint Design System and then rebuilding it inside the Next.js app without creating prompt drift or mixed authority.
+The rest of this folder is AI-facing structure. You do not need to read it.
 
 ## Purpose
 
-Use this packet when you want AI to perform a clean, repeatable flow:
+Reusable migration system for converting any external prototype into the Blueprint Design System and then rebuilding it in Next.js. Works with Vite, AI Studio, HTML/CSS, Tailwind, or any React prototype.
 
-1. audit a prototype as the visual source of truth
-2. identify Design System gaps against `src/ds/`
-3. upgrade the DS only where needed
-4. rebuild the site in Next.js using `@/ds` only
-5. verify parity against the prototype
+The AI performs a clean, repeatable flow:
 
-This folder is not for one single project. It is the reusable migration system for any prototype source: Vite, AI Studio, HTML/CSS prototype, Tailwind prototype, or another frontend codebase.
+1. Audit prototype as the visual source of truth
+2. Identify DS gaps against `src/ds/`
+3. Upgrade DS where needed (approved DS changes)
+4. Rebuild in Next.js using `@/ds` only
+5. Verify parity
 
 ## Operating Principle
 
-Do not combine these jobs in one implementation task:
+Never combine these in one task:
 
-- prototype mirroring
 - DS building
-- app rebuilding
+- App rebuilding
 
-That is the main cause of messy AI output.
-
-The correct order is:
-
-1. Prototype Audit and Freeze
-2. DS Gap Audit
-3. DS Build or DS Refinement
-4. Fresh Next.js Rebuild with DS Consumption Only
-5. Parity Verification
+The correct phase order is enforced by `tasks.md`.
 
 ## Folder Contents
 
-- `START-HERE.md` — single user-facing entry prompt
-- `README.md` — operating model and usage
-- `REFERENCES.md` — in-repo references AI should use
-- `tasks.md` — reusable execution sequence based on the Speckit task template
-- `templates/prototype-intake.template.md` — inventory of prototype routes, screens, sections, states, and assets
-- `templates/ds-gap-audit.template.md` — map prototype patterns to DS coverage and gaps
-- `templates/ds-build-spec.template.md` — DS implementation scope only
-- `templates/nextjs-build-spec.template.md` — Next.js rebuild scope only
-- `templates/parity-checklist.template.md` — pixel and behavior verification
-- `templates/ai-execution-brief.template.md` — the short brief to hand to any AI runner
+| File | Purpose |
+|------|---------|
+| `START-HERE.md` | Single user-facing entry prompt |
+| `README.md` | This file — operating model for AI |
+| `REFERENCES.md` | In-repo reference file map |
+| `tasks.md` | Full execution sequence with 5 phases |
+| `templates/prototype-intake.template.md` | Prototype route/screen/interaction inventory |
+| `templates/ds-gap-audit.template.md` | Map prototype patterns to DS coverage and gaps |
+| `templates/ds-build-spec.template.md` | DS implementation scope and acceptance criteria |
+| `templates/nextjs-build-spec.template.md` | Next.js rebuild scope and route plan |
+| `templates/parity-checklist.template.md` | Structural and behavioral parity verification |
+| `templates/ai-execution-brief.template.md` | Quick-reference brief for AI context window |
 
 ## Authority Chain
 
-This packet does not replace `DOC_UNIVERSAL`. It operates under it.
+This packet operates under `DOC_UNIVERSAL`, not alongside it.
 
-Always read in this order:
+Read order:
 
 1. `DOC_UNIVERSAL/README.md`
-2. all files in `DOC_UNIVERSAL/CORE/`
-3. one runner file in `DOC_UNIVERSAL/RUNNERS/`
-4. this folder's `tasks.md`
-5. the active templates/specs in this folder
-6. only the referenced DS and app files required by the current task
+2. All files in `DOC_UNIVERSAL/CORE/`
+3. `DOC_UNIVERSAL/RUNNERS/COPILOT.md` (or `AIDER.md` based on START-HERE runner field)
+4. `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md`
+5. `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md`
+6. `src/ds/DESIGN-SYSTEM-ANATOMY.md`
+7. `src/ds/DS-COVERAGE-CHECKLIST.md`
+8. `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+9. This folder's `tasks.md`
+10. Active templates in this folder as needed by the current phase
 
-For frontend migration work, always load:
+## Phase Model (aligned with tasks.md)
 
-- `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md`
-- `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md`
-- `src/ds/DESIGN-SYSTEM-ANATOMY.md`
-- `src/ds/DS-COVERAGE-CHECKLIST.md`
-- `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+### Phase 1: Intake And Scope Lock
+
+Fill `templates/prototype-intake.template.md`. Record prototype path, UI mode, DS policy, scope, routes, interactions, overlays, responsive behavior, screenshots, and protected zones.
+
+### Phase 2: DS Gap Audit And Planning
+
+Fill `templates/ds-gap-audit.template.md` — map every prototype pattern to existing DS coverage or a gap. Then fill `templates/ds-build-spec.template.md` and `templates/nextjs-build-spec.template.md` with concrete change lists and route plans.
+
+**If scope is `audit-only`, stop here.**
+
+### Phase 3: DS Implementation
+
+DS policy is `approved-ds-change`. Implement tokens, utilities, primitives, components, shells, tests, and docs per ds-build-spec. Run `npm run verify` before moving on.
+
+### Phase 4: Next.js App Rebuild
+
+DS policy reverts to `consume-only`. Build routes, pages, and components per nextjs-build-spec. Import from `@/ds` only. Run `npm run verify` before moving on.
+
+### Phase 5: Parity Verification And Close
+
+Complete `templates/parity-checklist.template.md`. Structural parity = DOM structure, DS class usage, layout behavior, interaction behavior. Run final `npm run verify`. Document any approved deviations.
 
 ## Non-Negotiable Rules
 
-- Prototype is the visual source of truth during audit and parity review.
+- Prototype is the visual source of truth during audit and parity.
 - `src/ds/` is the implementation source of truth after DS decisions are locked.
-- `src/app/` is a consumer only. App code must not invent styling outside the DS.
-- Never mix DS edits and app rebuild work in the same implementation task.
-- Never let an AI improvise visual patterns not justified by the prototype or the DS.
-- Never treat old prompt folders as the active source of truth.
-- Every migration must declare protected zones before execution.
-- Every migration must define verification commands before implementation starts.
+- `src/app/` is a consumer only — no inventing styles outside the DS.
+- Never mix DS edits and app rebuild work in the same task.
+- Never let AI improvise visual patterns not in the prototype or the DS.
+- Do not use legacy prompt folders as authority: `DOC/Prompts/`, `DOC/Features/`, `DOC/helios-lead-gen/`, `DOC/solarconnect/`.
+- UI mode must be declared before any frontend work.
+- DS policy must be declared per phase (`approved-ds-change` for Phase 3, `consume-only` for Phase 4).
+- Protected zones must be declared before execution.
+- Verification command is `npm run verify`.
+- Parity verification is structural — AI cannot do pixel comparison of screenshots.
 
-## Recommended Execution Model
+## Valid Scopes
 
-### Phase 1: Prototype Audit
+| Scope | Behavior |
+|-------|----------|
+| `full site rebuild` | All 5 phases, all routes |
+| `single-route` | All 5 phases, constrained to one route |
+| `ds-only` | Phases 1–3 only, skip app rebuild and parity |
+| `audit-only` | Phases 1–2 only, no code changes |
 
-Use `templates/prototype-intake.template.md` to record:
+## How To Use
 
-- prototype root path
-- route list
-- screen list
-- sections and repeated patterns
-- modal and overlay inventory
-- interactive states
-- responsive behavior
-- screenshots and reference assets
-- protected zones
-
-### Phase 2: DS Gap Audit
-
-Use `templates/ds-gap-audit.template.md` to answer:
-
-- which prototype patterns are already covered by `@/ds`
-- which tokens are missing
-- which utilities are missing
-- which primitives or composed components must be added
-- what must stay unchanged in app code
-
-### Phase 3: DS Build Spec
-
-Use `templates/ds-build-spec.template.md` to lock:
-
-- allowed DS files to change
-- acceptance criteria
-- test expectations
-- documentation sync requirements
-- explicit non-goals
-
-### Phase 4: Next.js Build Spec
-
-Use `templates/nextjs-build-spec.template.md` to lock:
-
-- route map changes
-- route group placement
-- shell selection
-- page/component extraction boundaries
-- feature layer usage
-- parity expectations
-
-### Phase 5: Verification
-
-Use `templates/parity-checklist.template.md` to verify:
-
-- visual parity
-- layout parity
-- interaction parity
-- responsive parity
-- accessibility and keyboard behavior
-- build, lint, type, DS audit, and DS a11y gates
-
-## How To Use This Packet For A Real Migration
-
-1. Start from `START-HERE.md`.
-2. Give the AI the prototype path, DS path, and app path.
-3. Let the AI prepare the working files in this folder.
-4. Run DS work first.
-5. Run app rebuild second.
-6. Do parity review last.
-
-If the AI cannot point to the current prototype manifest, DS gap audit, and active task entry, it should not start coding.
+1. Open `START-HERE.md`.
+2. Copy the prompt, fill paths and UI mode.
+3. Send to AI.
+4. The AI reads authority docs, fills templates, and begins execution per `tasks.md`.

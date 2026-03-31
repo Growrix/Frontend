@@ -52,17 +52,25 @@ Required references:
 
 ## 8. Decision Summary
 
-### Build In DS First
+After completing the coverage map and gap sections above, summarize the decisions here. Do not duplicate the implementation details — those go into `ds-build-spec.template.md`.
 
-- 
+### Gaps That Require DS Changes
 
-### Already Covered By DS
+List each gap category and the number of items. The concrete change list with acceptance criteria goes into `templates/ds-build-spec.template.md`.
 
-- 
+- Tokens:
+- Utilities/semantic classes:
+- Primitives:
+- Components:
+- Shells/runtime:
 
-### Explicit Non-Goals
+### Already Covered By DS (no changes needed)
 
-- 
+-
+
+### Explicit Non-Goals (will not be built)
+
+-
 
 ## 9. Gate To Exit This Phase
 
