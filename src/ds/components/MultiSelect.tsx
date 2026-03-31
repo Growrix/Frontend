@@ -33,11 +33,12 @@ export function MultiSelect({ label, options, values, onValuesChange }: MultiSel
           {label} ({values.length})
         </Button>
       }
+      aria-label={label}
     >
       <Stack gap="compact">
         <div className="text-heading-4">{label}</div>
         <Text tone="muted">Select one or more.</Text>
-        <div className="ui-stack ui-stack--tight">
+        <div className="ui-stack ui-stack--tight" role="group" aria-label={label}>
           {options.map((o) => (
             <Checkbox key={o.id} label={o.label} checked={values.includes(o.value)} onChange={() => toggle(o.value)} />
           ))}

@@ -41,6 +41,13 @@ Every implementation task must define:
 - verification commands
 - done criteria
 
+For backend, auth, billing, data, or operations work, also define:
+
+- tenant or workspace scope
+- auth or permission impact
+- data or migration impact
+- rollout or rollback note when risk is meaningful
+
 ## Read Order
 
 Use this order for every task:
@@ -59,6 +66,12 @@ For frontend tasks, add:
 9. `STANDARDS/APP-STRUCTURE.md`
 10. `src/ds/DESIGN-SYSTEM-ANATOMY.md`
 11. `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+
+For backend, auth, billing, data, or operations tasks, add:
+
+8. `STANDARDS/API-BACKEND-RULES.md`
+9. `STANDARDS/SAAS-FOUNDATIONS.md`
+10. the smallest relevant subset from `STACK_PROFILES/NEXTJS-SAAS/architecture/`, `security/`, `testing/`, `devops/`, or `operations/`
 
 ## Change Management
 

@@ -11,6 +11,7 @@ describe("DS layouts (snapshots)", () => {
       </PublicShell>
     );
 
+    expect(container.querySelector("main")).toHaveAttribute("id", "main");
     expect(container.firstChild).toMatchSnapshot();
   });
 
@@ -21,6 +22,7 @@ describe("DS layouts (snapshots)", () => {
       </CenteredShell>
     );
 
+    expect(container.querySelector("main")).toHaveAttribute("id", "main");
     expect(container.firstChild).toMatchSnapshot();
   });
 
@@ -31,6 +33,7 @@ describe("DS layouts (snapshots)", () => {
       </DashboardShell>
     );
 
+    expect(container.querySelector("main")).toHaveAttribute("id", "main");
     expect(container.firstChild).toMatchSnapshot();
   });
 
@@ -47,6 +50,7 @@ describe("DS layouts (snapshots)", () => {
       </DocsShell>
     );
 
+    expect(container.querySelector("main")).toHaveAttribute("id", "main");
     expect(container.firstChild).toMatchSnapshot();
   });
 });

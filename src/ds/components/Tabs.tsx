@@ -62,6 +62,27 @@ export function TabsTrigger({ value, className, type = "button", ...props }: Tab
   const id = `${tabs.baseId}-tab-${value}`;
   const controls = `${tabs.baseId}-panel-${value}`;
 
+  const focusSiblingTab = (current: HTMLButtonElement, mode: "prev" | "next" | "first" | "last") => {
+    const tabList = current.closest<HTMLElement>('[role="tablist"]');
+    if (!tabList) return;
+
+    const tabButtons = Array.from(tabList.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    if (!tabButtons.length) return;
+
+    const currentIndex = tabButtons.findIndex((tab) => tab === current);
+    if (currentIndex < 0) return;
+
+    let nextIndex = currentIndex;
+    if (mode === "prev") nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+    if (mode === "next") nextIndex = (currentIndex + 1) % tabButtons.length;
+    if (mode === "first") nextIndex = 0;
+    if (mode === "last") nextIndex = tabButtons.length - 1;
+
+    const nextTab = tabButtons[nextIndex];
+    nextTab.focus();
+    tabs.setValue(nextTab.dataset.value ?? value);
+  };
+
   return (
     <button
       type={type}
@@ -71,11 +92,41 @@ export function TabsTrigger({ value, className, type = "button", ...props }: Tab
       aria-controls={controls}
       aria-selected={selected}
       tabIndex={selected ? 0 : -1}
+      data-value={value}
+      {...props}
       onClick={(e) => {
         props.onClick?.(e);
         if (!e.defaultPrevented) tabs.setValue(value);
       }}
-      {...props}
+      onKeyDown={(e) => {
+        props.onKeyDown?.(e);
+        if (e.defaultPrevented) return;
+
+        const target = e.currentTarget;
+
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+          e.preventDefault();
+          focusSiblingTab(target, "next");
+          return;
+        }
+
+        if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+          e.preventDefault();
+          focusSiblingTab(target, "prev");
+          return;
+        }
+
+        if (e.key === "Home") {
+          e.preventDefault();
+          focusSiblingTab(target, "first");
+          return;
+        }
+
+        if (e.key === "End") {
+          e.preventDefault();
+          focusSiblingTab(target, "last");
+        }
+      }}
     />
   );
 }

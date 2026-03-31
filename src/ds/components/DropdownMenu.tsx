@@ -20,6 +20,7 @@ function useMenuContext() {
 export type DropdownMenuProps = {
   trigger: React.ReactElement<{
     onClick?: (e: React.MouseEvent) => void;
+    onKeyDown?: (e: React.KeyboardEvent) => void;
     "aria-expanded"?: boolean;
     "aria-controls"?: string;
   }>;
@@ -33,6 +34,19 @@ export function DropdownMenu({ trigger, children, className }: DropdownMenuProps
   const [anchor, setAnchor] = React.useState<HTMLSpanElement | null>(null);
   const panelRef = React.useRef<HTMLDivElement | null>(null);
   const menuId = React.useId();
+
+  const getMenuItems = React.useCallback(() => {
+    const panel = panelRef.current;
+    if (!panel) return [] as HTMLElement[];
+    return Array.from(panel.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+  }, []);
+
+  const focusItem = React.useCallback((index: number) => {
+    const items = getMenuItems();
+    if (!items.length) return;
+    const nextIndex = ((index % items.length) + items.length) % items.length;
+    items[nextIndex]?.focus();
+  }, [getMenuItems]);
 
   const onTriggerRef = React.useCallback((node: HTMLSpanElement | null) => {
     setAnchor(node);
@@ -88,13 +102,30 @@ export function DropdownMenu({ trigger, children, className }: DropdownMenuProps
     el.style.setProperty("--ui-menu-min-w", `${pos.width}px`);
   }, [open, pos]);
 
+  React.useEffect(() => {
+    if (!open) return;
+    const timer = window.setTimeout(() => focusItem(0), 0);
+    return () => window.clearTimeout(timer);
+  }, [open, focusItem]);
+
   return (
     <div className={cx("ui-menu", className)}>
       <span className="ui-menu__anchor" ref={onTriggerRef}>
+        {/* eslint-disable-next-line react-hooks/refs */}
         {React.cloneElement(trigger, {
           onClick: (e: React.MouseEvent) => {
             (trigger.props as { onClick?: (e: React.MouseEvent) => void }).onClick?.(e);
             if (!e.defaultPrevented) setOpen((v) => !v);
+          },
+          onKeyDown: (e: React.KeyboardEvent) => {
+            (trigger.props as { onKeyDown?: (e: React.KeyboardEvent) => void }).onKeyDown?.(e);
+            if (e.defaultPrevented) return;
+
+            if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+              e.preventDefault();
+              setOpen(true);
+              window.setTimeout(() => focusItem(e.key === "ArrowDown" ? 0 : -1), 0);
+            }
           },
           "aria-expanded": open,
           "aria-controls": menuId,
@@ -109,6 +140,48 @@ export function DropdownMenu({ trigger, children, className }: DropdownMenuProps
                 ref={panelRef}
                 className="ui-menu__panel"
                 role="menu"
+                aria-orientation="vertical"
+                onKeyDown={(e) => {
+                  const items = getMenuItems();
+                  if (!items.length) return;
+
+                  const currentIndex = items.findIndex((item) => item === document.activeElement);
+
+                  if (e.key === "Escape") {
+                    e.preventDefault();
+                    setOpen(false);
+                    anchor?.querySelector<HTMLElement>("button, a, [tabindex]")?.focus();
+                    return;
+                  }
+
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    focusItem(currentIndex < 0 ? 0 : currentIndex + 1);
+                    return;
+                  }
+
+                  if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    focusItem(currentIndex < 0 ? items.length - 1 : currentIndex - 1);
+                    return;
+                  }
+
+                  if (e.key === "Home") {
+                    e.preventDefault();
+                    focusItem(0);
+                    return;
+                  }
+
+                  if (e.key === "End") {
+                    e.preventDefault();
+                    focusItem(items.length - 1);
+                    return;
+                  }
+
+                  if (e.key === "Tab") {
+                    setOpen(false);
+                  }
+                }}
               >
                 {children}
               </div>

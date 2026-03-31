@@ -600,6 +600,10 @@
     background: transparent;
   }
 
+  .ui-preview-panel {
+    width: min(100%, var(--ds-size-preview-panel));
+  }
+
   /* Responsive visibility helpers (block-level)
      Use these when you need to swap entire page sections/layouts.
      (The existing ui-only-mobile/ui-only-desktop utilities are inline-flex oriented.) */

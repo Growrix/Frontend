@@ -12,7 +12,7 @@ export function PublicShell({ header, footer, children }: PublicShellProps) {
   return (
     <div className="ui-page">
       {header ? <div className="ui-band ui-band--surface ui-sticky-top">{header}</div> : null}
-      <main className="ui-page-main">{children}</main>
+      <main className="ui-page-main" id="main">{children}</main>
       {footer ? <div className="ui-band">{footer}</div> : null}
     </div>
   );

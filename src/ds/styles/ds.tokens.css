@@ -38,6 +38,7 @@
     --ds-space-2: 0.5rem;
     --ds-space-3: 0.75rem;
     --ds-space-4: 1rem;
+    --ds-space-5: 1.25rem;
     --ds-space-6: 1.5rem;
     --ds-space-7: 2rem;
     --ds-space-8: 2.5rem;
@@ -184,11 +185,20 @@
 
     --ds-size-touch-target: 2.75rem;
     --ds-size-input-min-h: var(--ds-size-touch-target);
+    --ds-size-button-sm: 2.5rem;
     --ds-size-button-min-h: var(--ds-size-touch-target);
+    --ds-size-icon-xs: 0.875rem;
+    --ds-size-icon-sm: 1rem;
+    --ds-size-icon-md: 1.25rem;
+    --ds-size-icon-lg: 1.5rem;
+    --ds-size-icon-xl: 2rem;
     --ds-size-icon-button: var(--ds-size-touch-target);
     --ds-size-fab: 3.25rem;
     --ds-size-tabs-h: var(--ds-size-touch-target);
     --ds-size-bottom-nav-h: 4rem;
+    --ds-size-selection-control: 1.125rem;
+    --ds-size-stepper-dot: 0.625rem;
+    --ds-size-preview-panel: 28rem;
 
     /* Device preview sizing (used by component-library previews) */
     --ds-size-device-phone-w: 24.375rem; /* 390px */

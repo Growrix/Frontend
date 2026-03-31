@@ -11,7 +11,7 @@ export type CenteredShellProps = {
 export function CenteredShell({ title, children }: CenteredShellProps) {
   return (
     <div className="ui-page">
-      <main className="ui-page-main">
+      <main className="ui-page-main" id="main">
         <Section container="narrow">
           <Stack>
             {title ? <h1 className="text-heading-1">{title}</h1> : null}

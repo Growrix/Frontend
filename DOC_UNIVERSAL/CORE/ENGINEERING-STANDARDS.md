@@ -67,11 +67,22 @@ Every frontend plan must declare one of these modes before implementation.
 - Each starter project should expose predictable scripts for `build`, `lint`, `test`, and ideally a single `verify` command.
 - Starter projects should include `DOC_UNIVERSAL`, the protected DS, and project execution docs before autonomous work begins.
 
-## Routing
+## Routing And App Structure
 
+- Every route must belong to a Next.js route group: `(marketing)`, `(dashboard)`, `(auth)`, `(docs)`, etc.
+- No top-level route folders outside groups. Route groups define shell boundaries.
 - Route structure must be defined before page creation.
-- Dashboard pages must inherit from a shared dashboard shell.
-- Navigation config must stay in sync with actual routes.
+- Every route must be registered in `src/app/route-map.ts`. All `<Link href>` and `router.push()` calls must use `ROUTES.*` constants.
+- Dashboard pages must inherit from a shared dashboard shell via the route group layout.
+- Navigation config must be centralized per route group in a single file, not duplicated across components.
+- Root `layout.tsx` contains only: fonts, `<ThemeInitScript />`, `globals.css` import, skip-link, `<html>` + `<body>`. No shell, no navigation, no business logic.
+- Route group `layout.tsx` wraps children in exactly one DS shell. No conditional shell rendering.
+- Page files must be thin (~80 lines max). Extract heavy views to `_components/`.
+- `_components/` are co-located and route-scoped. Never import across route group boundaries.
+- `src/features/` holds business logic, domain types, services, adapters. No React components.
+- Mobile/tablet behavior comes from DS runtime props (`data-platform`, `data-density`), not conditional shell rendering or pathname-gating.
+
+See `STANDARDS/APP-STRUCTURE.md` for the full recommended shape, shell selection table, file placement summary, routing checklist, and anti-patterns.
 
 ## API And Backend
 
@@ -85,6 +96,25 @@ Every frontend plan must declare one of these modes before implementation.
 - Schema changes must be deliberate, reviewable, and reversible when possible.
 - Define constraints, foreign keys, indexes, and audit fields intentionally.
 - Avoid magical behavior hidden in database access helpers.
+
+## Professional SaaS Baseline
+
+- Decide the tenancy model before broad feature work: single-tenant, workspace-based, or true multi-tenant.
+- Keep authentication, authorization, and entitlements separate. They are related, but they are not the same concern.
+- Treat billing as a domain boundary, not a UI toggle. Plan plan-state sync, webhook reconciliation, and downgrade behavior deliberately.
+- Design external writes, webhooks, and async workflows for idempotency, retries, and safe replay.
+- Use feature flags for risky releases, staged rollouts, or migrations that may need rapid containment.
+- Critical product journeys should emit traceable logs, correlation IDs, and business-level events that support debugging and support operations.
+- Environment validation, migration discipline, and rollback thinking are baseline SaaS requirements, not later hardening work.
+
+## Optional Stack Modules
+
+- Add stack modules because the product needs a capability, not because the starter can carry them.
+- Prefer one clear tool per concern. Avoid overlapping auth, ORM, queue, analytics, or feature-flag systems.
+- A practical default stack for many SaaS projects is: PostgreSQL, Zod, one auth system, one data access system, one billing provider when monetization exists, one email provider when transactional email exists, one job runner when async workflows exist, and one observability path.
+- Good optional defaults for this startup are usually: PostgreSQL, Prisma or Drizzle, Clerk or Supabase Auth or Auth.js, Stripe, Resend, S3-compatible object storage, Inngest or Trigger.dev, Sentry, and PostHog.
+- Never install Prisma and Drizzle together in the same starter unless there is an exceptional migration reason.
+- Never install billing, queues, advanced analytics, or feature-flag platforms by default if the current project has no product need for them.
 
 ## Security
 

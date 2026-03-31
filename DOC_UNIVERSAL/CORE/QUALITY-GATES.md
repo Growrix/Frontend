@@ -25,6 +25,7 @@ Starter projects should also define one stable verification command, ideally `np
 - all required UI states exist
 - responsive behavior verified
 - basic accessibility verified
+- shared shell landmarks and skip-link targets verified
 
 ## Mandatory Design System Checks
 
@@ -38,14 +39,26 @@ Starter projects should also define one stable verification command, ideally `np
 - root knobs such as `data-platform`, `data-density`, and `data-visual` are applied intentionally, not scattered across leaf nodes
 - Tailwind utilities do not bypass DS visual authority
 - if an approved DS change exists, `src/ds/index.ts` and related docs are updated together when needed
+- `npm run ds:audit` passes (no undefined tokens, registry sync)
+- `npm run ds:a11y` passes (DS accessibility test suite)
+- for approved DS changes, `src/ds/DS-COVERAGE-CHECKLIST.md` is followed before merge
 
 ## Mandatory Backend Checks
 
 - boundary validation exists
 - auth and authorization rules are enforced
+- tenant or workspace scoping is explicit and verified
 - response and error shapes are explicit
 - service and data layers are not mixed
 - logging or trace points exist for critical workflows
+
+## Mandatory SaaS Checks
+
+- migrations are reviewed for forward path and rollback impact
+- billing or entitlement changes define source of truth and reconciliation behavior
+- external writes, jobs, and webhooks define idempotency and retry behavior
+- feature flag or staged rollout strategy exists when the blast radius is meaningful
+- observability exists for critical flows that can impact revenue, access, or data integrity
 
 ## Mandatory Documentation Checks
 
@@ -64,6 +77,8 @@ Do not mark complete if any of these are true:
 - tests required by the task fail
 - route or API contract is undocumented
 - security-sensitive change has no auth review
+- tenant boundary or entitlement logic is unclear
+- migration or webhook behavior is unsafe or undocumented
 - UI introduces hardcoded values against the system rules
 - DS files were changed without explicit approval
 - unattended automation is configured to push directly to a protected branch without explicit approval

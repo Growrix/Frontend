@@ -27,6 +27,7 @@ export function Autocomplete({ value, onValueChange, options, placeholder, label
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(0);
   const listId = React.useId();
+  const optionIdPrefix = React.useId();
 
   const filtered = React.useMemo(() => {
     const q = value.trim().toLowerCase();
@@ -37,6 +38,8 @@ export function Autocomplete({ value, onValueChange, options, placeholder, label
   React.useEffect(() => {
     setActive(0);
   }, [value]);
+
+  const activeOptionId = filtered.length > 0 ? `${optionIdPrefix}${filtered[active]?.id}` : undefined;
 
   return (
     <div className={cx("ui-ac", className)}>
@@ -52,6 +55,7 @@ export function Autocomplete({ value, onValueChange, options, placeholder, label
         aria-expanded={open}
         aria-controls={listId}
         aria-autocomplete="list"
+        aria-activedescendant={open ? activeOptionId : undefined}
         onFocus={() => setOpen(true)}
         onBlur={() => {
           window.setTimeout(() => setOpen(false), 120);
@@ -75,6 +79,16 @@ export function Autocomplete({ value, onValueChange, options, placeholder, label
             setActive((v) => Math.max(0, v - 1));
             return;
           }
+          if (e.key === "Home") {
+            e.preventDefault();
+            setActive(0);
+            return;
+          }
+          if (e.key === "End") {
+            e.preventDefault();
+            setActive(Math.max(0, filtered.length - 1));
+            return;
+          }
           if (e.key === "Enter") {
             const opt = filtered[active];
             if (!opt) return;
@@ -90,6 +104,7 @@ export function Autocomplete({ value, onValueChange, options, placeholder, label
           {filtered.map((o, idx) => (
             <button
               key={o.id}
+              id={`${optionIdPrefix}${o.id}`}
               type="button"
               className={cx("ui-ac__opt ui-focus-ring", idx === active && "ui-ac__opt--active")}
               role="option"

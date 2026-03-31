@@ -6,6 +6,7 @@ exports[`DS layouts (snapshots) CenteredShell 1`] = `
 >
   <main
     class="ui-page-main"
+    id="main"
   >
     <div
       class="ui-band"
@@ -170,6 +171,7 @@ exports[`DS layouts (snapshots) PublicShell 1`] = `
   </div>
   <main
     class="ui-page-main"
+    id="main"
   >
     <div>
       Body

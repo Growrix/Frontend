@@ -21,6 +21,35 @@ export type DataGridProps<T> = {
   className?: string;
 };
 
+function collectSearchText(value: unknown, bucket: string[], depth = 0) {
+  if (value == null || depth > 2) return;
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    bucket.push(String(value));
+    return;
+  }
+
+  if (value instanceof Date) {
+    bucket.push(value.toISOString());
+    return;
+  }
+
+  if (Array.isArray(value)) {
+    value.forEach((item) => collectSearchText(item, bucket, depth + 1));
+    return;
+  }
+
+  if (typeof value === "object") {
+    Object.values(value as Record<string, unknown>).forEach((item) => collectSearchText(item, bucket, depth + 1));
+  }
+}
+
+function defaultSearch(row: unknown, query: string) {
+  const bucket: string[] = [];
+  collectSearchText(row, bucket);
+  return bucket.join(" ").toLowerCase().includes(query);
+}
+
 export function DataGrid<T>({
   rows,
   columns,
@@ -41,15 +70,7 @@ export function DataGrid<T>({
   const filtered = React.useMemo(() => {
     if (!searchable || !query.trim()) return rows;
     const q = query.trim().toLowerCase();
-    const fn =
-      searchFn ??
-      ((row: T, qq: string) => {
-        try {
-          return JSON.stringify(row).toLowerCase().includes(qq);
-        } catch {
-          return false;
-        }
-      });
+    const fn = searchFn ?? ((row: T, qq: string) => defaultSearch(row, qq));
     return rows.filter((r) => fn(r, q));
   }, [rows, query, searchable, searchFn]);
 

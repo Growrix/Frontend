@@ -3,10 +3,12 @@ import path from "node:path";
 
 const repoRoot = process.cwd();
 
+const tokenFile = path.join(repoRoot, "src/ds/styles/ds.tokens.css");
 const targets = [
   "src/ds/styles/ds.components.css",
   "src/ds/styles/ds.base.css",
   "src/ds/styles/ds.utilities.css",
+  "src/ds/styles/ds.theme.css",
 ].map((p) => path.join(repoRoot, p));
 
 const rules = [
@@ -37,6 +39,14 @@ function getLineNumber(text, index) {
   return line;
 }
 
+const tokenText = await fs.readFile(tokenFile, "utf8");
+const definedTokens = new Set(Array.from(tokenText.matchAll(/(--ds-[a-z0-9-]+)\s*:/gi), (match) => match[1]));
+
+function reportFinding(rel, line, ruleId, snippet) {
+  hasFindings = true;
+  console.log(`${rel}:${line} [${ruleId}] ${snippet}`);
+}
+
 let hasFindings = false;
 
 for (const filePath of targets) {
@@ -51,12 +61,21 @@ for (const filePath of targets) {
         continue;
       }
 
-      hasFindings = true;
       const line = getLineNumber(text, idx);
       const snippet = (match[0] ?? "").slice(0, 80);
-      // Keep output simple/greppable.
-      console.log(`${rel}:${line} [${rule.id}] ${snippet}`);
+      reportFinding(rel, line, rule.id, snippet);
     }
+  }
+
+  for (const match of text.matchAll(/var\(\s*(--ds-[a-z0-9-]+)/gi)) {
+    const tokenName = match[1];
+    if (definedTokens.has(tokenName)) {
+      continue;
+    }
+
+    const idx = match.index ?? 0;
+    const line = getLineNumber(text, idx);
+    reportFinding(rel, line, "undefined-token", tokenName);
   }
 }
 

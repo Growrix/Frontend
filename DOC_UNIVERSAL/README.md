@@ -46,12 +46,19 @@ For frontend work, also load:
 - `src/ds/DESIGN-SYSTEM-ANATOMY.md`
 - `DOC/SEMANTIC-CLASSES-REGISTRY.md`
 
+For backend, auth, billing, data, or operations work, also load:
+
+- `STANDARDS/API-BACKEND-RULES.md`
+- `STANDARDS/SAAS-FOUNDATIONS.md`
+- only the smallest relevant subset from `STACK_PROFILES/NEXTJS-SAAS/`
+
 Do not load the full folder tree by default.
 
 ## Folder Map
 
 - `CORE/`: always-on operating rules
 - `STANDARDS/`: stable implementation rules for structure, UI/DS, and API/backend
+- `STANDARDS/SAAS-FOUNDATIONS.md`: optional-module and SaaS decision guide for AI and developers
 - `RUNNERS/`: runner-specific operating contracts
 - `TEMPLATES/`: seed templates for project execution docs
 - `STACK_PROFILES/`: on-demand technical handbooks by stack

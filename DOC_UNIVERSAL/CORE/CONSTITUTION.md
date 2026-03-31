@@ -25,8 +25,11 @@ Non-negotiable rules for all AI and developer execution.
 - No duplicate dashboards, layouts, sidebars, nav systems, or routing patterns.
 - No unauthorized edits to the Design System during normal feature implementation.
 - No direct database access from UI layers.
+- No cross-tenant data access, tenant context leaks, or ambiguous ownership boundaries.
 - No business logic buried in page files or route handlers.
 - No API shape invented ad hoc; use an API map and explicit response contract.
+- No billing, webhook, or external write flow without idempotency and reconciliation thinking.
+- No schema change without an explicit migration path and rollback note.
 - No secrets, credentials, tokens, or machine-specific absolute paths in docs.
 - No skipped verification gates.
 - No unrelated refactors during active task execution.
@@ -66,7 +69,9 @@ Professional output means:
 - token-driven UI
 - typed contracts
 - validated input
+- tenant-safe data boundaries
 - secure defaults
+- operational visibility for critical flows
 - testable units
 - traceable changes
 - reversible releases

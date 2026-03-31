@@ -12,13 +12,15 @@ export type PopoverProps = {
   children: React.ReactNode;
   className?: string;
   align?: "start" | "end";
+  "aria-label"?: string;
 };
 
-export function Popover({ trigger, children, className, align = "start" }: PopoverProps) {
+export function Popover({ trigger, children, className, align = "start", "aria-label": ariaLabel }: PopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [pos, setPos] = React.useState<{ top: number; left: number } | null>(null);
   const [anchor, setAnchor] = React.useState<HTMLSpanElement | null>(null);
   const panelRef = React.useRef<HTMLDivElement | null>(null);
+  const lastActiveRef = React.useRef<HTMLElement | null>(null);
   const id = React.useId();
 
   const compute = React.useCallback(() => {
@@ -54,7 +56,10 @@ export function Popover({ trigger, children, className, align = "start" }: Popov
   React.useEffect(() => {
     if (!open) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        lastActiveRef.current?.focus();
+      }
     };
     const onMouseDown = (e: MouseEvent) => {
       const t = e.target as Node | null;
@@ -74,10 +79,14 @@ export function Popover({ trigger, children, className, align = "start" }: Popov
   return (
     <div className={cx("ui-popover", className)}>
       <span className="ui-popover__anchor" ref={(n) => setAnchor(n)}>
+        {/* eslint-disable-next-line react-hooks/refs */}
         {React.cloneElement(trigger, {
           onClick: (e: React.MouseEvent) => {
             (trigger.props as { onClick?: (e: React.MouseEvent) => void }).onClick?.(e);
-            if (!e.defaultPrevented) setOpen((v) => !v);
+            if (!e.defaultPrevented) {
+              lastActiveRef.current = document.activeElement as HTMLElement;
+              setOpen((v) => !v);
+            }
           },
           "aria-expanded": open,
           "aria-controls": id,
@@ -92,6 +101,7 @@ export function Popover({ trigger, children, className, align = "start" }: Popov
               className={cx("ui-popover__panel", align === "end" && "ui-popover__panel--end")}
               role="dialog"
               aria-modal="false"
+              aria-label={ariaLabel}
             >
               {children}
             </div>,

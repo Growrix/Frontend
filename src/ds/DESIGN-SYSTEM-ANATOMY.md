@@ -1,668 +1,637 @@
-# Blueprint Design System (DS) — Anatomy, Rules, and Operating Guide
+# Blueprint Design System — The Single Source of Truth
+
+> **For AI agents and human developers alike.**
+> Read this document **before** creating, editing, or consuming any UI in this project.
+> This is the authoritative reference. If anything elsewhere contradicts this file, this file wins for DS matters.
 
 **Location:** `src/ds/`
-
-This document explains how the Design System (DS) in this repo is structured, how it works at runtime, and the strict rules for using/extending it while building frontend.
-
-**Goal:** Any AI or human can build screens *systematically* using the DS without breaking theming, tokens, layout conventions, or the DS boundary.
+**Public import:** `@/ds` (backed by `src/ds/index.ts`)
+**Last verified:** 2026-03-30
 
 ---
 
-## 0) Executive summary (what this DS is)
+## 0. Executive Summary
 
-This DS is a **class-based design system**:
+This is a **class-based, token-driven design system**.
 
-- **Styling is driven by DS-owned CSS** in `src/ds/styles/*`.
-- React components (primitives + components + shells) mostly act as **thin wrappers** that apply DS class names like `ui-button`, `ui-container`, `ui-page`, etc.
-- Visual consistency is enforced through:
-  - **CSS variables (“tokens”)** in `src/ds/styles/ds.tokens.css`.
-  - **Theme selection** via an `html` class: `theme-dark`, `theme-light`, `theme-purple`.
-  - **CSS layer ordering** to guarantee predictable cascade.
-
-**Single public API:** `@/ds` (backed by `src/ds/index.ts`). Import UI ONLY from there.
+- Styling lives in DS-owned CSS layers (`src/ds/styles/*`).
+- React components are thin wrappers that apply DS class names (`ui-button`, `ui-card`, …).
+- Visual consistency is enforced through **CSS custom properties (tokens)** in `ds.tokens.css`, **theme classes** on `<html>`, and a **strict CSS layer cascade**.
+- Everything is exported from a **single barrel** at `src/ds/index.ts`. Import UI **only** from `@/ds`.
+- The DS is a **protected system asset**. Default policy is `consume-only`. Do not edit DS internals during feature work unless approved.
 
 ---
 
-## 1) The DS boundary (non‑negotiable)
+## 1. Architecture At A Glance
 
-### Import boundary
+```
+src/ds/
+│
+│   index.ts              ← the ONLY public API (import from @/ds)
+│   icons.ts              ← curated icon re-exports (lucide-react behind DS boundary)
+│
+├── styles/               ← CSS implementation (the real styling authority)
+│   ├── index.css         ← layer ordering + imports
+│   ├── ds.tokens.css     ← tokens, theme overrides, density/platform/visual knobs
+│   ├── ds.theme.css      ← color-scheme per theme
+│   ├── ds.base.css       ← element reset + body
+│   ├── ds.utilities.css  ← layout + typography helpers (ui-*, text-*)
+│   └── ds.components.css ← component class implementations (ui-button, ui-card, …)
+│
+├── primitives/           ← low-level building blocks (Button, Input, Stack, Grid, …)
+├── components/           ← higher-level composed components (Modal, Tabs, DataTable, …)
+│   └── __tests__/        ← component + keyboard a11y tests
+├── layouts/              ← page shells (PublicShell, DashboardShell, DocsShell, CenteredShell)
+│   └── __tests__/        ← shell snapshot tests
+│
+├── foundation/           ← foundational contracts
+│   ├── tokens/           ← typed CSS variable references (vars.ts)
+│   ├── themes/           ← theme registry, init script, storage utilities
+│   ├── semantics/        ← semantic class registry (ui-page, ui-container, …)
+│   ├── a11y/             ← VisuallyHidden, usePrefersReducedMotion
+│   └── motion/           ← motion duration/easing tokens
+│
+├── themes/               ← legacy alias (same content as foundation/themes)
+├── tokens/               ← legacy placeholder (README only — not the SOT)
+│
+├── patterns/             ← app state patterns (AsyncBoundary, ErrorBlock, + re-exports)
+├── widgets/              ← dashboard building blocks (WidgetShell, MetricWidget, StatWidget, …)
+│   └── __tests__/        ← widget tests
+├── visuals/              ← decorative effects (Glow, NoiseOverlay, BackgroundFX)
+│
+├── composition/          ← higher-order composition
+│   ├── blocks/           ← MarketingBlocks, PublicBlocks re-exports
+│   ├── patterns/         ← SectionPattern
+│   └── templates/        ← PageTemplate (shell selection by name)
+│
+├── runtime/              ← platform surface adapters
+│   ├── app/mobile/       ← Screen, Sheet, BottomNavPreset, FloatingAction, Overlay
+│   │   └── __tests__/    ← Sheet focus/a11y tests
+│   ├── app/tablet/       ← SideRail, SideRailPreset
+│   └── web/              ← DeviceFrame, WidgetFrame, shell re-exports
+│
+├── structures/           ← organizational re-exports (Card, Container, Grid, Stack)
+├── interactions/         ← organizational re-exports (Modal, Drawer, DropdownMenu, Popover, …)
+│
+└── preview/              ← component-library preview context (PreviewPlatform)
+```
 
-✅ Do:
+### What are "organizational re-export layers"?
+
+`structures/`, `interactions/`, and parts of `runtime/web/` are **not separate implementations**. They are thin re-export barrels that expose the same primitives/components under a blueprint-style organizational grouping. This lets the architecture express intent (structure vs interaction) while keeping one implementation behind the curtain.
+
+**Rule:** Do not assume these folders contain distinct code. They point back to `primitives/` and `components/`.
+
+---
+
+## 2. The Import Boundary (Non-Negotiable)
+
+### Allowed
 
 ```ts
 import { Button, Card, DashboardShell, ThemeSwitcher } from "@/ds";
-import { Bell, Home } from "@/ds"; // icons are curated and re-exported
+import { Bell, Home } from "@/ds"; // curated icons
 ```
 
-❌ Don’t:
+### Forbidden
 
-- Import DS internals directly (example: `@/ds/primitives/Button`).
-- Import icon libraries directly (example: `lucide-react`) from app/features.
+```ts
+import { Button } from "@/ds/primitives/Button";     // ← internal path
+import { Home } from "lucide-react";                  // ← raw icon library
+```
 
-**Why:** The DS uses `src/ds/index.ts` as the *only* stable surface. Internals can move; the barrel is the contract.
+**Why:** `src/ds/index.ts` is the only stable contract. Internals may be reorganized; the barrel never breaks.
 
 ### Styling boundary
 
-✅ Do:
-
 - Use DS classes, DS components, and DS tokens.
 - If you need a new visual style, add it **inside the DS** (new DS utility class, component style, or token).
-
-❌ Don’t:
-
-- Hardcode new hex colors, px values, shadows, etc. in feature code.
-- Create “random one-off” CSS for UI primitives in feature folders.
+- Never hardcode hex colors, px values, shadows, radii, or typography in feature code.
+- Never create one-off CSS in feature folders for UI primitives.
 
 ---
 
-## 2) How DS styles load (critical)
+## 3. How DS Styles Load
 
-### Global import
+### Global entry point
 
-The app loads DS styles once via:
-
-- `src/app/globals.css`
+`src/app/globals.css` imports the DS once:
 
 ```css
 @import "../ds/styles/index.css";
 ```
 
-So DS CSS is **always available** across the app.
-
-### Layer ordering
-
-The DS defines explicit CSS layers in `src/ds/styles/index.css`:
+### CSS layer cascade (strict order)
 
 ```css
 @layer ds.tokens, ds.theme, ds.base, ds.utilities, ds.components;
-
-@import "./ds.tokens.css";
-@import "./ds.theme.css";
-@import "./ds.base.css";
-@import "./ds.utilities.css";
-@import "./ds.components.css";
 ```
 
-**Interpretation:**
+| Priority | Layer | File | Purpose |
+|----------|-------|------|---------|
+| 1 (lowest) | `ds.tokens` | `ds.tokens.css` | Token variables (`--ds-*`), theme/density/platform/visual overrides |
+| 2 | `ds.theme` | `ds.theme.css` | `color-scheme` mapping per theme |
+| 3 | `ds.base` | `ds.base.css` | Element reset + body typography |
+| 4 | `ds.utilities` | `ds.utilities.css` | Layout/typography helper classes |
+| 5 (highest) | `ds.components` | `ds.components.css` | Component class implementations |
 
-1. `ds.tokens` → token variables (`--ds-*`) and theme overrides
-2. `ds.theme` → `color-scheme` mapping per theme
-3. `ds.base` → base element reset + body typography
-4. `ds.utilities` → layout/typography helper classes (`ui-*`, `text-*`)
-5. `ds.components` → component class implementations (`ui-button`, `ui-card`, etc.)
-
-**Rule:** Do not reorder these layers or import DS CSS multiple times.
+**Rules:**
+- Do not reorder these layers.
+- Do not import DS CSS a second time.
+- Do not create competing CSS layers in feature code.
 
 ---
 
-## 3) Tokens (the source of truth)
+## 4. Token System
 
-### Where tokens live
+### Source of truth
 
-- **Source of truth (CSS variables):** `src/ds/styles/ds.tokens.css`
-- **Typed references (TS helpers):** `src/ds/foundation/tokens/vars.ts`
+| What | File |
+|------|------|
+| CSS variables (real SOT) | `src/ds/styles/ds.tokens.css` |
+| Typed TS references | `src/ds/foundation/tokens/vars.ts` |
 
-The legacy folder `src/ds/tokens/` is intentionally present but **not** the source of truth.
+### Token families (in vars.ts)
 
-### Token philosophy
+| Family | Example keys | CSS prefix |
+|--------|-------------|------------|
+| `space` | `0–9`, `cardPadding`, `modalPadding`, `formGap` | `--ds-space-*` |
+| `radius` | `default`, `card`, `modal`, `full`, `sm`, `1–3` | `--ds-radius-*` |
+| `z` | `sticky`, `modal`, `dropdown`, `drawer`, `tooltip`, `toast` | `--ds-z-*` |
+| `motion` | `easeStandard`, `durationFast/Normal/Slow` | `--ds-ease-*`, `--ds-duration-*` |
+| `shadow` | `sm`, `md` | `--ds-shadow-*` |
+| `size` | `heroMinH`, `headerH`, `touchTarget`, icon sizes, shell sizes | `--ds-size-*` |
+| `color` | `background`, `surface`, `accent`, `primary`, `danger`, `focusRing`, … | `--ds-color-*` |
+| `palette` | `neutral0–950`, `brand50–950`, `success600`, … | `--ds-palette-*` |
+| `fontFamily` | `sans`, `display`, `mono` | `--ds-font-*` |
+| `fontSize` | `1–7` | `--ds-font-size-*` |
+| `fontWeight` | `regular`, `book`, `medium`, `demibold`, `semibold`, `bold` | `--ds-font-weight-*` |
+| `lineHeight` | `tight`, `section`, `meta`, `normal`, `relaxed` | `--ds-line-height-*` |
+| `letterSpacing` | `tight`, `loose` | `--ds-letter-spacing-*` |
 
-- Components should prefer DS **classes** that already encode token usage.
-- When code needs a stable variable reference, use typed helpers like:
+### Using tokens in code
+
+Prefer DS classes and components. When a typed variable reference is needed:
 
 ```ts
 import { tokens } from "@/ds";
 
-// example: tokens.tokens.vars.space.cardPadding (actual surface is foundation/tokens)
+// Access: tokens.space.cardPadding, tokens.color.accent, tokens.radius.card, etc.
 ```
 
-(Use token references sparingly; prefer DS classes/components.)
+Use token references sparingly — DS classes already encode the correct token usage.
 
-### Theme + platform knobs
+### Knobs (contextual token overrides)
 
-`ds.tokens.css` supports scoped “knobs” that change tokens:
+Tokens can be modified contextually through HTML attributes:
 
-- Themes via `html.theme-*`.
-- Density via `data-density="compact"` (on `html` or any wrapper).
-- Visual variants via `data-visual="glass" | "neumorph" | "sleek"`.
-- Platform presets via `data-platform="mobile"`.
+| Knob | Attribute | Values | Where to apply |
+|------|-----------|--------|----------------|
+| Theme | `class` on `<html>` | `theme-dark`, `theme-light`, `theme-purple` | Set by `ThemeInitScript` |
+| Density | `data-density` | `"compact"` | Page shell or root wrapper |
+| Visual style | `data-visual` | `"glass"`, `"neumorph"`, `"sleek"` | Page shell or root wrapper |
+| Platform | `data-platform` | `"mobile"` | Page shell or root wrapper |
 
-**Rule:** Prefer setting these knobs at a **page shell/root wrapper** instead of sprinkling per-component overrides.
+**Rule:** Set knobs at the page shell or root wrapper. Never scatter them across child components.
 
 ---
 
-## 4) Theming (how it works)
+## 5. Theming
 
-### Theme selector mechanism
+### Available themes
 
-A theme is applied by adding a class to `<html>`:
+| Name | CSS class | Color scheme |
+|------|-----------|-------------|
+| Dark | `theme-dark` | `dark` |
+| Light | `theme-light` | `light` |
+| Purple | `theme-purple` | `dark` |
 
-- `theme-dark`
-- `theme-light`
-- `theme-purple`
+Default: `dark`. Stored in `localStorage` key `solarmatch-theme`.
 
-### Preventing “flash of wrong theme”
+### Flash prevention
 
-The app injects `ThemeInitScript` into `<head>` in `src/app/layout.tsx`:
-
-```tsx
-import { ThemeInitScript } from "@/ds";
-
-<head>
-  <ThemeInitScript />
-</head>
-```
-
-`ThemeInitScript` reads localStorage key:
-
-- `solarmatch-theme`
-
-and applies `theme-*` class before React hydration.
+`ThemeInitScript` (injected into `<head>` in `src/app/layout.tsx`) reads localStorage and applies the `theme-*` class before React hydration.
 
 ### Runtime switching
 
-`ThemeSwitcher`:
+Use `ThemeSwitcher` component or the `applyTheme()`/`storeTheme()` utilities from `@/ds`.
 
-- reads stored theme
-- calls `applyTheme()`
-- stores theme via `storeTheme()`
+### Adding a new theme
 
-**Rule:** Use the DS theme utilities/components. Don’t implement new theme logic in feature code.
+1. Add to `ThemeName` union and `THEMES` array in `src/ds/foundation/themes/registry.ts`.
+2. Add token overrides in `ds.tokens.css` under `html.theme-<name>`.
+3. Add `color-scheme` mapping in `ds.theme.css`.
 
----
-
-## 5) Typography and semantic utility classes
-
-Typography classes are defined in `src/ds/styles/ds.utilities.css`:
-
-- Headings: `text-heading-1..4`
-- Body: `text-body`, `text-body-large`, `text-body-small`
-- Meta: `text-caption`, `text-micro`, `text-label`
-
-The `Text` primitive is a thin wrapper:
-
-- always uses `text-body`
-- supports `tone="muted"` → `ui-text-muted`
-
-### Semantic layout utilities
-
-The DS has a small “semantic utility registry” in:
-
-- `src/ds/foundation/semantics/registry.ts`
-
-It defines stable names like:
-
-- `ui-page`, `ui-page-main`
-- `ui-container` (+ width modifiers)
-- `ui-stack`, `ui-row`
-- `ui-focus-ring`
-
-Use these via DS components (preferred) or directly as classes when appropriate.
+**Rule:** New themes must be token-driven. No per-component theme rules.
 
 ---
 
-## 6) DS component architecture (what lives where)
+## 6. Typography
 
-### Overview
+### Typography classes (`ds.utilities.css`)
 
-This DS is organized into multiple layers. Some are “real” implementation layers, others are **organizational/compatibility re-exports**.
+| Class | Use |
+|-------|-----|
+| `text-heading-1` through `text-heading-4` | Page/section headings |
+| `text-body`, `text-body-large`, `text-body-small` | Body text |
+| `text-caption`, `text-micro`, `text-label` | Meta/small/label text |
 
-The **real styling** lives primarily in:
+### `Text` primitive
 
-- `src/ds/styles/ds.utilities.css`
-- `src/ds/styles/ds.components.css`
-
-The React components generally:
-
-- render semantic HTML
-- attach DS class names
-- occasionally include client-side behavior (`"use client"`)
-
-### Folder responsibilities (operational meaning)
-
-#### `src/ds/primitives/`
-Low-level building blocks. Usually minimal logic; mostly class wiring.
-
-Examples:
-- `Button`, `Input`, `Select`, `Stack`, `Grid`, `Container`, `Text`
-
-Use primitives to assemble new UI before reaching for heavier components.
-
-#### `src/ds/components/`
-Higher-level components that combine primitives, behaviors, and DS class conventions.
-
-Examples:
-- `Modal`, `Drawer`, `Tabs`, `Toast`, `DataTable`, `MarkdownEditor`, `ThemeSwitcher`
-
-These map to large sections inside `ds.components.css`.
-
-#### `src/ds/layouts/`
-Page shells that define layout structure and apply semantic utility classes.
-
-Examples:
-- `PublicShell`, `DashboardShell`, `DocsShell`, `CenteredShell`
-
-If a page is a “dashboard”, it should use the dashboard shell.
-
-#### `src/ds/runtime/`
-Runtime “platform” helpers and re-exports.
-
-- `runtime/web/shells.ts` re-exports layout shells.
-- `runtime/app/*` contains presets for mobile/tablet style shells.
-
-Treat this as the DS “integration layer” for different app surfaces.
-
-#### `src/ds/foundation/`
-Foundational contracts:
-
-- `tokens` (typed token references)
-- `themes` (theme registry + init script + storage)
-- `semantics` (semantic class registry)
-- `a11y` and `motion` utilities
-
-When extending the DS, this is where you define **new foundational primitives** (new theme, new semantic tokens, etc.).
-
-#### `src/ds/styles/`
-The DS stylesheet implementation.
-
-- `ds.tokens.css` — tokens + theme overrides + knobs
-- `ds.theme.css` — `color-scheme` per theme
-- `ds.base.css` — base element + body rules
-- `ds.utilities.css` — layout/type utilities (`ui-*`, `text-*`)
-- `ds.components.css` — component styles (`ui-button`, `ui-card`, …)
-
-#### `src/ds/icons.ts`
-Curated icon exports. Keeps `lucide-react` behind DS boundary.
-
-#### `src/ds/patterns/`
-Reusable patterns for application states.
-
-- `AsyncBoundary` (idle/loading/error/empty/ready switch)
-- `ErrorBlock`
-
-Also re-exports some component patterns for backwards compatibility.
-
-#### `src/ds/composition/`
-Higher-level “composition” helpers:
-
-- `templates/PageTemplate.tsx` chooses a shell by name
-- blocks/patterns/templates groupings
-
-Use composition to standardize screen structure across features.
-
-#### `src/ds/structures/` and `src/ds/interactions/`
-These currently act as **organizational re-export layers** that point to primitives/components.
-
-They exist to preserve/express a blueprint architecture and allow future “headless” or “structure-only” expansions without breaking imports.
-
-#### `src/ds/widgets/` and `src/ds/visuals/`
-Optional building blocks for dashboards and visual effects.
-
-- Widgets: `WidgetShell`, `MetricWidget`, `StatWidget`, etc.
-- Visuals: `Glow`, `NoiseOverlay`, `BackgroundFX`
-
-Use these when building dashboard-like UIs.
-
-#### `src/ds/preview/`
-Preview context used by component-library screens:
-
-- `PreviewPlatformProvider`
-- `usePreviewPlatform()`
+The `Text` component always applies `text-body` and supports `tone="muted"` → `ui-text-muted`.
 
 ---
 
-## 7) What the DS exports (public API)
+## 7. Semantic Utility Classes
 
-The DS public API is the barrel:
+Defined in `src/ds/foundation/semantics/registry.ts` and implemented in `ds.utilities.css`.
 
-- `src/ds/index.ts`
+| Key | Class | Purpose |
+|-----|-------|---------|
+| `page` | `ui-page` | Full page wrapper |
+| `pageMain` | `ui-page-main` | Main content area |
+| `band` | `ui-band` | Content band/section |
+| `container` | `ui-container` | Width-constrained wrapper |
+| `containerNarrow` | `ui-container--narrow` | Narrow variant |
+| `containerWide` | `ui-container--wide` | Wide variant |
+| `containerFull` | `ui-container--full` | Full-width |
+| `stack` | `ui-stack` | Vertical stack |
+| `row` | `ui-row` | Horizontal row |
+| `focusRing` | `ui-focus-ring` | Focus-visible ring |
 
-It exports:
+Additional modifiers: `ui-stack--tight`, `ui-stack--compact`, `ui-row--between`, `ui-row--center`, `ui-section`, `ui-section--sm`, `ui-section--lg`, `ui-sticky-top`.
 
-- all primitives
-- all components
-- layouts
-- foundation + runtime layers
-- patterns, visuals, widgets, composition
-- preview platform
-- curated icons
-
-**Rule:** If you add a new DS module, it is not “real” until it is exported from `src/ds/index.ts`.
-
----
-
-## 8) How to build frontend using this DS (the operating workflow)
-
-### A. Build a new page/screen
-
-1) Pick a shell:
-
-- Public marketing / landing → `PublicShell`
-- App dashboard → `DashboardShell`
-- Docs → `DocsShell`
-- Simple centered content → `CenteredShell`
-
-2) Layout with primitives + utilities:
-
-- `Container` for width
-- `Stack` for vertical rhythm
-- `Grid` for columns
-- `Section` for content bands
-
-3) Use DS components next:
-
-- forms → `Field`, `Input`, `Select`, `Switch`, etc.
-- overlay → `Modal`, `Drawer`, `Popover`, `Tooltip`
-- feedback → `Alert`, `Toast`, `Skeleton`, `EmptyState`
-
-4) Only then consider adding new DS capability.
-
-### B. Add a new primitive/component (safe procedure)
-
-**Checklist (follow in order):**
-
-1. Create the implementation file in the correct folder:
-   - primitive → `src/ds/primitives/NewThing.tsx`
-   - component → `src/ds/components/NewThing.tsx`
-
-2. Implement it in the DS style:
-   - add DS classes (e.g. `ui-newthing`)
-   - avoid hardcoded visuals; use tokens via CSS variables
-
-3. Add styles:
-   - layout/typography helper? → `src/ds/styles/ds.utilities.css`
-   - component implementation? → `src/ds/styles/ds.components.css`
-
-4. Export it from `src/ds/index.ts`.
-
-5. If it affects shells/layouts, update the component-library pages (in `src/app/component-library/*`) so it’s visible and exercised.
-
-6. Add/adjust tests if relevant:
-   - shells already have snapshot tests in `src/ds/layouts/__tests__`.
-
-### C. Add a new theme (strict)
-
-1. Update `ThemeName` union and `THEMES` in `src/ds/foundation/themes/registry.ts`.
-2. Add token overrides in `src/ds/styles/ds.tokens.css` under `html.theme-<name>`.
-3. Ensure `ds.theme.css` includes the right `color-scheme` mapping.
-
-**Rule:** New theme must be token-driven; do not introduce ad-hoc per-component theme rules.
+**External registry:** `DOC/SEMANTIC-CLASSES-REGISTRY.md` — must be updated when any `ui-*` class is added or renamed.
 
 ---
 
-## 9) Limitations and scope (important so no one “messes up”)
+## 8. Complete Component Catalog
 
-### Current scope (what this DS supports well)
+### Primitives (`src/ds/primitives/`)
 
-- Tokenized, themeable UI using CSS variables.
-- Consistent spacing/typography via utilities and primitives.
-- Multiple shells (public/dashboard/docs) with responsive behavior.
-- Curated icon surface.
-- A component-library area in the app that already consumes the DS.
+Basic building blocks. Minimal logic, mostly class wiring.
 
-### Current limitations (don’t fight these)
+| Component | Purpose |
+|-----------|---------|
+| `Button` | Primary action element (variants: `primary`, `secondary`, `ghost`, `danger`; sizes: `sm`, `md`, `lg`) |
+| `Input` | Text input |
+| `Textarea` | Multi-line text input |
+| `Select` | Native `<select>` wrapper |
+| `Checkbox` | Checkbox with label |
+| `Radio` | Radio button with label |
+| `Switch` | Toggle switch |
+| `RangeSlider` | Range input |
+| `Avatar` | User avatar |
+| `Spinner` | Loading spinner |
+| `Container` | Width-constrained wrapper |
+| `Stack` | Vertical layout (`gap` variants: `tight`, `compact`, `default`, `spacious`) |
+| `Grid` | CSS grid layout |
+| `Spacer` | Vertical/horizontal spacing |
+| `Divider` | Horizontal rule |
+| `Text` | Body text with optional `tone` |
 
-- The DS is **not Tailwind-first**; it is DS-class-first.
-- Many layers (`structures`, `interactions`, parts of `runtime`) are mostly **re-exports** today; don’t assume they contain distinct implementations.
-- Tokens are primarily in CSS; typed token helpers exist but are intentionally minimal.
-- Adding new visuals usually requires editing DS CSS files; do not patch around this in feature code.
+### Components (`src/ds/components/`)
 
----
+Higher-level composed elements with behavior.
 
-## 10) Roadmap for systematic frontend builds (recommended)
+| Component | Category | Notes |
+|-----------|----------|-------|
+| **Overlays** | | |
+| `Modal` | Overlay | Focus trapping, aria-labelledby/describedby, Escape dismiss |
+| `Drawer` | Overlay | Side/bottom panel, focus trapping, same ARIA pattern as Modal |
+| `Popover` | Overlay | Portal-based, Escape dismisses with focus restore, `aria-label` |
+| `ConfirmDialog` | Overlay | Composes Modal for confirm/cancel flows |
+| `ContextMenu` | Overlay | Right-click menu, arrow/Home/End nav, Escape focus restore |
+| `DropdownMenu` | Overlay | Trigger-based menu, full keyboard nav, roving focus |
+| `Tooltip` | Overlay | Hover/focus tooltip |
+| **Navigation** | | |
+| `Tabs` (`TabsList`, `TabsTrigger`, `TabsPanel`) | Navigation | Arrow/Home/End keyboard nav, roving tabindex |
+| `BottomNav` | Navigation | Mobile bottom navigation bar |
+| `Breadcrumbs` | Navigation | Breadcrumb trail |
+| `Pagination` | Navigation | Page navigation |
+| `AppBar` | Navigation | Top application bar |
+| `ScrollToTopButton` | Navigation | Scroll-to-top floating button |
+| **Data** | | |
+| `DataTable` | Data | Sortable columns, row selection, keyboard sort |
+| `DataGrid` | Data | Search, pagination, bulk actions, structured search |
+| `ResourceTable` | Data | CRUD table (create/edit/delete callbacks) |
+| `Charts` | Data | Chart components |
+| `Sparkline` | Data | Inline mini chart |
+| `MetricCard` | Data | Key metric display |
+| **Forms** | | |
+| `Field` | Form | Form field wrapper with label/error |
+| `FormHelpers` | Form | Form composition utilities |
+| `Autocomplete` | Form | Combobox with aria-activedescendant, arrow/Home/End, Enter select |
+| `MultiSelect` | Form | Popover with checkbox group (`role="group"`, `aria-label`) |
+| `TagInput` | Form | Tag/chip input |
+| `FileDropzone` | Form | Drag-and-drop file upload |
+| `DateTimePickers` | Form | Date/time selection |
+| `FilterPanel` | Form | Filter sidebar/panel |
+| **Feedback** | | |
+| `Alert` | Feedback | Inline alert |
+| `Banner` | Feedback | Full-width banner |
+| `Toast` | Feedback | Toast notifications |
+| `Status` | Feedback | Status indicator |
+| `Progress` | Feedback | Progress bar |
+| `Skeleton` | Feedback | Loading placeholder |
+| `EmptyState` | Feedback | Empty content state |
+| `ErrorBoundary` | Feedback | React error boundary |
+| **Content** | | |
+| `Card` | Content | Surface card |
+| `ImageCard` | Content | Card with image |
+| `IconCard` | Content | Card with icon |
+| `Badge` | Content | Small badge/tag |
+| `Section` | Content | Content section |
+| `SectionHeader` | Content | Section header |
+| `SplitSection` | Content | Two-column section |
+| `Icon` | Content | Token-driven icon sizing |
+| `AvatarGroup` | Content | Grouped avatars |
+| `Timeline` | Content | Timeline display |
+| `List` | Content | List component |
+| `Accordion` | Content | Collapsible sections |
+| `ResponsiveImage` | Content | Responsive image |
+| `Carousel` | Content | Image/content carousel |
+| `VideoPlayer` | Content | Video embed |
+| `MarkdownEditor` | Content | Markdown editing |
+| **Marketing** | | |
+| `Marketing` | Marketing | Marketing page components |
+| `PublicBlocks` | Marketing | Public page content blocks |
+| `CookieConsentBanner` | Marketing | Cookie consent UI |
+| `BulkActionsToolbar` | Utility | Bulk action toolbar |
+| **Theme** | | |
+| `ThemeSwitcher` | Theme | Theme toggle/selector |
 
-### Phase 1 — Consume only
+### Layouts (`src/ds/layouts/`)
 
-- Build all new pages using `@/ds` imports.
-- Prefer shells + primitives + existing components.
-- Avoid adding new utilities unless repeated use is proven.
+Page shells that define layout structure.
 
-### Phase 2 — Standardize patterns
+| Shell | Use case |
+|-------|----------|
+| `PublicShell` | Public marketing/landing pages |
+| `DashboardShell` | Authenticated dashboard/product pages |
+| `DocsShell` | Documentation pages |
+| `CenteredShell` | Focused auth/single-purpose pages |
 
-- Use `composition/templates/PageTemplate` when page selection is dynamic.
-- Adopt `patterns/AsyncBoundary` for all async state handling.
+All shells preserve the global skip-link target (`id="main"`) and `<main>` landmark.
 
-### Phase 3 — Extend DS carefully
+### Widgets (`src/ds/widgets/`)
 
-- When something is missing, add it inside DS with:
-  - DS classes
-  - token-driven styles
-  - exported API via `src/ds/index.ts`
+Dashboard building blocks.
 
-### Phase 4 — Governance
+| Widget | Purpose |
+|--------|---------|
+| `WidgetShell` | Generic widget container (header, subtitle, actions, body, footer) |
+| `MetricWidget` | Metric display in WidgetShell |
+| `StatWidget` | Statistics display |
+| `ListWidget` | List inside widget frame |
+| `MediaWidget` | Media inside widget frame |
 
-- Add a lightweight “DS change checklist” to PR templates (optional):
-  - exported from barrel
-  - theme-safe
-  - token-safe
-  - no feature-layer hardcoded styling
+### Visuals (`src/ds/visuals/`)
 
----
+Decorative effects (non-essential, opt-in).
 
-## 11) Current DS file tree (snapshot)
+| Visual | Purpose |
+|--------|---------|
+| `Glow` | Glow effect |
+| `NoiseOverlay` | Noise texture overlay |
+| `BackgroundFX` | Background visual effects |
 
-This is the current `src/ds` tree as captured by `tree src\\ds /F /A`:
+### Patterns (`src/ds/patterns/`)
 
-```text
-SRC/DS
-|   icons.ts
-|   index.ts
-|
-+---components
-|   Accordion.tsx
-|   Alert.tsx
-|   AppBar.tsx
-|   Autocomplete.tsx
-|   AvatarGroup.tsx
-|   Badge.tsx
-|   Banner.tsx
-|   BottomNav.tsx
-|   Breadcrumbs.tsx
-|   BulkActionsToolbar.tsx
-|   Card.tsx
-|   Carousel.tsx
-|   Charts.tsx
-|   ConfirmDialog.tsx
-|   ContextMenu.tsx
-|   CookieConsentBanner.tsx
-|   DataGrid.tsx
-|   DataTable.tsx
-|   DateTimePickers.tsx
-|   Drawer.tsx
-|   DropdownMenu.tsx
-|   EmptyState.tsx
-|   ErrorBoundary.tsx
-|   Field.tsx
-|   FileDropzone.tsx
-|   FilterPanel.tsx
-|   FormHelpers.tsx
-|   Icon.tsx
-|   IconCard.tsx
-|   ImageCard.tsx
-|   List.tsx
-|   MarkdownEditor.tsx
-|   Marketing.tsx
-|   MetricCard.tsx
-|   Modal.tsx
-|   MultiSelect.tsx
-|   Pagination.tsx
-|   Patterns.tsx
-|   Popover.tsx
-|   Progress.tsx
-|   PublicBlocks.tsx
-|   ResourceTable.tsx
-|   ResponsiveImage.tsx
-|   ScrollToTopButton.tsx
-|   Section.tsx
-|   SectionHeader.tsx
-|   Skeleton.tsx
-|   Sparkline.tsx
-|   SplitSection.tsx
-|   Status.tsx
-|   Tabs.tsx
-|   TagInput.tsx
-|   ThemeSwitcher.tsx
-|   Timeline.tsx
-|   Toast.tsx
-|   Tooltip.tsx
-|   VideoPlayer.tsx
-|
-+---composition
-|   index.ts
-|   +---blocks
-|   |   index.ts
-|   |   MarketingBlocks.ts
-|   |   PublicBlocks.ts
-|   +---patterns
-|   |   index.ts
-|   |   SectionPattern.tsx
-|   \---templates
-|       index.ts
-|       PageTemplate.tsx
-|
-+---foundation
-|   index.ts
-|   +---a11y
-|   |   index.ts
-|   |   usePrefersReducedMotion.ts
-|   |   VisuallyHidden.tsx
-|   +---motion
-|   |   index.ts
-|   |   tokens.ts
-|   +---semantics
-|   |   index.ts
-|   |   registry.ts
-|   +---themes
-|   |   index.ts
-|   |   registry.ts
-|   |   theme.ts
-|   |   ThemeInitScript.tsx
-|   \---tokens
-|       index.ts
-|       vars.ts
-|
-+---interactions
-|   ContextMenu.ts
-|   Drawer.ts
-|   Dropdown.ts
-|   index.ts
-|   Modal.ts
-|   Popover.ts
-|   Tooltip.ts
-|
-+---layouts
-|   CenteredShell.tsx
-|   DashboardShell.tsx
-|   DocsShell.tsx
-|   PublicShell.tsx
-|   \---__tests__
-|       shells.snapshot.test.tsx
-|       \---__snapshots__
-|           shells.snapshot.test.tsx.snap
-|
-+---patterns
-|   AsyncBoundary.tsx
-|   ErrorBlock.tsx
-|   index.ts
-|
-+---preview
-|   PreviewPlatform.tsx
-|
-+---primitives
-|   Avatar.tsx
-|   Button.tsx
-|   Checkbox.tsx
-|   Container.tsx
-|   Divider.tsx
-|   Grid.tsx
-|   Input.tsx
-|   Radio.tsx
-|   RangeSlider.tsx
-|   Select.tsx
-|   Spacer.tsx
-|   Spinner.tsx
-|   Stack.tsx
-|   Switch.tsx
-|   Text.tsx
-|   Textarea.tsx
-|
-+---runtime
-|   index.ts
-|   +---app
-|   |   index.ts
-|   |   +---mobile
-|   |   |   BottomNavPreset.tsx
-|   |   |   FloatingAction.tsx
-|   |   |   index.ts
-|   |   |   Overlay.tsx
-|   |   |   Screen.tsx
-|   |   |   Sheet.tsx
-|   |   \---tablet
-|   |       index.ts
-|   |       SideRail.tsx
-|   |       SideRailPreset.tsx
-|   \---web
-|       index.ts
-|       shells.ts
-|       WidgetFrame.tsx
-|
-+---structures
-|   Card.ts
-|   Container.ts
-|   Grid.ts
-|   index.ts
-|   Stack.ts
-|
-+---styles
-|   ds.base.css
-|   ds.components.css
-|   ds.theme.css
-|   ds.tokens.css
-|   ds.utilities.css
-|   index.css
-|
-+---themes
-|   registry.ts
-|   theme.ts
-|   ThemeInitScript.tsx
-|
-+---tokens
-|   README.md
-|
-+---visuals
-|   BackgroundFX.tsx
-|   Glow.tsx
-|   index.ts
-|   NoiseOverlay.tsx
-|
-\---widgets
-    index.ts
-    ListWidget.tsx
-    MediaWidget.tsx
-    MetricWidget.tsx
-    StatWidget.tsx
-    WidgetShell.tsx
-```
+Application state patterns.
+
+| Pattern | Purpose |
+|---------|---------|
+| `AsyncBoundary` | Idle/loading/error/empty/ready state switch |
+| `ErrorBlock` | Error display block |
+| Also re-exports: `EmptyState`, `Skeleton`, `ErrorBoundary` | Backwards compatibility |
+
+### Foundation (`src/ds/foundation/`)
+
+Foundational contracts exposed under `foundation.*` namespace.
+
+| Module | Path | Purpose |
+|--------|------|---------|
+| `tokens` | `foundation/tokens/vars.ts` | Typed CSS variable references (space, color, radius, …) |
+| `themes` | `foundation/themes/` | `ThemeName`, `THEMES`, `DEFAULT_THEME`, `isThemeName`, `ThemeInitScript`, `applyTheme`, `storeTheme` |
+| `semantics` | `foundation/semantics/registry.ts` | `SEMANTIC_CLASSES`, `semanticClass()` typed helper |
+| `a11y` | `foundation/a11y/` | `VisuallyHidden`, `usePrefersReducedMotion` |
+| `motion` | `foundation/motion/tokens.ts` | Motion duration/easing presets |
+
+### Runtime (`src/ds/runtime/`)
+
+Platform surface adapters.
+
+| Surface | Path | Purpose |
+|---------|------|---------|
+| `Screen` | `runtime/app/mobile/` | Full mobile screen |
+| `Sheet` | `runtime/app/mobile/` | Bottom sheet with focus trap |
+| `BottomNavPreset` | `runtime/app/mobile/` | Mobile bottom nav preset |
+| `FloatingAction` | `runtime/app/mobile/` | FAB |
+| `Overlay` | `runtime/app/mobile/` | Mobile overlay |
+| `SideRail` | `runtime/app/tablet/` | Tablet side rail |
+| `SideRailPreset` | `runtime/app/tablet/` | Tablet side rail preset |
+| `DeviceFrame` | `runtime/web/` | Device preview frame |
+| `WidgetFrame` | `runtime/web/` | Widget preview frame |
+
+### Composition (`src/ds/composition/`)
+
+Higher-level composition helpers.
+
+| Module | Purpose |
+|--------|---------|
+| `templates/PageTemplate` | Shell selection by name (dynamic page routing) |
+| `patterns/SectionPattern` | Section composition pattern |
+| `blocks/MarketingBlocks` | Marketing content block re-exports |
+| `blocks/PublicBlocks` | Public page block re-exports |
+
+### Preview (`src/ds/preview/`)
+
+Component-library support (development UI only).
+
+| Module | Purpose |
+|--------|---------|
+| `PreviewPlatform` | `PreviewPlatformProvider` + `usePreviewPlatform()` context |
 
 ---
 
-## 12) Quick “do not mess up” checklist
+## 9. How To Build UI Using This DS
 
-Before merging any frontend work:
+### Step-by-step for any screen
 
-- [ ] UI imports come from `@/ds` only
-- [ ] No new hardcoded colors/sizes/shadows in feature code
-- [ ] Theme logic uses DS (`ThemeInitScript`, `ThemeSwitcher`, theme utilities)
-- [ ] DS CSS remains a single global import (not duplicated)
-- [ ] Any new DS component is exported in `src/ds/index.ts`
-- [ ] Any new styling is token-driven and added in DS CSS layers
+1. **Pick a shell:** `PublicShell` | `DashboardShell` | `DocsShell` | `CenteredShell`
+2. **Layout with primitives:** `Container` → `Stack` → `Grid` → `Section`
+3. **Add DS components:** forms, overlays, feedback, data display
+4. **Apply typography:** Use `text-*` classes or `Text` primitive
+5. **Set knobs at root if needed:** `data-density`, `data-visual`, `data-platform`
+6. **Only then** consider adding new DS capability (approved DS task required)
+
+### Consumption hierarchy (strict order)
+
+1. DS shells
+2. DS components
+3. DS primitives
+4. Semantic `ui-*` classes
+5. Tailwind **only** as narrow support glue that does not override DS authority
+
+### Adding a new component (approved DS task)
+
+1. Create implementation in the correct folder:
+   - Primitive → `src/ds/primitives/NewThing.tsx`
+   - Component → `src/ds/components/NewThing.tsx`
+   - Widget → `src/ds/widgets/NewThing.tsx`
+
+2. Style it with DS patterns:
+   - Add classes (e.g., `ui-newthing`) to the correct CSS layer file
+   - Use tokens via CSS variables — no hardcoded values
+   - Layout helper? → `ds.utilities.css`
+   - Component? → `ds.components.css`
+
+3. Export from `src/ds/index.ts`.
+
+4. If the component is interactive, add keyboard/a11y tests (see Testing section).
+
+5. Update external docs:
+   - New `ui-*` class? → Update `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+   - New token or knob? → Update this file
+   - Run `npm run ds:audit` to catch undefined tokens or missing registry entries
+
+6. Follow `src/ds/DS-COVERAGE-CHECKLIST.md` before merge.
+
+### Adding a new theme
+
+1. Add to `ThemeName` union and `THEMES` in `src/ds/foundation/themes/registry.ts`.
+2. Add token overrides in `ds.tokens.css` under `html.theme-<name>`.
+3. Add `color-scheme` mapping in `ds.theme.css`.
 
 ---
 
-## Appendix: Notes for AI assistants
+## 10. Testing Infrastructure
+
+### Test suites
+
+| Suite | File | Tests | Scope |
+|-------|------|-------|-------|
+| Shell snapshots | `layouts/__tests__/shells.snapshot.test.tsx` | Snapshot tests | All 4 shells |
+| Keyboard a11y | `components/__tests__/keyboard.a11y.test.tsx` | Modal, Drawer, DropdownMenu, Tabs, DataTable | Focus trap, arrow nav, Home/End, Escape |
+| Keyboard a11y extended | `components/__tests__/keyboard-extended.a11y.test.tsx` | Popover, ContextMenu, Autocomplete, MultiSelect | Focus restore, arrow nav, aria-activedescendant |
+| Data components | `components/__tests__/data-components.test.tsx` | DataGrid, ResourceTable | Search, pagination, CRUD |
+| Widgets | `widgets/__tests__/widgets.test.tsx` | WidgetShell, MetricWidget | Rendering, composition |
+| Sheet | `runtime/app/mobile/__tests__/Sheet.test.tsx` | Sheet | Focus trap, restore |
+
+All paths are relative to `src/ds/`.
+
+### Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm test` | Run all tests |
+| `npm run ds:a11y` | Run only DS accessibility tests (keyboard + Sheet suites) |
+| `npm run ds:audit` | Static audit: checks for undefined tokens, registry sync |
+| `npm run verify` | Full pipeline: typecheck → lint → test → build → ds:audit → ds:a11y |
+
+### When to add tests
+
+- New interactive component → add to `keyboard.a11y.test.tsx` or `keyboard-extended.a11y.test.tsx`
+- New data component → add to `data-components.test.tsx`
+- New widget → add to `widgets.test.tsx`
+- New shell → add to `shells.snapshot.test.tsx`
+- New runtime surface with focus behavior → add to relevant `__tests__/` folder
+- Snapshot tests alone are **not sufficient** for interactive DS components
+
+---
+
+## 11. Accessibility Patterns
+
+The DS enforces these accessibility patterns:
+
+| Pattern | Components | Behavior |
+|---------|-----------|----------|
+| Focus trapping | Modal, Drawer, Sheet | Tab cycles within overlay; focus restores on close |
+| Focus restore | Modal, Drawer, Popover, ContextMenu, DropdownMenu, Sheet | Focus returns to trigger element on Escape/close |
+| Roving tabindex | Tabs | Arrow keys move focus between tabs; Home/End jump to first/last |
+| Menu navigation | DropdownMenu, ContextMenu | Arrow Up/Down, Home/End, Escape to close with focus restore |
+| Combobox | Autocomplete | `aria-activedescendant`, Arrow Up/Down/Home/End, Enter to select |
+| Dialog labelling | Modal, Drawer | `aria-labelledby` (title), `aria-describedby` (description) |
+| Dialog labelling (light) | Popover | `aria-label` on dialog panel |
+| Group labelling | MultiSelect | `role="group"` + `aria-label` on checkbox list |
+| Skip link | All shells | `id="main"` on `<main>` element |
+
+---
+
+## 12. Limitations And Scope
+
+### What this DS supports well
+
+- Tokenized, themeable UI using CSS variables
+- Consistent spacing/typography via utilities and primitives
+- Multiple shells (public/dashboard/docs/centered) with responsive behavior
+- Curated icon surface
+- Keyboard/a11y-tested interactive components
+- Component-library pages that exercise the DS
+
+### Current limitations (do not fight these)
+
+- The DS is **class-first**, not Tailwind-first. Tailwind is support glue only.
+- `structures/`, `interactions/`, and parts of `runtime/web/` are re-export layers, not distinct implementations.
+- Tokens are primarily CSS-driven; TS helpers exist for safe code references but are secondary.
+- Adding new visuals requires editing DS CSS files. Do not patch around this in feature code.
+- The legacy `src/ds/themes/` and `src/ds/tokens/` folders exist for compatibility but `foundation/themes/` and `foundation/tokens/` are the real implementation paths.
+
+---
+
+## 13. Tailwind Policy
+
+Tailwind is available but subordinate to the DS.
+
+**Allowed:** narrow layout support or framework interop when the DS does not already provide an equivalent.
+
+**Forbidden:** replacing DS-managed colors, spacing, shadows, radii, typography, or theme behavior. No `bg-*`, `text-*`, `border-*`, `shadow-*`, `rounded-*`, `dark:*`, or arbitrary values when the DS already covers the need.
+
+---
+
+## 14. Related Documents
+
+| Document | Location | Purpose |
+|----------|----------|---------|
+| This file | `src/ds/DESIGN-SYSTEM-ANATOMY.md` | DS operating guide (authoritative) |
+| Coverage checklist | `src/ds/DS-COVERAGE-CHECKLIST.md` | Pre-merge checklist for DS changes |
+| Semantic class registry | `DOC/SEMANTIC-CLASSES-REGISTRY.md` | Stable `ui-*` class reference |
+| UI/DS rules | `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md` | Consumption rules for feature work |
+| Constitution | `DOC_UNIVERSAL/CORE/CONSTITUTION.md` | Top-level authority (DS is protected) |
+| Quality gates | `DOC_UNIVERSAL/CORE/QUALITY-GATES.md` | Verification requirements |
+| Engineering standards | `DOC_UNIVERSAL/CORE/ENGINEERING-STANDARDS.md` | Stack and coding standards |
+| App structure | `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md` | Route/layout conventions |
+
+### Read order for DS work
+
+1. This file (`DESIGN-SYSTEM-ANATOMY.md`)
+2. `DS-COVERAGE-CHECKLIST.md`
+3. `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+4. `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md`
+
+---
+
+## 15. Quick Reference For AI Agents
 
 When generating UI code in this repo:
 
-- Prefer using `DashboardShell`/`PublicShell`/`DocsShell` first.
-- Use `Stack`, `Grid`, `Container`, `Section` for structure.
-- Use DS typography classes (`text-*`) and DS components.
-- If you think “I need Tailwind utilities”, stop: this DS expects DS classes and DS tokens.
+1. **Import only from `@/ds`.**
+2. **Pick a shell first** — `DashboardShell`, `PublicShell`, `DocsShell`, `CenteredShell`.
+3. **Use `Stack`, `Grid`, `Container`, `Section`** for structure.
+4. **Use DS typography classes** (`text-heading-1..4`, `text-body`, `text-caption`, etc.).
+5. **Use DS components** for overlays, forms, feedback, data display.
+6. **Never hardcode** colors, spacing, shadows, radii, or typography values.
+7. **Never reach into DS internals** (`@/ds/primitives/...`, `@/ds/components/...`).
+8. **Never import `lucide-react` directly** — use curated icons from `@/ds`.
+9. **Run `npm run verify`** after any DS change.
+10. **Do not edit DS files** during feature work unless explicitly approved.
+
+### Common mistakes to avoid
+
+- Creating a new CSS file in a feature folder for UI primitives → **use DS classes instead**
+- Adding `dark:` Tailwind variants → **the DS theme system handles dark mode**
+- Using inline styles for spacing/color → **use DS tokens or components**
+- Importing from `@/ds/components/Modal` → **import from `@/ds`**
+- Creating duplicate navigation/shell structures → **use existing shells**
+- Skipping keyboard/focus behavior on overlays → **follow the a11y patterns in section 11**

@@ -46,6 +46,8 @@ export function Modal({
 }: ModalProps) {
   const panelRef = React.useRef<HTMLDivElement | null>(null);
   const lastActiveRef = React.useRef<HTMLElement | null>(null);
+  const titleId = React.useId();
+  const descriptionId = React.useId();
 
   React.useEffect(() => {
     if (!open) return;
@@ -124,13 +126,15 @@ export function Modal({
         className={cx("ui-modal__panel", className)}
         role="dialog"
         aria-modal="true"
-        aria-label={typeof title === "string" ? title : undefined}
+        aria-label={typeof title === "string" ? undefined : "Modal"}
+        aria-labelledby={title ? titleId : undefined}
+        aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
       >
         {(title || description) && (
           <header className="ui-modal__header">
-            {title ? <div className="text-heading-4">{title}</div> : null}
-            {description ? <div className="text-body-small ui-text-muted">{description}</div> : null}
+            {title ? <div className="text-heading-4" id={titleId}>{title}</div> : null}
+            {description ? <div className="text-body-small ui-text-muted" id={descriptionId}>{description}</div> : null}
           </header>
         )}
         <div className="ui-modal__body">{children}</div>

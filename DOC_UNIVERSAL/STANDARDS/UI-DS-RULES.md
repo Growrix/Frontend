@@ -105,9 +105,22 @@ When a DS change is approved:
 - update `DOC/SEMANTIC-CLASSES-REGISTRY.md` if `ui-*` classes are added or renamed
 - update task notes to explain the DS impact clearly
 
+## DS Verification Toolchain
+
+The DS has dedicated verification commands. Use them during DS work and feature work that touches UI.
+
+| Command | Purpose |
+|---------|--------|
+| `npm run ds:audit` | Static audit for undefined tokens and registry sync |
+| `npm run ds:a11y` | DS accessibility test suite (keyboard, focus trap, ARIA) |
+| `npm run verify` | Full pipeline: typecheck → lint → test → build → ds:audit → ds:a11y |
+
+For approved DS changes, follow `src/ds/DS-COVERAGE-CHECKLIST.md` before merge.
+
 ## Mandatory Read-Before For Frontend Tasks
 
-- `src/ds/DESIGN-SYSTEM-ANATOMY.md`
+- `src/ds/DESIGN-SYSTEM-ANATOMY.md` (authoritative DS guide)
+- `src/ds/DS-COVERAGE-CHECKLIST.md` (for DS changes)
 - `DOC/SEMANTIC-CLASSES-REGISTRY.md`
 - `STANDARDS/APP-STRUCTURE.md`
 - this file
@@ -119,6 +132,7 @@ When a DS change is approved:
 - No duplicate component patterns with minor cosmetic changes.
 - No unauthorized DS edits.
 - No inaccessible interactive elements.
+- Shared shells must preserve the global skip-link and main-landmark contract.
 
 ## Validation Questions
 

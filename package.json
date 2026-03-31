@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "blueprint",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,10 +10,11 @@
     "start": "next start",
     "lint": "eslint .",
     "ds:audit": "node scripts/ds-audit.mjs",
+    "ds:a11y": "jest --runInBand src/ds/components/__tests__/keyboard.a11y.test.tsx src/ds/components/__tests__/keyboard-extended.a11y.test.tsx src/ds/runtime/app/mobile/__tests__/Sheet.test.tsx",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci",
-    "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run ds:audit"
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run ds:audit && npm run ds:a11y"
   },
   "dependencies": {
     "lucide-react": "^0.563.0",
