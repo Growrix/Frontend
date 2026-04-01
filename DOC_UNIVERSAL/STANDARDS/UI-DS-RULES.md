@@ -10,11 +10,17 @@ Primary DS references:
 
 - `src/ds/index.ts`: single public UI API
 - `src/ds/DESIGN-SYSTEM-ANATOMY.md`: DS operating guide
+- `src/ds/SEMANTIC-CLASSES-REGISTRY.md`: DS-owned semantic class registry
+- `src/ds/DS-COVERAGE-CHECKLIST.md`: DS change checklist
 - `src/ds/styles/ds.tokens.css`: token and knob source of truth
 - `src/ds/styles/ds.utilities.css`: semantic layout and utility classes
 - `src/ds/styles/ds.components.css`: shared component classes
 - `src/app/globals.css`: DS global style wiring
-- `DOC/SEMANTIC-CLASSES-REGISTRY.md`: stable `ui-*` semantic class registry
+
+Location rule:
+
+- DS code and DS-owned operating docs stay under `src/ds/` because they must version together with the implementation.
+- `DOC/DS BUILDING/` is for DS handbook/reference material, not the live registry that tracks current classes 1:1.
 
 ## Default DS Policy
 
@@ -40,6 +46,24 @@ Use this order when building UI:
 5. use Tailwind only as narrow support glue when it does not override DS authority
 
 Pages are consumers. They are not the visual source of truth.
+
+## Second Layer: Creative Direction
+
+The DS prevents inconsistency. It does not automatically create a strong visual identity.
+
+For homepages, landing pages, marketing sites, visual redesigns, wireframes, or theme creation, load:
+
+- `DDS/README.md`
+- `DDS/OPERATING/DESIGN-DECISION-SYSTEM.md`
+- `DDS/OPERATING/AI-EXECUTION-FLOW.md`
+
+Use those files to decide the page type, intent, mode, preset, and composition strategy before composing DS blocks.
+
+Rule:
+
+- the DS defines what is safe and reusable
+- the creative layer defines what the project should feel like
+- do not expect the DS alone to solve bland or generic page composition
 
 ## Current UI Modes
 
@@ -102,7 +126,7 @@ When a DS change is approved:
 
 - edit the correct DS layer instead of patching feature code
 - update `src/ds/index.ts` if the public API changes
-- update `DOC/SEMANTIC-CLASSES-REGISTRY.md` if `ui-*` classes are added or renamed
+- update `src/ds/SEMANTIC-CLASSES-REGISTRY.md` if `ui-*` classes are added or renamed
 - update task notes to explain the DS impact clearly
 
 ## DS Verification Toolchain
@@ -121,7 +145,7 @@ For approved DS changes, follow `src/ds/DS-COVERAGE-CHECKLIST.md` before merge.
 
 - `src/ds/DESIGN-SYSTEM-ANATOMY.md` (authoritative DS guide)
 - `src/ds/DS-COVERAGE-CHECKLIST.md` (for DS changes)
-- `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+- `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 - `STANDARDS/APP-STRUCTURE.md`
 - this file
 

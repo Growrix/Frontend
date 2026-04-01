@@ -16,7 +16,7 @@ Define the DS-only implementation work required to make the current Blueprint DS
 - `src/ds/runtime/`
 - `src/ds/foundation/`
 - `src/ds/DESIGN-SYSTEM-ANATOMY.md`
-- `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+- `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 - DS tests under `src/ds/**/__tests__/`
 
 ### Forbidden During This Phase
@@ -44,7 +44,7 @@ Define the DS-only implementation work required to make the current Blueprint DS
 
 - [ ] `src/ds/index.ts` updated if public API changes
 - [ ] `src/ds/DESIGN-SYSTEM-ANATOMY.md` updated if architecture/catalog changes
-- [ ] `DOC/SEMANTIC-CLASSES-REGISTRY.md` updated for new `ui-*` classes
+- [ ] `src/ds/SEMANTIC-CLASSES-REGISTRY.md` updated for new `ui-*` classes
 - [ ] tests added or updated in the correct DS test suites
 
 ## 5. Non-Goals

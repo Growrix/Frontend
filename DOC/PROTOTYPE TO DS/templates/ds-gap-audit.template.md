@@ -10,7 +10,7 @@ Required references:
 
 - `src/ds/DESIGN-SYSTEM-ANATOMY.md`
 - `src/ds/DS-COVERAGE-CHECKLIST.md`
-- `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+- `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 - `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md`
 
 ## 2. Existing Coverage Map
@@ -46,7 +46,7 @@ Required references:
 ## 7. Documentation Sync Required
 
 - `src/ds/DESIGN-SYSTEM-ANATOMY.md`
-- `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+- `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 - `src/ds/index.ts`
 - relevant tests under `src/ds/**/__tests__/`
 

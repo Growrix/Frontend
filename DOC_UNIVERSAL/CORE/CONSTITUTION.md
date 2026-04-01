@@ -11,7 +11,7 @@ Non-negotiable rules for all AI and developer execution.
 ## Protected Design System
 
 - The existing Blueprint Design System is a protected system asset.
-- Protected DS areas include `src/ds/**`, `src/app/globals.css` DS import wiring, and `DOC/SEMANTIC-CLASSES-REGISTRY.md`.
+- Protected DS areas include `src/ds/**`, `src/app/globals.css` DS import wiring, and `src/ds/SEMANTIC-CLASSES-REGISTRY.md`.
 - Default policy is `consume-only`.
 - No AI or developer may edit DS internals, barrel exports, token layers, theme wiring, runtime presets, or semantic registry files unless the user explicitly approves a DS task.
 - If a screen need appears missing, first solve it by consuming the current DS correctly. If a real gap remains, create a separate approved DS change task instead of modifying the DS during feature work.

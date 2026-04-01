@@ -55,7 +55,7 @@ Read order:
 5. `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md`
 6. `src/ds/DESIGN-SYSTEM-ANATOMY.md`
 7. `src/ds/DS-COVERAGE-CHECKLIST.md`
-8. `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+8. `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 9. This folder's `tasks.md`
 10. Active templates in this folder as needed by the current phase
 

@@ -41,7 +41,7 @@
 
 ## Phase 2: DS Gap Audit And Planning ⚠️ MUST COMPLETE BEFORE ANY CODE
 
-- [ ] T005 Fill `templates/ds-gap-audit.template.md` — map all prototype patterns to DS coverage using `src/ds/DESIGN-SYSTEM-ANATOMY.md`, `src/ds/DS-COVERAGE-CHECKLIST.md`, and `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+- [ ] T005 Fill `templates/ds-gap-audit.template.md` — map all prototype patterns to DS coverage using `src/ds/DESIGN-SYSTEM-ANATOMY.md`, `src/ds/DS-COVERAGE-CHECKLIST.md`, and `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 - [ ] T006 [P] List missing token and utility gaps in `templates/ds-gap-audit.template.md`
 - [ ] T007 [P] List missing component and shell gaps in `templates/ds-gap-audit.template.md`
 - [ ] T008 Fill `templates/ds-build-spec.template.md` — convert gaps into explicit DS change items with acceptance criteria
@@ -65,7 +65,7 @@ DS policy is `approved-ds-change` for this phase. One task per change item from 
 - [ ] T106 Update `src/ds/index.ts` barrel exports for all new public API items
 - [ ] T107 [P] Add/update DS tests per ds-build-spec test expectations
 - [ ] T108 [P] Update `src/ds/DESIGN-SYSTEM-ANATOMY.md` for architecture/catalog changes
-- [ ] T109 [P] Update `DOC/SEMANTIC-CLASSES-REGISTRY.md` for new `ui-*` classes
+- [ ] T109 [P] Update `src/ds/SEMANTIC-CLASSES-REGISTRY.md` for new `ui-*` classes
 - [ ] T110 Run `npm run verify` — all gates must pass before proceeding to Phase 4
 
 **AI note**: T100–T109 are templates. During execution, expand them into concrete tasks based on the actual gap items in ds-build-spec. For example, if ds-build-spec lists 3 new tokens and 2 new components, create specific tasks for each. Mark tasks that touch different files with [P] for parallel execution.

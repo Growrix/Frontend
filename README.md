@@ -1,71 +1,53 @@
-# Design System Platform (DS)
+# Blueprint Starter Kit
 
-This repo is a **Design System Platform** for building web apps (including app-like web) with a strict, centralized design architecture.
+Next.js startup kit with a protected design system, an AI operating system, and reusable handbook/reference docs for building SaaS projects in a controlled way.
 
-## Core rules (non-negotiable)
-- **Design is centralized** in DS tokens/themes/styles.
-- **Pages are consumers**, not decision makers.
-- **No hardcoded values** for colors/spacing/typography in pages/features.
-- **Layout belongs to DS shells** (`PublicShell`, `DashboardShell`, etc.).
-- **Single DS import entry:** app code must import UI only from `@/ds`.
+## Start Here
 
-## Project structure (relevant)
-- `src/ds/` — the Design System Platform
-	- `foundation/` — tokens/themes/semantics/motion/a11y surfaces
-	- `primitives/` — Button/Text/Input/Stack/Grid/etc
-	- `components/` — Card/Modal/Tabs/etc
-	- `layouts/` — shells (layout ownership)
-	- `runtime/` — platform-aware surfaces (web + app-like + tablet presets)
-	- `styles/` — layered CSS (tokens/theme/base/utilities/components)
-- `src/app/` — Next.js routes only (compose DS; don’t invent design)
+Read `DOC_UNIVERSAL/README.md` first.
 
-## How to use DS in pages
-Always import from the single DS entry:
+That file defines:
+- the authority model
+- the AI read policy
+- what to load for frontend, creative frontend, backend, and domain-specific tasks
+- how `DOC_UNIVERSAL/`, `DOC/`, and `src/ds/` relate to each other
 
-```ts
-import { Button, Stack, DashboardShell, AppBar, ThemeSwitcher } from "@/ds";
-```
+## What This Repo Contains
 
-### Example: app-like page composition
-```tsx
-import { DashboardShell, AppBar, Section, Stack, Card, Button } from "@/ds";
+- `src/` — live Next.js app and the protected Blueprint Design System
+- `DOC_UNIVERSAL/` — operational system for AI and humans
+- `DOC_UNIVERSAL/DDS/` — Design Decision System for creative frontend work
+- `DOC/` — reference handbooks, build playbooks, migration packets, and feature documentation
+- `DOC_WORKING/` — local working area for prompts and in-progress notes
 
-export default function Example() {
-	return (
-		<DashboardShell
-			topbar={<AppBar title={<strong>Example</strong>} />}
-		>
-			<Section container="wide" size="lg">
-				<Stack>
-					<Card>
-						<Button variant="primary">Action</Button>
-					</Card>
-				</Stack>
-			</Section>
-		</DashboardShell>
-	);
-}
-```
+## Folder Roles
 
-## Tokens & themes
-- Token values are defined as **CSS variables** in `src/ds/styles/ds.tokens.css`.
-- Theme selection is CSS-variable based (no per-component light/dark branching).
-- Theme bootstrap runs via `ThemeInitScript` (already wired in `src/app/layout.tsx`).
+- `src/ds/` — implementation-owned DS code and DS-owned live docs
+- `DOC_UNIVERSAL/CORE/` — always-on rules and workflow
+- `DOC_UNIVERSAL/STANDARDS/` — engineering standards for UI, structure, backend, and SaaS foundations
+- `DOC_UNIVERSAL/DDS/` — creative direction, modes, presets, and wireframe decision system
+- `DOC/DS BUILDING/` — DS theory and handbook chapters
+- `DOC/SAAS HANDBOOK/` — domain reference chapters for billing, jobs, privacy, integrations, and related SaaS topics
 
-## Adding a DS component (safe workflow)
-1) Pick the correct layer:
-	 - `primitives/` for “UI alphabet”
-	 - `components/` for reusable composed blocks
-2) Add class-based styles under `src/ds/styles/` (no inline styles in DS).
-3) Export via `src/ds/index.ts`.
-4) Verify:
-	 - `npm run verify`
-	 - `npm run ds:audit`
+## Working Model
 
-## Scripts
-- `npm run dev` — run locally
-- `npm run verify` — lint + tests + production build
-- `npm run ds:audit` — detects hardcoded color usage patterns in DS CSS
+- The Design System is the implementation authority.
+- `DOC_UNIVERSAL` is the operating authority.
+- `DOC` is reference and planning space.
+- Tasks should load only the minimum relevant context, not the full tree.
+
+## Commands
+
+- `npm run dev` — start local development
+- `npm run verify` — run typecheck, lint, tests, build, DS audit, and DS a11y gates
+- `npm run ds:audit` — DS token and registry consistency checks
+
+## Notes
+
+- Keep `.github/` for repo automation and instructions.
+- Keep `DOC_WORKING/` as a local working space if it helps your workflow.
+- Do not treat the root README as the full rulebook. Use `DOC_UNIVERSAL/README.md` for that.
 
 ## Contributing
-See `CONTRIBUTING.md` for DS rules and the checklist.
+
+See `CONTRIBUTING.md` and `DOC_UNIVERSAL/README.md` before making changes.

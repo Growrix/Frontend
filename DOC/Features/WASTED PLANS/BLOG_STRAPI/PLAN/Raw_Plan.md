@@ -1,1 +1,0 @@
-I have decided not to build entire blog feature and re-invent the wheel where there are already open sources to use such as strapi and more . Now I have decided to use Strapi but I want all the Automation functionality that I have explained above. e.g AI generated RSS based research and create AI Blog Posts etc

@@ -16,6 +16,15 @@ For frontend tasks, also read:
 5. `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md` — DS authority, consumption hierarchy
 6. `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md` — route groups, shell selection, anti-patterns
 7. `src/ds/DESIGN-SYSTEM-ANATOMY.md` — full component catalog, token families
+8. `src/ds/SEMANTIC-CLASSES-REGISTRY.md` — available semantic classes
+
+For creative frontend tasks such as homepages, landing pages, marketing sites, visual redesigns, theme creation, or wireframes, also read:
+
+9. `DOC_UNIVERSAL/DDS/README.md` — Design Decision System entry point
+10. `DOC_UNIVERSAL/DDS/OPERATING/DESIGN-DECISION-SYSTEM.md` — four-layer creative model
+11. `DOC_UNIVERSAL/DDS/OPERATING/AI-EXECUTION-FLOW.md` — step-by-step creative workflow
+
+Then load based on task: page taxonomy, mode selection, creative direction, wireframe standards, or theme preset system from `DDS/OPERATING/`. Load the specific mode from `DDS/MODES/` and preset from `DDS/PRESETS/` only after the design decision is made.
 
 For backend tasks, also read:
 

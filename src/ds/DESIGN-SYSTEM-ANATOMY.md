@@ -269,7 +269,7 @@ Defined in `src/ds/foundation/semantics/registry.ts` and implemented in `ds.util
 
 Additional modifiers: `ui-stack--tight`, `ui-stack--compact`, `ui-row--between`, `ui-row--center`, `ui-section`, `ui-section--sm`, `ui-section--lg`, `ui-sticky-top`.
 
-**External registry:** `DOC/SEMANTIC-CLASSES-REGISTRY.md` — must be updated when any `ui-*` class is added or renamed.
+**Semantic class registry:** `src/ds/SEMANTIC-CLASSES-REGISTRY.md` — DS-owned live inventory of stable `ui-*` classes. Update it whenever any `ui-*` class is added or renamed.
 
 ---
 
@@ -570,7 +570,7 @@ The following handbook items are **not implemented** by design:
 4. If the component is interactive, add keyboard/a11y tests (see Testing section).
 
 5. Update external docs:
-   - New `ui-*` class? → Update `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+   - New `ui-*` class? → Update `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
    - New token or knob? → Update this file
    - Run `npm run ds:audit` to catch undefined tokens or missing registry entries
 
@@ -680,18 +680,23 @@ Tailwind is available but subordinate to the DS.
 |----------|----------|---------|
 | This file | `src/ds/DESIGN-SYSTEM-ANATOMY.md` | DS operating guide (authoritative) |
 | Coverage checklist | `src/ds/DS-COVERAGE-CHECKLIST.md` | Pre-merge checklist for DS changes |
-| Semantic class registry | `DOC/SEMANTIC-CLASSES-REGISTRY.md` | Stable `ui-*` class reference |
+| Semantic class registry | `src/ds/SEMANTIC-CLASSES-REGISTRY.md` | Stable `ui-*` class reference |
 | UI/DS rules | `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md` | Consumption rules for feature work |
 | Constitution | `DOC_UNIVERSAL/CORE/CONSTITUTION.md` | Top-level authority (DS is protected) |
 | Quality gates | `DOC_UNIVERSAL/CORE/QUALITY-GATES.md` | Verification requirements |
 | Engineering standards | `DOC_UNIVERSAL/CORE/ENGINEERING-STANDARDS.md` | Stack and coding standards |
 | App structure | `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md` | Route/layout conventions |
 
+Location policy:
+
+- Files in `src/ds/` are the live DS system and the DS-owned docs that must stay in sync with it.
+- Files in `DOC/DS BUILDING/` are handbook/reference material used to explain or extend the DS.
+
 ### Read order for DS work
 
 1. This file (`DESIGN-SYSTEM-ANATOMY.md`)
 2. `DS-COVERAGE-CHECKLIST.md`
-3. `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+3. `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 4. `DOC_UNIVERSAL/STANDARDS/UI-DS-RULES.md`
 
 ---

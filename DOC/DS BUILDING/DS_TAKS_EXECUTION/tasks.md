@@ -76,7 +76,7 @@
 6. **Delete before adding**. Remove the old implementation of a section, then write the new one.
 7. **Verify after every task**. Run `npm run verify` after each task. Fix before proceeding.
 8. **Update DESIGN-SYSTEM-ANATOMY.md** whenever the public API surface changes.
-9. **Update DOC/SEMANTIC-CLASSES-REGISTRY.md** whenever `ui-*` or `text-*` classes change.
+9. **Update src/ds/SEMANTIC-CLASSES-REGISTRY.md** whenever `ui-*` or `text-*` classes change.
 10. **No improvisation**. If the handbook doesn't specify it, don't add it. The handbook is the scope boundary.
 11. **Run `npm run ds:audit` after token/class changes** to verify registry sync.
 12. **Run `npm run ds:a11y` after component changes** to verify a11y compliance.
@@ -579,10 +579,10 @@ type ComponentProps = React.HTML*Attributes<Element> & {
 
 ## Phase 4: Semantic Class Registry + Foundation TS
 
-**Read:** `DOC/SEMANTIC-CLASSES-REGISTRY.md`, `src/ds/foundation/semantics/registry.ts`
+**Read:** `src/ds/SEMANTIC-CLASSES-REGISTRY.md`, `src/ds/foundation/semantics/registry.ts`
 
 - [ ] T046 Rewrite `src/ds/foundation/semantics/registry.ts` — add typed entries for every `ui-*`, `text-*`, and `.sr-only` class created in Phase 3. Remove any entries for deleted classes.
-- [ ] T047 Rewrite `DOC/SEMANTIC-CLASSES-REGISTRY.md` — full registry of every utility class with purpose, layer, and example usage.
+- [ ] T047 Rewrite `src/ds/SEMANTIC-CLASSES-REGISTRY.md` — full registry of every utility class with purpose, layer, and example usage.
 - [ ] T048 Update `src/ds/foundation/motion/tokens.ts` — export all new motion tokens (8 durations, 10 easings) as typed TS constants matching `src/ds/styles/ds.tokens.css`.
 - [ ] T049 Update `src/ds/foundation/a11y/` — ensure `VisuallyHidden` component, `usePrefersReducedMotion` hook, and `FOCUS_RING_CLASSNAME` are aligned with new utility names from Phase 3.
 - [ ] T050 Verify `npm run verify` passes after Phase 4
@@ -977,7 +977,7 @@ All primitives must follow Ch 19 API patterns:
   - Updated reading rules for AI
   - Updated folder structure map
 
-- [ ] T157 Rewrite `DOC/SEMANTIC-CLASSES-REGISTRY.md` — complete registry of every utility class:
+- [ ] T157 Rewrite `src/ds/SEMANTIC-CLASSES-REGISTRY.md` — complete registry of every utility class:
   - Organized by category (typography, color, layout, motion, elevation, border, responsive, state)
   - Each entry: class name, CSS layer, purpose, example usage
   - Cross-referenced to handbook chapter/section
@@ -1018,7 +1018,7 @@ All primitives must follow Ch 19 API patterns:
 
 ### Phase 15 Validation (FINAL GATE)
 - [ ] `DESIGN-SYSTEM-ANATOMY.md` matches actual DS 1:1
-- [ ] `SEMANTIC-CLASSES-REGISTRY.md` matches actual CSS 1:1
+- [ ] `src/ds/SEMANTIC-CLASSES-REGISTRY.md` matches actual CSS 1:1
 - [ ] All primitives have unit tests (render + variant + ref + className + ARIA)
 - [ ] All high-priority components have unit tests
 - [ ] All interactive components have keyboard tests

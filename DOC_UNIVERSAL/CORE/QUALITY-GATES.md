@@ -33,7 +33,7 @@ Starter projects should also define one stable verification command, ideally `np
 - app or feature UI imports use `@/ds`
 - no direct imports from DS internals
 - no unauthorized edits under `src/ds/**`
-- no unauthorized edits to `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+- no unauthorized edits to `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
 - no unauthorized changes to DS global wiring in `src/app/globals.css`
 - page shell choice is explicit and consistent with the route type
 - root knobs such as `data-platform`, `data-density`, and `data-visual` are applied intentionally, not scattered across leaf nodes

@@ -1,0 +1,124 @@
+# Design Decision System — Core Architecture
+
+The four-layer model that drives every creative frontend decision.
+
+## The Four Layers
+
+Every page design flows through four layers in order. Skipping a layer produces generic output.
+
+```
+Layer 1: Page Type    → What kind of page is this?
+Layer 2: Intent       → What is this page trying to achieve?
+Layer 3: Mode         → What composition behavior fits this intent?
+Layer 4: Preset       → What aesthetic personality should the page carry?
+```
+
+### Layer 1 — Page Type Classification
+
+Before choosing any visual treatment, classify the page.
+
+See `PAGE-TYPE-TAXONOMY.md` for the full taxonomy.
+
+The page type determines the default composition constraints:
+
+- how many sections are expected
+- how dense the content should be
+- how prominent the hero should be
+- what proof patterns are appropriate
+- what CTA density is normal
+
+### Layer 2 — Intent Model
+
+Within the page type, define the page intent:
+
+| Intent | Description | Example |
+|--------|-------------|---------|
+| Acquire | Get new users to sign up | Homepage hero with CTA |
+| Educate | Teach the reader something | Feature deep dive |
+| Prove | Build trust and credibility | Case study, testimonials |
+| Convert | Push toward a specific action | Pricing page, trial start |
+| Navigate | Help users find what they need | Blog index, docs hub |
+| Retain | Keep existing users engaged | Dashboard overview |
+
+A page may have a primary intent and one secondary intent. It should never try to serve more than two.
+
+### Layer 3 — Design Mode
+
+The design mode controls composition behavior — how sections are laid out, how much visual tension exists, and how the rhythm flows.
+
+See `MODE-SELECTION.md` for the selection algorithm and `MODES/` for individual mode definitions.
+
+Available modes:
+
+| Mode | Best For |
+|------|----------|
+| Clean SaaS | Dashboard, settings, admin, utility pages |
+| Bold Marketing | Homepage, launch pages, high-conversion landing |
+| Editorial Narrative | Blog, case study, about page, story-led content |
+| Dense Data | Analytics, reports, comparison tables, pricing |
+| Mobile Native | App-like experiences, mobile-first flows |
+
+### Layer 4 — Preset Family
+
+The preset family controls the aesthetic personality — the feel, warmth, sharpness, and visual character.
+
+See `PRESETS/` for individual preset definitions.
+
+Available presets:
+
+| Preset | Character |
+|--------|-----------|
+| Neutral Professional | Clean, safe, corporate-friendly |
+| Editorial Premium | Spacious, typographic, magazine-inspired |
+| Warm Human | Soft, approachable, rounded, friendly |
+| Technical Sharp | Precise, high-contrast, developer-oriented |
+| High-Energy Launch | Bold, vibrant, high-contrast, startup-launch |
+
+## Mode vs Preset
+
+This is the most important distinction in the DDS.
+
+**Mode** = how the page is composed (structure, rhythm, density, tension)
+**Preset** = how the page feels (color character, typography weight, shape language, surface treatment)
+
+They are independent axes:
+
+- Bold Marketing + Editorial Premium = dramatic launch page with magazine feel
+- Clean SaaS + Technical Sharp = utility dashboard with developer precision
+- Editorial Narrative + Warm Human = friendly longform storytelling
+
+Any mode can pair with any preset. The combination creates the page personality.
+
+## Decision Flow
+
+```
+1. Classify the page type
+2. Define the page intent (primary + optional secondary)
+3. Select the design mode based on intent and type
+4. Select the preset family based on brand direction
+5. Load the mode file + preset file
+6. Compose using mode composition rules + preset aesthetic rules
+7. Run the anti-generic review
+```
+
+## Defaults And Overrides
+
+If no creative brief exists:
+
+- Page type: infer from route group
+- Intent: infer from page name
+- Mode: `Clean SaaS`
+- Preset: `Neutral Professional`
+
+These defaults produce safe but generic output. For any user-facing marketing or public page, the brief should explicitly choose a mode and preset.
+
+## Relationship To Other Systems
+
+| System | Role |
+|--------|------|
+| DS (`src/ds/`) | Provides the building blocks |
+| DDS (`DOC_UNIVERSAL/DDS/`) | Tells AI which blocks to use and how |
+| App Structure (`STANDARDS/APP-STRUCTURE.md`) | Defines route groups and shell selection |
+| Engineering Standards (`CORE/ENGINEERING-STANDARDS.md`) | Code quality and architecture rules |
+
+The DDS does not override any of these. It adds a creative decision layer on top.

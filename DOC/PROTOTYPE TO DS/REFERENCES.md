@@ -27,7 +27,7 @@ In-repo files used during prototype -> DS -> Next.js migration. Organized by whe
 | `DOC_UNIVERSAL/STANDARDS/APP-STRUCTURE.md` | Route groups, shell ownership, route map, `_components/` boundaries |
 | `src/ds/DESIGN-SYSTEM-ANATOMY.md` | Full DS architecture, export surface, tokens, shells, component catalog |
 | `src/ds/DS-COVERAGE-CHECKLIST.md` | Required DS tests, docs, and merge-gate sync for DS changes |
-| `DOC/SEMANTIC-CLASSES-REGISTRY.md` | Approved semantic class inventory and `ui-*` usage rules |
+| `src/ds/SEMANTIC-CLASSES-REGISTRY.md` | Approved semantic class inventory and `ui-*` usage rules |
 
 ## Implementation References (read as needed during coding)
 

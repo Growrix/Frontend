@@ -22,7 +22,7 @@ Use this checklist before merging any Design System change — new component, sh
   - Layout/typography utility → `src/ds/styles/ds.utilities.css`
   - Component implementation → `src/ds/styles/ds.components.css`
   - New token → `src/ds/styles/ds.tokens.css`
-- [ ] New `ui-*` class registered in `DOC/SEMANTIC-CLASSES-REGISTRY.md`.
+- [ ] New `ui-*` class registered in `src/ds/SEMANTIC-CLASSES-REGISTRY.md`.
 - [ ] New token family or knob behavior documented in `src/ds/DESIGN-SYSTEM-ANATOMY.md`.
 
 ## 3. Accessibility
@@ -68,5 +68,5 @@ npm run verify           # All of the above in sequence
 ## 6. Documentation Sync
 
 - [ ] `src/ds/DESIGN-SYSTEM-ANATOMY.md` updated if the change affects architecture, tokens, knobs, or component catalog.
-- [ ] `DOC/SEMANTIC-CLASSES-REGISTRY.md` updated if any `ui-*` class is added or renamed.
+- [ ] `src/ds/SEMANTIC-CLASSES-REGISTRY.md` updated if any `ui-*` class is added or renamed.
 - [ ] If the change affects reusable migration guidance or DS consumption examples, update `DOC/PROTOTYPE TO DS/` and any live DS showcase references.

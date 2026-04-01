@@ -65,7 +65,14 @@ For frontend tasks, add:
 8. `STANDARDS/UI-DS-RULES.md`
 9. `STANDARDS/APP-STRUCTURE.md`
 10. `src/ds/DESIGN-SYSTEM-ANATOMY.md`
-11. `DOC/SEMANTIC-CLASSES-REGISTRY.md`
+11. `src/ds/SEMANTIC-CLASSES-REGISTRY.md`
+
+For creative frontend tasks such as homepage design, landing pages, marketing composition, visual redesign, wireframes, or theme work, also add:
+
+12. `DDS/README.md`
+13. `DDS/OPERATING/DESIGN-DECISION-SYSTEM.md`
+14. `DDS/OPERATING/AI-EXECUTION-FLOW.md`
+15. the specific mode from `DDS/MODES/` and preset from `DDS/PRESETS/` after the design decision is made
 
 For backend, auth, billing, data, or operations tasks, add:
 
