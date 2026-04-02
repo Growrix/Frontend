@@ -5,12 +5,19 @@ How to choose the right design mode for a page.
 ## Selection Algorithm
 
 ```
-1. What is the page type?
-2. What is the primary intent?
-3. What is the content density?
-4. What is the audience expectation?
+1. If this is a full website or reusable template, what is the site archetype?
+2. What is the page type?
+3. What is the primary intent?
+4. What is the content density?
+5. What is the audience expectation?
 → Select the mode that best matches all four.
 ```
+
+Archetype acts as a tie-breaker when multiple modes could fit the same page type.
+
+- `Local Service Lead Gen` usually favors `Bold Marketing` over `Mobile Native` for public pages.
+- `Enterprise Trust` often favors `Clean SaaS` or restrained `Bold Marketing`.
+- `Editorial Brand` usually favors `Editorial Narrative`.
 
 ## Quick Selection Matrix
 
@@ -35,6 +42,7 @@ How to choose the right design mode for a page.
 
 The matrix is a starting point. Override when:
 
+- The chosen site archetype strongly points in a different direction
 - The creative brief explicitly requests a different mode
 - The brand personality clashes with the default mode
 - The page serves an unusual intent combination

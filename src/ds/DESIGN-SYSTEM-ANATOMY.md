@@ -55,8 +55,7 @@ src/ds/
 │   ├── a11y/             ← VisuallyHidden, usePrefersReducedMotion
 │   └── motion/           ← motion duration/easing tokens
 │
-├── themes/               ← legacy alias (same content as foundation/themes)
-├── tokens/               ← legacy placeholder (README only — not the SOT)
+├── tokens/               ← legacy placeholder (README only — not the SOT; canonical tokens live in foundation/tokens)
 │
 ├── patterns/             ← app state patterns (AsyncBoundary, ErrorBlock, + re-exports)
 ├── widgets/              ← dashboard building blocks (WidgetShell, MetricWidget, StatWidget, …)
@@ -173,9 +172,16 @@ import { Home } from "lucide-react";                  // ← raw icon library
 | `palette` | `neutral0–950`, `brand50–950`, `success600`, … | `--ds-palette-*` |
 | `fontFamily` | `sans`, `display`, `mono` | `--ds-font-*` |
 | `fontSize` | `1–7` | `--ds-font-size-*` |
-| `fontWeight` | `regular`, `book`, `medium`, `demibold`, `semibold`, `bold` | `--ds-font-weight-*` |
-| `lineHeight` | `tight`, `section`, `meta`, `normal`, `relaxed` | `--ds-line-height-*` |
-| `letterSpacing` | `tight`, `loose` | `--ds-letter-spacing-*` |
+| `fontWeight` | `regular`, `book`, `medium`, `semibold`, `bold` | `--ds-font-weight-*` |
+| `lineHeight` | `tight`, `snug`, `normal`, `relaxed`, `loose` | `--ds-line-height-*` |
+| `letterSpacing` | `tight`, `normal`, `wide`, `wider` | `--ds-letter-spacing-*` |
+
+### Foreground naming convention
+
+> **`--ds-color-foreground`** = default body text (intentionally subdued).
+> **`--ds-color-foreground-secondary`** = emphasis / heading text (higher contrast).
+>
+> This is by design — "secondary" here means *secondary in the hierarchy* (more prominent), not *less important*. Do not swap these tokens; components and semantic classes already apply them correctly.
 
 ### Using tokens in code
 

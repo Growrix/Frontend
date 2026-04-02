@@ -1,0 +1,9 @@
+/* ==========================================================================
+   ds.overrides — Highest-Priority Override Layer (Handbook Ch 17 §2.2)
+   Layer: ds.overrides (highest priority)
+   Use sparingly for edge-case overrides that must win over all other DS layers.
+   ========================================================================== */
+
+@layer ds.overrides {
+  /* Reserved for overrides. Do not add rules here unless absolutely necessary. */
+}

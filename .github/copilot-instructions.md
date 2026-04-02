@@ -21,8 +21,12 @@ For frontend tasks, also read:
 For creative frontend tasks such as homepages, landing pages, marketing sites, visual redesigns, theme creation, or wireframes, also read:
 
 9. `DOC_UNIVERSAL/DDS/README.md` — Design Decision System entry point
-10. `DOC_UNIVERSAL/DDS/OPERATING/DESIGN-DECISION-SYSTEM.md` — four-layer creative model
+10. `DOC_UNIVERSAL/DDS/OPERATING/DESIGN-DECISION-SYSTEM.md` — site/page creative decision model
 11. `DOC_UNIVERSAL/DDS/OPERATING/AI-EXECUTION-FLOW.md` — step-by-step creative workflow
+
+For full public websites, reusable templates, or market-specific theme families, also read:
+
+12. the selected file from `DOC_UNIVERSAL/DDS/ARCHETYPES/` — site-level website strategy
 
 Then load based on task: page taxonomy, mode selection, creative direction, wireframe standards, or theme preset system from `DDS/OPERATING/`. Load the specific mode from `DDS/MODES/` and preset from `DDS/PRESETS/` only after the design decision is made.
 

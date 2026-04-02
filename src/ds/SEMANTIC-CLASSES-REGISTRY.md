@@ -12,6 +12,7 @@ Quick reference for the **token-driven** `ui-*`, `text-*`, and helper classes us
   - `src/ds/styles/ds.layouts.css` (shell layout utilities)
   - `src/ds/styles/ds.components.css` (component classes)
   - `src/ds/styles/ds.patterns.css` (multi-component patterns)
+  - `src/ds/styles/ds.overrides.css` (highest-priority override escape hatch)
 - TS registry: `src/ds/foundation/semantics/registry.ts`
 - Entry wiring: `src/app/globals.css` imports `src/ds/styles/index.css`
 
@@ -33,6 +34,7 @@ Quick reference for the **token-driven** `ui-*`, `text-*`, and helper classes us
 | `.ui-page--dashboard` | Edge-to-edge dashboard variant |
 | `.ui-band` | Full-width band |
 | `.ui-band--surface` | Band with surface background + border |
+| `.ui-theme-scope` | Paints a scoped theme wrapper with its own background + text color |
 | `.ui-sticky-top` | Sticky header positioning |
 | `.ui-container` | Width-constrained centered container |
 | `.ui-container--narrow` / `--wide` / `--xl` / `--full` | Container width variants |

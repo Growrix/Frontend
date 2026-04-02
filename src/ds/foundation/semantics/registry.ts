@@ -5,6 +5,7 @@ export const SEMANTIC_CLASSES = {
   pageDashboard: "ui-page--dashboard",
   band: "ui-band",
   bandSurface: "ui-band--surface",
+  themeScope: "ui-theme-scope",
   stickyTop: "ui-sticky-top",
   container: "ui-container",
   containerNarrow: "ui-container--narrow",

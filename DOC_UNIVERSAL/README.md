@@ -51,6 +51,7 @@ For creative frontend work such as homepages, landing pages, marketing sites, vi
 - `DDS/README.md`
 - `DDS/OPERATING/DESIGN-DECISION-SYSTEM.md`
 - `DDS/OPERATING/AI-EXECUTION-FLOW.md`
+- for full public websites, reusable templates, or market-specific theme families, also load the specific archetype from `DDS/ARCHETYPES/`
 - only the specific mode from `DDS/MODES/` and preset from `DDS/PRESETS/` after the design decision is made
 - only the smallest relevant template from `DDS/TEMPLATES/` for visual direction, wireframes, or theme presets
 
@@ -81,6 +82,7 @@ For DS theory or component design rationale:
 - `CORE/`: always-on operating rules
 - `STANDARDS/`: stable implementation rules for structure, UI/DS, and API/backend
 - `DDS/`: Design Decision System — creative direction, modes, presets, composition rules
+- `DDS/ARCHETYPES/`: reusable site-level website strategies (local service lead gen, B2B SaaS marketing, etc.)
 - `DDS/OPERATING/`: authoritative DDS rules AI must follow for creative work
 - `DDS/MODES/`: design mode definitions (Clean SaaS, Bold Marketing, etc.)
 - `DDS/PRESETS/`: visual preset families (Neutral Professional, Editorial Premium, etc.)

@@ -115,17 +115,17 @@
     --ds-palette-neutral-950: #0b0b0c;
 
     /* Brand */
-    --ds-palette-brand-50: #f4f0ff;
-    --ds-palette-brand-100: #e7dcff;
-    --ds-palette-brand-200: #cebaff;
-    --ds-palette-brand-300: #b18cff;
-    --ds-palette-brand-400: #9156ff;
-    --ds-palette-brand-500: #7b42f2;
-    --ds-palette-brand-600: #6d3be2;
-    --ds-palette-brand-700: #5c2fc6;
-    --ds-palette-brand-800: #452291;
-    --ds-palette-brand-900: #2e1660;
-    --ds-palette-brand-950: #230f4f;
+    --ds-palette-brand-50: #f2f7ff;
+    --ds-palette-brand-100: #e4efff;
+    --ds-palette-brand-200: #c9ddff;
+    --ds-palette-brand-300: #a6c5ff;
+    --ds-palette-brand-400: #76a4ff;
+    --ds-palette-brand-500: #4380ef;
+    --ds-palette-brand-600: #215fc9;
+    --ds-palette-brand-700: #1f4fa6;
+    --ds-palette-brand-800: #1d4084;
+    --ds-palette-brand-900: #1a356b;
+    --ds-palette-brand-950: #122248;
 
     /* Status ramps (Ch 02 §2) — minimum 3 stops for hover/active */
     --ds-palette-success-500: #22c55e;
@@ -149,7 +149,7 @@
     /* Background / Surface */
     --ds-color-background: var(--ds-palette-neutral-900);
     --ds-color-surface: var(--ds-palette-neutral-850);
-    --ds-color-surface-raised: color-mix(in oklab, var(--ds-color-surface) 70%, var(--ds-color-background));
+    --ds-color-surface-raised: var(--ds-palette-neutral-800);
     --ds-color-surface-sunken: var(--ds-palette-neutral-950);
     --ds-color-surface-overlay: var(--ds-palette-neutral-800);
     --ds-color-surface-interactive: var(--ds-palette-neutral-800);
@@ -173,7 +173,7 @@
     --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, white);
     --ds-color-accent-active: color-mix(in oklab, var(--ds-color-accent) 78%, black);
     --ds-color-accent-muted: color-mix(in oklab, var(--ds-color-accent) 20%, var(--ds-color-background));
-    --ds-color-accent-foreground: var(--ds-palette-brand-950);
+    --ds-color-accent-foreground: var(--ds-palette-neutral-0);
 
     /* Status (Ch 02 §8) */
     --ds-color-success: var(--ds-palette-success-600);
@@ -193,11 +193,15 @@
     --ds-color-info-text: var(--ds-palette-info-500);
 
     /* RGB helpers (space-separated for alpha variations) */
-    --ds-color-accent-rgb: 109 59 226;
+    --ds-color-accent-rgb: 33 95 201;
     --ds-color-success-rgb: 22 163 74;
     --ds-color-warning-rgb: 245 158 11;
     --ds-color-danger-rgb: 220 38 38;
     --ds-color-info-rgb: 37 99 235;
+
+    /* Gradient endpoints (semantic — never use palette primitives in component CSS) */
+    --ds-color-gradient-start: var(--ds-color-accent);
+    --ds-color-gradient-end: color-mix(in oklab, var(--ds-color-accent) 55%, white);
 
     /* Effects */
     --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.45);
@@ -240,8 +244,8 @@
     --ds-space-card-padding: var(--ds-space-6);
     --ds-space-modal-padding: var(--ds-space-6);
     --ds-space-form-gap: var(--ds-space-4);
-    --ds-space-section-padding: var(--ds-space-8);
-    --ds-space-section-margin: var(--ds-space-12);
+    --ds-space-section-padding: var(--ds-space-12);
+    --ds-space-section-margin: var(--ds-space-14);
     --ds-space-heading-margin: var(--ds-space-4);
     --ds-space-button-pad-x: var(--ds-space-4);
     --ds-space-button-pad-y: var(--ds-space-2);
@@ -353,6 +357,9 @@
     --ds-blur-xl: 24px;
     --ds-blur-2xl: 40px;
 
+    /* Semantic surface blur — defaults to none, overridden by visual knobs */
+    --ds-blur-surface: 0px;
+
     /* ── Z-Index (Ch 14 §2) ── */
 
     --ds-z-base: 0;
@@ -435,19 +442,20 @@
      Neutral palette is NOT overridden because the scale is identical across themes;
      only the semantic mappings change. */
 
-  html.theme-light {
+  html.theme-light,
+  [data-theme="light"] {
     /* Surface / Background — light endpoints of neutral scale */
-    --ds-color-background: var(--ds-palette-neutral-0);
+    --ds-color-background: var(--ds-palette-neutral-50);
     --ds-color-surface: var(--ds-palette-neutral-0);
-    --ds-color-surface-raised: var(--ds-palette-neutral-50);
+    --ds-color-surface-raised: color-mix(in oklab, var(--ds-color-surface) 60%, var(--ds-color-background));
     --ds-color-surface-sunken: var(--ds-palette-neutral-100);
     --ds-color-surface-overlay: var(--ds-palette-neutral-0);
-    --ds-color-surface-interactive: var(--ds-palette-neutral-100);
+    --ds-color-surface-interactive: var(--ds-palette-neutral-50);
 
     /* Foreground — dark text on light backgrounds */
     --ds-color-foreground: var(--ds-palette-neutral-700);
-    --ds-color-foreground-secondary: var(--ds-palette-neutral-850);
-    --ds-color-foreground-muted: var(--ds-palette-neutral-400);
+    --ds-color-foreground-secondary: var(--ds-palette-neutral-950);
+    --ds-color-foreground-muted: var(--ds-palette-neutral-500);
     --ds-color-foreground-inverse: var(--ds-palette-neutral-0);
 
     /* Border — lighter neutral stops */
@@ -467,15 +475,65 @@
     --ds-color-info-text: var(--ds-palette-info-700);
 
     /* Effects — softer on light */
-    --ds-color-overlay: rgb(0 0 0 / 0.35);
-    --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.35);
+    --ds-color-overlay: rgb(10 15 28 / 0.24);
+    --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.24);
+
+    /* Shadows — lighter for light backgrounds */
+    --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+    --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --ds-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+    --ds-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(0, 0, 0, 0.03);
+    --ds-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.06), 0 10px 10px rgba(0, 0, 0, 0.02);
+    --ds-shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.12);
+  }
+
+  /* ── Theme: Dark (scoped) ──
+     Mirrors :root dark defaults so [data-theme="dark"] can re-establish dark
+     context inside a light-themed ancestor. Required for nested theme scoping. */
+
+  [data-theme="dark"] {
+    --ds-color-background: var(--ds-palette-neutral-900);
+    --ds-color-surface: var(--ds-palette-neutral-850);
+    --ds-color-surface-raised: var(--ds-palette-neutral-800);
+    --ds-color-surface-sunken: var(--ds-palette-neutral-950);
+    --ds-color-surface-overlay: var(--ds-palette-neutral-800);
+    --ds-color-surface-interactive: var(--ds-palette-neutral-800);
+
+    --ds-color-foreground: var(--ds-palette-neutral-400);
+    --ds-color-foreground-secondary: var(--ds-palette-neutral-50);
+    --ds-color-foreground-muted: color-mix(in oklab, var(--ds-palette-neutral-400) 78%, var(--ds-palette-neutral-900));
+    --ds-color-foreground-inverse: var(--ds-palette-neutral-900);
+
+    --ds-color-border: var(--ds-palette-neutral-800);
+    --ds-color-border-strong: var(--ds-palette-neutral-600);
+    --ds-color-border-muted: var(--ds-palette-neutral-850);
+
+    --ds-color-accent-hover: color-mix(in oklab, var(--ds-color-accent) 86%, white);
+    --ds-color-accent-active: color-mix(in oklab, var(--ds-color-accent) 78%, black);
+    --ds-color-accent-foreground: var(--ds-palette-neutral-0);
+
+    --ds-color-success-text: var(--ds-palette-success-500);
+    --ds-color-warning-text: var(--ds-palette-warning-500);
+    --ds-color-danger-text: var(--ds-palette-danger-500);
+    --ds-color-info-text: var(--ds-palette-info-500);
+
+    --ds-color-overlay: rgb(0 0 0 / 0.55);
+    --ds-color-focus-ring: rgb(var(--ds-color-accent-rgb) / 0.45);
+
+    --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --ds-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --ds-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --ds-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+    --ds-shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
   }
 
   /* ── Theme: Purple ──
      Overrides brand palette + accent chain. All other semantic tokens
      auto-resolve through their var() references. */
 
-  html.theme-purple {
+  html.theme-purple,
+  [data-theme="purple"] {
     --ds-palette-brand-50: #faf5ff;
     --ds-palette-brand-100: #f3e8ff;
     --ds-palette-brand-200: #e9d5ff;
@@ -501,8 +559,10 @@
     --ds-space-card-padding: var(--ds-space-3);
     --ds-space-modal-padding: var(--ds-space-4);
     --ds-space-form-gap: var(--ds-space-2);
+    --ds-space-section-padding: var(--ds-space-8);
     --ds-space-section-margin: var(--ds-space-8);
     --ds-space-nav-padding: var(--ds-space-2);
+    --ds-space-stack-gap: var(--ds-space-5);
   }
 
   :where(html[data-density="spacious"], [data-density="spacious"]) {
@@ -512,8 +572,10 @@
     --ds-space-card-padding: var(--ds-space-8);
     --ds-space-modal-padding: var(--ds-space-8);
     --ds-space-form-gap: var(--ds-space-5);
+    --ds-space-section-padding: var(--ds-space-16);
     --ds-space-section-margin: var(--ds-space-16);
     --ds-space-nav-padding: var(--ds-space-5);
+    --ds-space-stack-gap: var(--ds-space-8);
   }
 
   /* ── Visual knobs (Ch 16 §5) ── */
@@ -527,10 +589,26 @@
     --ds-blur-surface: var(--ds-blur-lg);
   }
 
+  /* Glass — light theme: dark translucent surfaces for light backgrounds */
+  :where(html.theme-light[data-visual="glass"], [data-theme="light"][data-visual="glass"]) {
+    --ds-color-surface: rgb(255 255 255 / 0.72);
+    --ds-color-surface-raised: rgb(255 255 255 / 0.82);
+    --ds-color-surface-overlay: rgb(255 255 255 / 0.68);
+    --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --ds-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
   :where(html[data-visual="neumorph"], [data-visual="neumorph"]) {
     --ds-shadow-sm: 4px 4px 8px rgba(0, 0, 0, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.05);
     --ds-shadow-md: 8px 8px 16px rgba(0, 0, 0, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.06);
     --ds-shadow-inset-sm: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Neumorph — light theme: softer highlight/shadow for light backgrounds */
+  :where(html.theme-light[data-visual="neumorph"], [data-theme="light"][data-visual="neumorph"]) {
+    --ds-shadow-sm: 4px 4px 8px rgba(0, 0, 0, 0.08), -4px -4px 8px rgba(255, 255, 255, 0.7);
+    --ds-shadow-md: 8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.8);
+    --ds-shadow-inset-sm: inset 4px 4px 8px rgba(0, 0, 0, 0.06), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
   }
 
   :where(html[data-visual="sleek"], [data-visual="sleek"]) {

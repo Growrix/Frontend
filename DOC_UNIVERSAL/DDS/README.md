@@ -29,13 +29,26 @@ The DS owns the 70%. The DDS owns the 30%.
 
 The DDS never bypasses the DS. It tells AI which DS tools to reach for and how to compose them with intention.
 
+For full public websites and reusable templates, the DDS also needs a site-level layer:
+
+- **Archetype** = the overall website strategy
+- **Mode** = per-page composition behavior
+- **Preset** = aesthetic personality
+
 ## Folder Structure
 
 ```
 DDS/
 ├── README.md                          ← you are here
+├── ARCHETYPES/                        ← reusable site-level website strategies
+│   ├── README.md                      ← archetype index and read policy
+│   ├── LOCAL-SERVICE-LEAD-GEN.md
+│   ├── B2B-SAAS-MARKETING.md
+│   ├── PRODUCT-LAUNCH.md
+│   ├── ENTERPRISE-TRUST.md
+│   └── EDITORIAL-BRAND.md
 ├── OPERATING/                         ← authoritative rules AI must follow
-│   ├── DESIGN-DECISION-SYSTEM.md      ← core DDS architecture and four-layer model
+│   ├── DESIGN-DECISION-SYSTEM.md      ← core DDS architecture and five-layer model
 │   ├── MODE-SELECTION.md              ← how to pick the right design mode
 │   ├── PAGE-TYPE-TAXONOMY.md          ← page classification before composition
 │   ├── AI-EXECUTION-FLOW.md           ← step-by-step AI creative workflow
@@ -79,6 +92,7 @@ DDS/
 
 ### Then load based on task
 
+- Full website, reusable template, or public site build → selected archetype from `ARCHETYPES/`
 - Page design → `OPERATING/PAGE-TYPE-TAXONOMY.md` + `OPERATING/MODE-SELECTION.md`
 - Visual direction → `OPERATING/CREATIVE-DIRECTION.md` + relevant mode from `MODES/`
 - Wireframing → `OPERATING/WIREFRAME-STANDARDS.md`
@@ -95,11 +109,13 @@ DDS/
 Load for:
 
 - homepage design
+- multi-page public websites
 - landing pages
 - marketing sites
 - public website redesigns
 - visual refresh work
 - theme or preset creation
+- reusable web template creation
 - creative wireframing
 - any task where visual identity or composition quality matters
 
@@ -116,6 +132,7 @@ Do not load for:
 The DDS is working when:
 
 - AI asks "what should this feel like?" before composing
+- full websites have a stated site archetype before page composition begins
 - Pages have a stated visual direction, not an implied one
 - No two marketing pages look like the same SaaS template
 - The anti-generic checklist catches bland output before merge

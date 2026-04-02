@@ -72,7 +72,8 @@ For creative frontend tasks such as homepage design, landing pages, marketing co
 12. `DDS/README.md`
 13. `DDS/OPERATING/DESIGN-DECISION-SYSTEM.md`
 14. `DDS/OPERATING/AI-EXECUTION-FLOW.md`
-15. the specific mode from `DDS/MODES/` and preset from `DDS/PRESETS/` after the design decision is made
+15. for full public websites, reusable templates, or market-specific theme families, the selected archetype from `DDS/ARCHETYPES/`
+16. the specific mode from `DDS/MODES/` and preset from `DDS/PRESETS/` after the design decision is made
 
 For backend, auth, billing, data, or operations tasks, add:
 

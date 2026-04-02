@@ -1,3 +1,24 @@
+build a website with: Home,service, about,blog, contact page for a Electircal & Solar installer company. each page with minimum 4-5 sections. 
+The company name is  : Rayiss Electrical & solar PTY LTD. The TG is Australian market . 
+
+The Mode I chose is : `D:\Desktop Mass\Blueprint\DOC_UNIVERSAL\DDS\MODES\MOBILE-NATIVE.md`
+The Preset is : `D:\Desktop Mass\Blueprint\DOC_UNIVERSAL\DDS\PRESETS\NEUTRAL-PROFESSIONAL.md`
+
+
+
+
+
+
+
+
+
+
+
+
+
+I think the DS still has issues with inconcistency or anything else. YOu need to figuer out the DS settings mainly. is it properly done based on the D:\Desktop Mass\Blueprint\DOC_UNIVERSAL\README.md ? becuase it should follow stricktly all the rules while doing the global settings. ANd the global settings should cover everything that has in the rules pixel perfect and accurately. I do not allow partial impimenetations as well. You should do a deep analysis on D:\Desktop Mass\Blueprint\src\ds and also the documentations as well and identify the gaps and do the enhancement accurately.  Forget about the site , only focus on the DS building. Create a Gap analysis file into this folder  D:\Desktop Mass\Blueprint\DOC_WORKING\ONGOING TASKS , and after that prepare a detailed implementation plan to fill the gaps and enhance the DS based on the rules in D:\Desktop Mass\Blueprint\DOC_UNIVERSAL\README.md . And then finally create the tasks.md file with the tasks to implement the plan. and Start implimenting the tasks one by one and update the task notes with the changes and verification results. Make sure to follow the rules strictly and do not allow any partial implementations. The DS should be consistent and follow all the guidelines mentioned in the documentation.
+
+
 ## Rules
 
 Read `DOC_UNIVERSAL/README.md` first. It defines the authority model, AI read policy, and folder map.

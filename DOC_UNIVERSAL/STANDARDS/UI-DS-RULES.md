@@ -57,6 +57,10 @@ For homepages, landing pages, marketing sites, visual redesigns, wireframes, or 
 - `DDS/OPERATING/DESIGN-DECISION-SYSTEM.md`
 - `DDS/OPERATING/AI-EXECUTION-FLOW.md`
 
+For full public websites, reusable templates, or market-specific design systems, also load:
+
+- the selected archetype from `DDS/ARCHETYPES/`
+
 Use those files to decide the page type, intent, mode, preset, and composition strategy before composing DS blocks.
 
 Rule:

@@ -61,8 +61,9 @@ Clean, reliable, corporate-friendly aesthetic. The safe default that works for m
 
 ## DS Token Mapping
 
+- Theme: `light` for public marketing websites unless the brief explicitly calls for dark
 - `data-visual`: default or `sleek`
-- `data-density`: `balanced`
+- `data-density`: `balanced` for product UI, `spacious` for public marketing websites
 - Shape tokens: default DS values
 - Shadow tokens: default DS values
 - Motion tokens: default DS values
