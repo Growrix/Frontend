@@ -131,6 +131,7 @@ export const blur = {
   lg: "var(--ds-blur-lg)",
   xl: "var(--ds-blur-xl)",
   "2xl": "var(--ds-blur-2xl)",
+  surface: "var(--ds-blur-surface)",
 } as const satisfies Record<string, CssVar>;
 
 export const size = {
@@ -149,6 +150,8 @@ export const size = {
   iconMd: "var(--ds-size-icon-md)",
   iconLg: "var(--ds-size-icon-lg)",
   iconXl: "var(--ds-size-icon-xl)",
+  icon2xl: "var(--ds-size-icon-2xl)",
+  icon3xl: "var(--ds-size-icon-3xl)",
   iconButton: "var(--ds-size-icon-button)",
   fab: "var(--ds-size-fab)",
   tabsH: "var(--ds-size-tabs-h)",
@@ -197,6 +200,13 @@ export const color = {
   info: "var(--ds-color-info)",
   infoBg: "var(--ds-color-info-bg)",
   infoText: "var(--ds-color-info-text)",
+  accentRgb: "var(--ds-color-accent-rgb)",
+  successRgb: "var(--ds-color-success-rgb)",
+  warningRgb: "var(--ds-color-warning-rgb)",
+  dangerRgb: "var(--ds-color-danger-rgb)",
+  infoRgb: "var(--ds-color-info-rgb)",
+  gradientStart: "var(--ds-color-gradient-start)",
+  gradientEnd: "var(--ds-color-gradient-end)",
   focusRing: "var(--ds-color-focus-ring)",
   overlay: "var(--ds-color-overlay)",
 } as const satisfies Record<string, CssVar>;
